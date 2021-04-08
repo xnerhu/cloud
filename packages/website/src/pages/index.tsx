@@ -1,5 +1,3 @@
-import React from 'react';
+import Index from 'views/index';
 
-export default function Home() {
-  return <div>Landing site</div>;
-}
+export default Index;
