@@ -18,7 +18,7 @@ export const BrowserContainer = styled.div`
   border-radius: 12px;
   position: absolute;
   right: -64px;
-  bottom: -8px;
+  bottom: -12px;
   padding: 4px;
   background: conic-gradient(
     from -39.31deg at 58.46% 54.64%,
