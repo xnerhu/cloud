@@ -2,15 +2,19 @@ import { interRegular } from 'mixins/typography';
 import { createGlobalStyle } from 'styled-components';
 
 export const UIStyle = createGlobalStyle`
-  body {
+  html, body {
     width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
     height: 100%;
     cursor: default;
     margin: 0;
     padding: 0;
     background-color: #000;
     color: #fff;
-    overflow-x: hidden;
+    position: relative;
     ${interRegular};
   }
 
