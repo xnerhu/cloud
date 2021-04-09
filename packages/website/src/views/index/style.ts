@@ -73,7 +73,7 @@ export const SubTitle = styled(Title)`
 export const Circle = styled.div`
   position: absolute;
   z-index: 0;
-  background-color: #0085FF;
+  background-color: #0085ff;
   opacity: 0.3;
   width: 60vw;
   height: 60vw;
@@ -95,7 +95,7 @@ export const WaitlistButton = styled.a`
   cursor: pointer;
   margin-top: 32px;
   will-change: background-color, color;
-  transition: 0.15s background-color, 0.15s color, 0.15s transform;
+  transition: 0.15s background-color, 0.15s color;
   ${noUserSelect};
   ${interBold};
   text-decoration: none;
@@ -103,7 +103,6 @@ export const WaitlistButton = styled.a`
 
   &:hover {
     background-color: ${COLOR_SECONDARY};
-    transform: translate(4px, 4px);
     color: #000;
   }
 
