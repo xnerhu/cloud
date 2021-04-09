@@ -100,6 +100,7 @@ export const WaitlistButton = styled.a`
   ${interBold};
   text-decoration: none;
   color: #000;
+  border: 2px solid transparent;
 
   &:hover {
     background-color: ${COLOR_SECONDARY};
