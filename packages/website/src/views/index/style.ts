@@ -10,6 +10,11 @@ import {
   BREAKPOINT_SMALL,
 } from 'constants/breakpoints';
 
+export const Container = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
 export const StyledLanding = styled.div`
   width: 100%;
   max-width: ${BREAKPOINT_FULL}px;
