@@ -14,11 +14,11 @@ import { BREAKPOINT_FULL, BREAKPOINT_MEDIUM } from 'constants/breakpoints';
 
 export const BrowserContainer = styled.div`
   width: 740px;
-  height: calc(100vh - ${NAVBAR_HEIGHT}px);
+  height: calc(100vh - ${NAVBAR_HEIGHT * 2}px);
   border-radius: 12px;
   position: absolute;
   right: -64px;
-  margin-top: 24px;
+  bottom: -8px;
   padding: 4px;
   background: conic-gradient(
     from -39.31deg at 58.46% 54.64%,

@@ -4,7 +4,11 @@ import { singleLine, gradientText, noUserSelect } from '@wexond/ui';
 import { NAVBAR_HEIGHT } from 'constants/design';
 import { interBold, interRegular } from 'mixins/typography';
 import { COLOR_PRIMARY, COLOR_SECONDARY } from 'constants/colors';
-import { BREAKPOINT_FULL, BREAKPOINT_MEDIUM } from 'constants/breakpoints';
+import {
+  BREAKPOINT_FULL,
+  BREAKPOINT_MEDIUM,
+  BREAKPOINT_SMALL,
+} from 'constants/breakpoints';
 
 export const StyledLanding = styled.div`
   width: 100%;
@@ -29,7 +33,8 @@ export const Hero = styled.header`
   flex-direction: column;
 
   @media (max-width: ${BREAKPOINT_MEDIUM}px) {
-    padding: 48px 0px;
+    width: 100%;
+    padding: 48px 8px;
     align-items: center;
     text-align: center;
   }
@@ -47,6 +52,10 @@ export const Title = styled.div`
 
   @media (max-width: ${BREAKPOINT_MEDIUM}px) {
     font-size: 48px;
+  }
+
+  @media (max-width: ${BREAKPOINT_SMALL}px) {
+    font-size: 40px;
   }
 `;
 
