@@ -2,7 +2,11 @@ import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 
-import { FONT_INTER_MEDIUM, FONT_INTER_REGULAR } from 'constants/fonts';
+import {
+  FONT_INTER_BOLD,
+  FONT_INTER_MEDIUM,
+  FONT_INTER_REGULAR,
+} from 'constants/fonts';
 import { UIStyle } from 'views/style';
 
 export const injectFonts = () => {
@@ -23,6 +27,13 @@ export const injectFonts = () => {
         font-style: normal;
         font-weight: 500;
         src: url(${FONT_INTER_MEDIUM}) format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 600;
+        src: url(${FONT_INTER_BOLD}) format('woff2');
       }
   `;
   document.head.appendChild(styleElement);

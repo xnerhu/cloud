@@ -10,6 +10,7 @@ export const UIStyle = createGlobalStyle`
     padding: 0;
     background-color: #000;
     color: #fff;
+    overflow-x: hidden;
     ${interRegular};
   }
 
