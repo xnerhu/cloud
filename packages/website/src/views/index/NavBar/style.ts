@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { BREAKPOINT_FULL } from 'constants/breakpoints';
+import { BREAKPOINT_FULL, BREAKPOINT_MEDIUM } from 'constants/breakpoints';
 import { NAVBAR_HEIGHT } from 'constants/design';
 import { interBold } from 'mixins/typography';
 import { noUserSelect } from '@wexond/ui';
@@ -30,6 +30,16 @@ export const Container = styled.div`
   margin: 0 auto;
   display: flex;
   align-items: center;
+
+  @media (min-width: ${BREAKPOINT_MEDIUM +
+    1}px) and (max-width: ${BREAKPOINT_FULL}px) {
+    max-width: ${BREAKPOINT_MEDIUM}px;
+  }
+
+  @media (max-width: ${BREAKPOINT_MEDIUM}px) {
+    max-width: 100%;
+    padding: 0px 32px;
+  }
 `;
 
 export const Title = styled.span`

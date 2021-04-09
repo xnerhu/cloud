@@ -49,19 +49,19 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 
         <meta name="theme-color" content="#2196F3" />
 
-        <title>Wexond - your browser for a new decade</title>
+        <title>Wexond: Web browser redefined.</title>
         <meta
           name="description"
-          content="Wexond is an innovative browser, changing web experiences for the better."
+          content="Wexond is an innovative web browser with a totally new user experience. It will change your productivity life for the better. Try it!"
         />
         <meta
           name="keywords"
-          content="Electron Wexond Chrome Chromium macOS Linux Windows React Adblock"
+          content="wexond, macos, linux, windows, ablock, nersent, productivity, extensions, chrome"
         />
 
         <link rel="icon" href="favicon.ico" />
 
-        <meta property="og:image" content="https://wexond.net/img/wexond.png" />
+        <meta property="og:image" content="https://wexond.net/wexond.png" />
         <meta property="og:url" content="https://wexond.net" />
 
         <meta name="twitter:card" content="summary" />
