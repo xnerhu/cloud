@@ -49,7 +49,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 
         <meta name="theme-color" content="#2196F3" />
 
-        <title>Wexond</title>
+        <title>Wexond: Web browser redefined.</title>
         <meta
           name="description"
           content="Wexond is an innovative web browser with a totally new user experience. It will change your productivity life for the better. Try it!"

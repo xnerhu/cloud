@@ -42,6 +42,13 @@ export const Container = styled.div`
   }
 `;
 
+export const LogoContainer = styled.a`
+  text-decoration: none;
+  display: flex;
+  color: #fff;
+  align-items: center;
+`;
+
 export const Title = styled.span`
   font-size: 18px;
   margin-left: 12px;

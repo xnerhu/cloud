@@ -13,7 +13,7 @@ import { COLOR_PRIMARY, COLOR_SECONDARY } from 'constants/colors';
 import { BREAKPOINT_FULL, BREAKPOINT_MEDIUM } from 'constants/breakpoints';
 
 export const BrowserContainer = styled.div`
-  width: 740px;
+  width: calc(50vw - 64px);
   height: calc(100vh - ${NAVBAR_HEIGHT * 2}px);
   border-radius: 12px;
   position: absolute;
@@ -100,11 +100,12 @@ export const Tab = styled.div`
 
 export const Cards = styled.div`
   width: calc(100% - ${DOCK_CONTAINER_WIDTH}px);
-  height: 100%;
+  height: calc(100% - ${DOCK_MARGIN_TOP}px);
   display: flex;
   margin-left: ${DOCK_CONTAINER_WIDTH}px;
-  padding-top: ${DOCK_MARGIN_TOP}px;
-  padding-bottom: 8px;
+  top: ${DOCK_MARGIN_TOP}px;
+  padding-bottom: 12px;
+  position: absolute;
 `;
 
 export const Card = styled.div`

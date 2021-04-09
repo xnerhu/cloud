@@ -9,7 +9,7 @@ export const StyledFooter = styled.footer`
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: rgba(255, 255, 255, 0.36);
+  color: rgba(255, 255, 255, 0.48);
   font-size: 14px;
   padding-bottom: 24px;
   ${interRegular};

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { singleLine, gradientText, noUserSelect } from '@wexond/ui';
 
 import { NAVBAR_HEIGHT } from 'constants/design';
@@ -60,12 +60,12 @@ export const Title = styled.div`
 `;
 
 export const SubTitle = styled(Title)`
-  ${gradientText};
   background-image: linear-gradient(
-    180deg,
-    ${COLOR_SECONDARY} 25%,
-    ${COLOR_PRIMARY} 100%
+    90deg,
+    ${COLOR_PRIMARY} 0%,
+    ${COLOR_SECONDARY} 70%
   );
+  ${gradientText};
 `;
 
 export const WaitlistButton = styled.a`
@@ -76,7 +76,7 @@ export const WaitlistButton = styled.a`
   padding: 20px 16px;
   letter-spacing: 1px;
   cursor: pointer;
-  margin-top: 24px;
+  margin-top: 32px;
   will-change: background-color, color;
   transition: 0.15s background-color, 0.15s color;
   ${noUserSelect};
@@ -105,7 +105,7 @@ export const StyledComing = styled.div`
 
 export const ComingHeader = styled.header`
   font-size: 48px;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
   text-align: center;
   padding: 0px 16px;
   ${interRegular};

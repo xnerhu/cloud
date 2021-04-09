@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon, isClientWeb } from '@wexond/ui';
 
 import { ICON_LOGO_WHITE } from 'constants/icons';
-import { StyledNavBar, Container, Title } from './style';
+import { StyledNavBar, Container, Title, LogoContainer } from './style';
 
 export const NavBar: React.FC = () => {
   const [isSticky, setSticky] = React.useState(false);
@@ -30,8 +30,10 @@ export const NavBar: React.FC = () => {
   return (
     <StyledNavBar isSticky={isSticky}>
       <Container>
-        <Icon src={ICON_LOGO_WHITE} boxSize="56px" iconSize="100%" />
-        <Title>Wexond</Title>
+        <LogoContainer href="/">
+          <Icon src={ICON_LOGO_WHITE} boxSize="56px" iconSize="100%" />
+          <Title>Wexond</Title>
+        </LogoContainer>
       </Container>
     </StyledNavBar>
   );

@@ -23,9 +23,21 @@ export const Footer: React.FC = () => {
   return (
     <StyledFooter>
       <Socials>
-        <Social href="https://github.com/wexond" icon={ICON_GITHUB} />
-        <Social href="https://discord.gg/P7Vn4VX" icon={ICON_DISCORD} />
-        <Social href="https://twitter.com/wexond" icon={ICON_TWITTER} />
+        <Social
+          aria-label="Github"
+          href="https://github.com/wexond"
+          icon={ICON_GITHUB}
+        />
+        <Social
+          aria-label="Discord"
+          href="https://discord.gg/P7Vn4VX"
+          icon={ICON_DISCORD}
+        />
+        <Social
+          aria-label="Twitter"
+          href="https://twitter.com/wexond"
+          icon={ICON_TWITTER}
+        />
       </Socials>
       Copyright &copy; Wexond 2021
     </StyledFooter>
