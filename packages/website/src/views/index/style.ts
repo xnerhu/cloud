@@ -95,7 +95,7 @@ export const WaitlistButton = styled.a`
   letter-spacing: 1px;
   cursor: pointer;
   will-change: background-color, color;
-  transition: 0.15s background-color, 0.15s color, 0.15s transform;
+  transition: 0.15s background-color, 0.15s color;
   ${noUserSelect};
   ${interBold};
   text-decoration: none;
@@ -105,7 +105,6 @@ export const WaitlistButton = styled.a`
   &:hover {
     background-color: ${COLOR_SECONDARY};
     color: #000;
-    transform: translate(4px, 4px);
   }
 
   @media (max-width: ${BREAKPOINT_MEDIUM}px) {
