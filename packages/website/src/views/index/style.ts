@@ -29,6 +29,8 @@ export const StyledLanding = styled.div`
 `;
 
 export const Hero = styled.header`
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
 
@@ -68,30 +70,57 @@ export const SubTitle = styled(Title)`
   ${gradientText};
 `;
 
+export const Circle = styled.div`
+  position: absolute;
+  z-index: 0;
+  background-color: #0085FF;
+  opacity: 0.3;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  filter: blur(18vw);
+`;
+
+export const Buttons = styled.div`
+  display: flex;
+`;
+
 export const WaitlistButton = styled.a`
   width: fit-content;
   font-size: 16px;
-  border: 2px solid #fff;
+  background-color: #fff;
   border-radius: 10px;
-  padding: 20px 16px;
+  padding: 20px 24px;
   letter-spacing: 1px;
   cursor: pointer;
   margin-top: 32px;
   will-change: background-color, color;
-  transition: 0.15s background-color, 0.15s color;
+  transition: 0.15s background-color, 0.15s color, 0.15s transform;
   ${noUserSelect};
   ${interBold};
   text-decoration: none;
-  color: #fff;
+  color: #000;
 
   &:hover {
-    background-color: #fff;
+    background-color: ${COLOR_SECONDARY};
+    transform: translate(4px, 4px);
     color: #000;
   }
 
   @media (max-width: ${BREAKPOINT_MEDIUM}px) {
     font-size: 14px;
     padding: 16px 12px;
+  }
+`;
+
+export const OutlinedButton = styled(WaitlistButton)`
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  margin-left: 16px;
+
+  &:hover {
+    border: 2px solid transparent;
   }
 `;
 
