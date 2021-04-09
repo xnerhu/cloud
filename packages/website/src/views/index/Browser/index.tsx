@@ -46,7 +46,7 @@ export const Browser: React.FC = () => {
           <Card />
         </Cards>
       </StyledBrowser>
-      <BlueEffect />
+      {/* <BlueEffect /> */}
     </BrowserContainer>
   );
 };

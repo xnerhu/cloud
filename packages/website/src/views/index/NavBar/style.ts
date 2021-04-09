@@ -1,11 +1,9 @@
 import styled, { css } from 'styled-components';
 
 import { BREAKPOINT_FULL, BREAKPOINT_MEDIUM } from 'constants/breakpoints';
-import { NAVBAR_HEIGHT, NAVIGATION_MARGIN_TOP } from 'constants/design';
+import { NAVBAR_HEIGHT, NAVBAR_MARGIN_TOP } from 'constants/design';
 import { interBold } from 'mixins/typography';
 import { noUserSelect } from '@wexond/ui';
-
-
 
 export const StyledNavBar = styled.nav`
   width: 100%;
@@ -14,7 +12,7 @@ export const StyledNavBar = styled.nav`
   top: 0;
   z-index: 10;
   border: 1px solid transparent;
-  margin-top: ${NAVIGATION_MARGIN_TOP}px;
+  margin-top: ${NAVBAR_MARGIN_TOP}px;
   transition-property: 0.15s border-bottom;
   backdrop-filter: blur(16px);
 

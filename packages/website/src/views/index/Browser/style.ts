@@ -13,7 +13,7 @@ import { COLOR_PRIMARY, COLOR_SECONDARY } from 'constants/colors';
 import { BREAKPOINT_FULL, BREAKPOINT_MEDIUM } from 'constants/breakpoints';
 
 export const BrowserContainer = styled.div`
-  width: calc(50vw - 64px);
+  width: calc(50vw - 96px);
   height: calc(100vh - ${NAVBAR_HEIGHT * 2}px);
   border-radius: 12px;
   position: absolute;
@@ -136,8 +136,8 @@ export const Card = styled.div`
 export const BlueEffect = styled.div`
   width: 100%;
   height: 100%;
-  top: -16px;
-  right: 32px;
+  top: 0px;
+  right: 0px;
   position: absolute;
   background: rgba(39, 140, 214, 0.12);
   filter: blur(128px);

@@ -1,7 +1,7 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { singleLine, gradientText, noUserSelect } from '@wexond/ui';
 
-import { NAVBAR_HEIGHT } from 'constants/design';
+import { NAVBAR_HEIGHT, NAVBAR_MARGIN_TOP } from 'constants/design';
 import { interBold, interRegular } from 'mixins/typography';
 import { COLOR_PRIMARY, COLOR_SECONDARY } from 'constants/colors';
 import {
@@ -14,7 +14,7 @@ export const StyledLanding = styled.div`
   width: 100%;
   max-width: ${BREAKPOINT_FULL}px;
   margin: 0 auto;
-  height: calc(100vh - ${NAVBAR_HEIGHT}px);
+  height: calc(100vh - ${NAVBAR_HEIGHT + NAVBAR_MARGIN_TOP}px);
   display: flex;
   align-items: center;
 
@@ -83,6 +83,7 @@ export const Circle = styled.div`
 
 export const Buttons = styled.div`
   display: flex;
+  margin-top: 32px;
 `;
 
 export const WaitlistButton = styled.a`
@@ -93,7 +94,6 @@ export const WaitlistButton = styled.a`
   padding: 20px 24px;
   letter-spacing: 1px;
   cursor: pointer;
-  margin-top: 32px;
   will-change: background-color, color;
   transition: 0.15s background-color, 0.15s color, 0.15s transform;
   ${noUserSelect};
