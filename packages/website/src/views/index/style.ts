@@ -68,7 +68,7 @@ export const SubTitle = styled(Title)`
   );
 `;
 
-export const WaitlistButton = styled.div`
+export const WaitlistButton = styled.a`
   width: fit-content;
   font-size: 16px;
   border: 2px solid #fff;
@@ -81,6 +81,8 @@ export const WaitlistButton = styled.div`
   transition: 0.15s background-color, 0.15s color;
   ${noUserSelect};
   ${interBold};
+  text-decoration: none;
+  color: #fff;
 
   &:hover {
     background-color: #fff;

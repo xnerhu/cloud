@@ -19,7 +19,9 @@ const Landing: React.FC = () => {
       <Hero>
         <Title>web browser.</Title>
         <SubTitle>redefined.</SubTitle>
-        <WaitlistButton>JOIN THE WAITLIST</WaitlistButton>
+        <WaitlistButton href="https://discord.gg/P7Vn4VX">
+          JOIN THE WAITLIST
+        </WaitlistButton>
       </Hero>
       <Browser />
     </StyledLanding>
