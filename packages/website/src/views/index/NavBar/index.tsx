@@ -3,13 +3,13 @@ import { Icon, isClientWeb } from '@wexond/ui';
 
 import { ICON_LOGO_WHITE } from 'constants/icons';
 import { StyledNavBar, Container, Title, LogoContainer } from './style';
-import { NAVIGATION_MARGIN_TOP } from 'constants/design';
+import { NAVBAR_MARGIN_TOP } from 'constants/design';
 
 export const NavBar: React.FC = () => {
   const [isSticky, setSticky] = React.useState(false);
 
   const onWindowScroll = React.useCallback(() => {
-    const sticky = window.scrollY > NAVIGATION_MARGIN_TOP;
+    const sticky = window.scrollY > NAVBAR_MARGIN_TOP;
 
     if (isSticky !== sticky) {
       setSticky(sticky);
