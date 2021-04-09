@@ -9,6 +9,8 @@ import {
 } from 'constants/fonts';
 import { UIStyle } from 'views/style';
 
+const dev = process.env.NODE_ENV === 'development';
+
 export const injectFonts = () => {
   if (typeof window === 'undefined') return;
 
@@ -67,6 +69,26 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@wexond" />
         <meta name="twitter:title" content="Wexond" />
+
+        {!dev && (
+          <>
+            <script
+              async
+              src="https://www.googletagmanager.com/gtag/js?id=G-9KHKPQL4E8"
+            />
+
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){window.dataLayer.push(arguments)}
+              gtag("js", new Date());
+              gtag("config", "G-9KHKPQL4E8");
+            `,
+              }}
+            />
+          </>
+        )}
       </Head>
       <UIStyle />
       <Component {...pageProps} />

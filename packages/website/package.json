@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export -o build",
+    "build": "npm run clean && next build && next export -o build",
+    "clean": "rimraf build && rimraf .next",
     "analyze": "cross-env ANALYZE=1 next build"
   },
   "devDependencies": {
