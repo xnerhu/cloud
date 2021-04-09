@@ -1,27 +1,53 @@
 import styled from 'styled-components';
-import { centerIcon, singleLine, gradientText, noUserSelect } from '@wexond/ui';
+import { singleLine, gradientText, noUserSelect } from '@wexond/ui';
 
-import { ICON_LOGO } from 'constants/icons';
 import { NAVBAR_HEIGHT } from 'constants/design';
 import { interBold, interRegular } from 'mixins/typography';
 import { COLOR_PRIMARY, COLOR_SECONDARY } from 'constants/colors';
-import { BREAKPOINT_CONTENT } from 'constants/breakpoints';
+import { BREAKPOINT_FULL, BREAKPOINT_MEDIUM } from 'constants/breakpoints';
 
 export const StyledLanding = styled.div`
   width: 100%;
-  max-width: ${BREAKPOINT_CONTENT}px;
+  max-width: ${BREAKPOINT_FULL}px;
   margin: 0 auto;
   height: calc(100vh - ${NAVBAR_HEIGHT}px);
   display: flex;
   align-items: center;
+
+  @media (min-width: ${BREAKPOINT_MEDIUM +
+    1}px) and (max-width: ${BREAKPOINT_FULL}px) {
+    max-width: ${BREAKPOINT_MEDIUM}px;
+  }
+
+  @media (max-width: ${BREAKPOINT_MEDIUM}px) {
+    flex-direction: column;
+  }
 `;
 
-export const Hero = styled.header``;
+export const Hero = styled.header`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: ${BREAKPOINT_MEDIUM}px) {
+    padding: 48px 0px;
+    align-items: center;
+    text-align: center;
+  }
+`;
 
 export const Title = styled.div`
   font-size: 128px;
   ${singleLine};
   ${interBold};
+
+  @media (min-width: ${BREAKPOINT_MEDIUM +
+    1}px) and (max-width: ${BREAKPOINT_FULL}px) {
+    font-size: 96px;
+  }
+
+  @media (max-width: ${BREAKPOINT_MEDIUM}px) {
+    font-size: 48px;
+  }
 `;
 
 export const SubTitle = styled(Title)`
@@ -51,6 +77,11 @@ export const WaitlistButton = styled.div`
     background-color: #fff;
     color: #000;
   }
+
+  @media (max-width: ${BREAKPOINT_MEDIUM}px) {
+    font-size: 14px;
+    padding: 16px 12px;
+  }
 `;
 
 export const StyledComing = styled.div`
@@ -64,5 +95,11 @@ export const StyledComing = styled.div`
 export const ComingHeader = styled.header`
   font-size: 48px;
   letter-spacing: 2px;
+  text-align: center;
+  padding: 0px 16px;
   ${interRegular};
+
+  @media (max-width: ${BREAKPOINT_MEDIUM}px) {
+    font-size: 24px;
+  }
 `;

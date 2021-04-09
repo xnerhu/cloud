@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { BREAKPOINT_CONTENT } from 'constants/breakpoints';
+import { BREAKPOINT_FULL } from 'constants/breakpoints';
 import { NAVBAR_HEIGHT } from 'constants/design';
 import { interBold } from 'mixins/typography';
 import { noUserSelect } from '@wexond/ui';
@@ -25,7 +25,7 @@ export const StyledNavBar = styled.nav`
 
 export const Container = styled.div`
   width: 100%;
-  max-width: ${BREAKPOINT_CONTENT}px;
+  max-width: ${BREAKPOINT_FULL}px;
   height: 100%;
   margin: 0 auto;
   display: flex;
