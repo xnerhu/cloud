@@ -2,6 +2,34 @@ import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 
+import { FONT_INTER_MEDIUM, FONT_INTER_REGULAR } from 'constants/fonts';
+import { UIStyle } from 'views/style';
+
+export const injectFonts = () => {
+  if (typeof window === 'undefined') return;
+
+  const styleElement = document.createElement('style');
+
+  styleElement.textContent = `
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        src: url(${FONT_INTER_REGULAR}) format('woff2');
+      }
+      
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        src: url(${FONT_INTER_MEDIUM}) format('woff2');
+      }
+  `;
+  document.head.appendChild(styleElement);
+};
+
+injectFonts();
+
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
@@ -29,6 +57,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <meta name="twitter:site" content="@wexond" />
         <meta name="twitter:title" content="Wexond" />
       </Head>
+      <UIStyle />
       <Component {...pageProps} />
     </>
   );

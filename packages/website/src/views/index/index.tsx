@@ -1,9 +1,15 @@
 import React from 'react';
 
-import { FONT_INTER_REGULAR } from 'constants/fonts';
+import { NavBar } from './NavBar';
+import { Container } from './style';
 
 const Index = () => {
-  return <div>xddd</div>;
+  return (
+    <>
+      <NavBar />
+      <Container>xd</Container>
+    </>
+  );
 };
 
 export default Index;

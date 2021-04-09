@@ -15,6 +15,8 @@ module.exports = {
           loader: 'file-loader',
           options: {
             esModule: false,
+            publicPath: '/_next/static/resources/',
+            outputPath: 'static/resources/',
           },
         },
       ],
