@@ -75,16 +75,16 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
           <>
             <script
               async
-              src="https://www.googletagmanager.com/gtag/js?id=G-9KHKPQL4E8"
+              src="https://www.googletagmanager.com/gtag/js?id=G-MJQH7T09F8"
             />
 
             <script
               dangerouslySetInnerHTML={{
                 __html: `
               window.dataLayer = window.dataLayer || [];
-              function gtag(){window.dataLayer.push(arguments)}
+              function gtag(){dataLayer.push(arguments);}
               gtag("js", new Date());
-              gtag("config", "G-9KHKPQL4E8");
+              gtag("config", "G-MJQH7T09F8");
             `,
               }}
             />
