@@ -18,3 +18,4 @@ report.*.json
 coverage
 *.lcov
 .next
+.env
