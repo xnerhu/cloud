@@ -1,4 +1,4 @@
-export interface ReportModel {
+export interface FeedbackModel {
   description: string;
   url: string;
   email?: string;

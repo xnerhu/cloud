@@ -1,5 +1,5 @@
 {
-  "name": "@services/reports",
+  "name": "@services/feedback",
   "version": "1.0.0",
   "private": true,
   "main": "build/index.js",

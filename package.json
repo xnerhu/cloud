@@ -2,8 +2,8 @@
   "name": "wexond-cloud",
   "private": true,
   "scripts": {
-    "dev:reports": "lerna exec yarn dev --parallel --scope=@services/{common,reports}",
-    "watch:reports": "lerna exec yarn watch --scope=@services/reports",
+    "dev:feedback": "lerna exec yarn dev --parallel --scope=@services/{common,feedback}",
+    "watch:feedback": "lerna exec yarn watch --scope=@services/feedback",
     "analyze": "lerna run --stream --parallel analyze",
     "start": "lerna run --stream --parallel start",
     "build": "lerna run --stream --parallel build",

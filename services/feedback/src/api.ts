@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
+
+import { FeedbackService } from './feedback-service';
 import { Logger } from './logger';
 
-import { ReportService } from './report-service';
-
-const SCHEMA_REPORT = {
+const SCHEMA_FEEDBACK = {
   type: 'object',
   required: [
     'description',
@@ -23,16 +23,16 @@ const SCHEMA_REPORT = {
   },
 } as const;
 
-type ReportBodyParams = FromSchema<typeof SCHEMA_REPORT> & {
+type FeedbackRequestBodyParams = FromSchema<typeof SCHEMA_FEEDBACK> & {
   screenshot?: { data: Buffer; mimetype: string }[];
 };
 
 export default (app: FastifyInstance) => {
-  app.post<{ Body: ReportBodyParams }>(
-    '/report',
-    { schema: { body: SCHEMA_REPORT } },
+  app.post<{ Body: FeedbackRequestBodyParams }>(
+    '/feedback',
+    { schema: { body: SCHEMA_FEEDBACK } },
     async (req, res) => {
-      Logger.instance.info(`Incoming report request`);
+      Logger.instance.info(`Incoming feedback request`);
 
       const {
         url,
@@ -51,13 +51,13 @@ export default (app: FastifyInstance) => {
         res.statusCode = 400;
 
         Logger.instance.info(
-          `Incorrect report request with mimetype ${screenshot![0].mimetype}`,
+          `Incorrect feedback request with mimetype ${screenshot![0].mimetype}`,
         );
 
         throw new Error('Screenshot must be an image!');
       }
 
-      await ReportService.instance.report({
+      await FeedbackService.instance.report({
         url,
         description,
         chromiumVersion,

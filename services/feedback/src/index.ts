@@ -4,7 +4,7 @@ import formBody from 'fastify-formbody';
 import multipart from 'fastify-multipart';
 import { ensurePath } from '@services/common';
 
-import { RAPORT_SCREENSHOT_MAX_SIZE, SERVICE_PORT } from './constants/config';
+import { FEEDBACK_SCREENSHOT_MAX_SIZE, SERVICE_PORT } from './constants/config';
 import { MailService } from './mail-service';
 import api from './api';
 import { PATH_OUT } from './constants/paths';
@@ -19,7 +19,7 @@ app.register(multipart, {
     fieldNameSize: 100,
     fieldSize: 100,
     fields: 10,
-    fileSize: RAPORT_SCREENSHOT_MAX_SIZE,
+    fileSize: FEEDBACK_SCREENSHOT_MAX_SIZE,
     files: 1,
     headerPairs: 2000,
   },
