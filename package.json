@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "lerna run --stream --parallel dev",
+    "analyze": "lerna run --stream --parallel analyze",
     "start": "lerna run --stream --parallel start",
     "build": "lerna run --stream --parallel build",
     "gen": "lerna run --stream --parallel gen",
