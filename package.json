@@ -22,6 +22,7 @@
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "lerna": "^3.22.1",
+    "nodemon": "^2.0.12",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-loader": "^8.0.11",
@@ -29,6 +30,7 @@
   },
   "dependencies": {},
   "workspaces": [
-    "packages/*"
+    "services/*",
+    "web/*"
   ]
 }

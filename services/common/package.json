@@ -1,0 +1,17 @@
+{
+  "name": "@cloud/common",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsc --watch",
+    "watch": "nodemon ./build/index.js",
+    "build": "tsc"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0"
+  }
+}
