@@ -51,7 +51,6 @@ export default (app: FastifyInstance) => {
         res.statusCode = 400;
 
         Logger.instance.info(
-          //
           `Incorrect report request with mimetype ${screenshot![0].mimetype}`,
         );
 
