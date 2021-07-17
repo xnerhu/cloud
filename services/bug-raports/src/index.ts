@@ -1,12 +1,37 @@
-import express from 'express';
-import helmet from 'helmet';
-import cors from 'cors';
+import fastify from 'fastify';
+import helmet from 'fastify-helmet';
+import formBody from 'fastify-formbody';
+import multipart from 'fastify-multipart';
 
-const app = express();
+import { RAPORT_SCREENSHOT_MAX_SIZE, SERVICE_PORT } from './constants/config';
+import { MailService } from './mail-service';
+import api from './api';
 
-app.use(helmet);
-app.use(cors);
+const app = fastify();
 
-app.listen(8080, () => {});
+app.register(helmet);
+app.register(formBody);
+app.register(multipart, {
+  limits: {
+    fieldNameSize: 100,
+    fieldSize: 100,
+    fields: 10,
+    fileSize: RAPORT_SCREENSHOT_MAX_SIZE,
+    files: 1,
+    headerPairs: 2000,
+  },
+  addToBody: true,
+  attachFieldsToBody: true,
+});
 
-console.log('Bug raports service is running!');
+api(app);
+
+const main = async () => {
+  MailService.instance.init();
+
+  app.listen(SERVICE_PORT, async () => {
+    console.log(`[Bug Reports]: listening on port ${SERVICE_PORT}!`);
+  });
+};
+
+main();
