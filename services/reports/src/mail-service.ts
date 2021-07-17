@@ -5,6 +5,7 @@ import {
   SMTP_AUTH_USER,
   SMTP_AUTH_PASSWORD,
 } from './constants/config';
+import { Logger } from './logger';
 
 export class MailService {
   public static instance = new MailService();
@@ -25,5 +26,6 @@ export class MailService {
 
   public async send(info: SentMessageInfo) {
     await this.transporter.sendMail(info);
+    Logger.instance.info(`Report email send successfully`);
   }
 }

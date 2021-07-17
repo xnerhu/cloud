@@ -2,12 +2,13 @@
   "name": "wexond-cloud",
   "private": true,
   "scripts": {
-    "dev": "lerna run --stream --parallel dev",
+    "dev:reports": "lerna exec yarn dev --parallel --scope=@services/{common,reports}",
+    "watch:reports": "lerna exec yarn watch --scope=@services/reports",
     "analyze": "lerna run --stream --parallel analyze",
     "start": "lerna run --stream --parallel start",
     "build": "lerna run --stream --parallel build",
     "gen": "lerna run --stream --parallel gen",
-    "link": "npx lerna link --local"
+    "deps": "npx lerna link"
   },
   "devDependencies": {
     "@types/node": "^14.14.10",
