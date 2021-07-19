@@ -2,12 +2,13 @@
   "name": "wexond-cloud",
   "private": true,
   "scripts": {
-    "dev": "lerna run --stream --parallel dev",
+    "dev:feedback": "lerna exec yarn dev --parallel --scope=@services/{common,feedback}",
+    "watch:feedback": "lerna exec yarn watch --scope=@services/feedback",
     "analyze": "lerna run --stream --parallel analyze",
     "start": "lerna run --stream --parallel start",
     "build": "lerna run --stream --parallel build",
     "gen": "lerna run --stream --parallel gen",
-    "link": "npx lerna link --local"
+    "deps": "npx lerna link"
   },
   "devDependencies": {
     "@types/node": "^14.14.10",
@@ -22,13 +23,17 @@
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "lerna": "^3.22.1",
+    "nodemon": "^2.0.12",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-loader": "^8.0.11",
     "typescript": "^4.1.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  },
   "workspaces": [
-    "packages/*"
+    "services/*",
+    "web/*"
   ]
 }
