@@ -16,6 +16,7 @@ export class MailService {
     this.transporter = createTransport({
       host: SMTP_HOST,
       port: SMTP_PORT,
+      service: 'gmail',
       secure: SMTP_PORT === 465,
       auth: {
         user: SMTP_AUTH_USER,

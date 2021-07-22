@@ -20,11 +20,15 @@ app.register(multipart, {
     fieldSize: 100,
     fields: 10,
     fileSize: FEEDBACK_SCREENSHOT_MAX_SIZE,
-    files: 1,
+    files: 5,
     headerPairs: 2000,
   },
   addToBody: true,
   attachFieldsToBody: true,
+});
+
+app.setErrorHandler((err, req, res) => {
+  Logger.instance.error(`Internal error: ${err.message}, ${err.stack}`);
 });
 
 api(app);

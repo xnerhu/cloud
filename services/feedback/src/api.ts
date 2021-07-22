@@ -24,7 +24,7 @@ const SCHEMA_FEEDBACK = {
 } as const;
 
 type FeedbackRequestBodyParams = FromSchema<typeof SCHEMA_FEEDBACK> & {
-  screenshot?: { data: Buffer; mimetype: string }[];
+  attachments?: { data: Buffer; mimetype: string }[];
 };
 
 export default (app: FastifyInstance) => {
@@ -41,17 +41,20 @@ export default (app: FastifyInstance) => {
         email,
         userAgent,
         wexondVersion,
-        screenshot,
+        attachments,
       } = req.body;
 
       if (
-        screenshot?.length !== 0 &&
-        !screenshot![0].mimetype.startsWith('image')
+        attachments != null &&
+        attachments.length > 0 &&
+        !attachments[0].mimetype.startsWith('image')
       ) {
         res.statusCode = 400;
 
         Logger.instance.info(
-          `Incorrect feedback request with mimetype ${screenshot![0].mimetype}`,
+          `Incorrect feedback request with mimetype ${
+            attachments![0].mimetype
+          }`,
         );
 
         throw new Error('Screenshot must be an image!');
@@ -64,7 +67,7 @@ export default (app: FastifyInstance) => {
         email,
         userAgent,
         wexondVersion,
-        screenshot: screenshot?.[0]?.data,
+        attachments: attachments?.map((r) => r.data),
       });
 
       return { success: true };

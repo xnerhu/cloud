@@ -15,17 +15,15 @@ export class FeedbackService {
       text: feedbackMailTemplate(feedback),
     };
 
-    if (feedback.screenshot) {
-      const type = await fromBuffer(feedback.screenshot);
-      mail = {
-        ...mail,
-        attachments: [
-          {
-            filename: `screenshot.${type?.ext}`,
-            content: feedback.screenshot,
-          },
-        ],
-      };
+    if (feedback.attachments != null) {
+      const attachments = await Promise.all(
+        feedback.attachments.map(async (r) => ({
+          filename: `screenshot.${await fromBuffer(r).then((r) => r?.ext)}`,
+          content: r,
+        })),
+      );
+
+      mail = { ...mail, attachments };
     }
 
     await MailService.instance.send(mail);
