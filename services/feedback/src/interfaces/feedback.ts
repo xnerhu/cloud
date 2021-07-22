@@ -2,7 +2,7 @@ export interface FeedbackModel {
   description: string;
   url: string;
   email?: string;
-  screenshot?: Buffer;
+  attachments?: Buffer[];
   wexondVersion: string;
   chromiumVersion: string;
   userAgent: string;
