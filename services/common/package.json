@@ -9,11 +9,8 @@
     "watch": "nodemon ./build/index.js",
     "build": "tsc"
   },
-  "devDependencies": {},
-  "dependencies": {
-    "@types/express": "^4.17.13",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "helmet": "^4.6.0"
-  }
+  "devDependencies": {
+    "fastify": "^3.19.2"
+  },
+  "dependencies": {}
 }

@@ -4,8 +4,10 @@
   "scripts": {
     "dev:feedback": "lerna exec yarn dev --parallel --scope=@services/{common,feedback}",
     "dev:waitlist": "lerna exec yarn dev --parallel --scope=@services/waitlist",
+    "dev:updates": "lerna exec yarn dev --parallel --scope=@services/{common,updates}",
     "watch:feedback": "lerna exec yarn watch --scope=@services/feedback",
     "watch:waitlist": "lerna exec yarn watch --scope=@services/waitlist",
+    "watch:updates": "lerna exec yarn watch --scope=@services/updates",
     "analyze": "lerna run --stream --parallel analyze",
     "start": "lerna run --stream --parallel start",
     "build": "lerna run --stream --parallel build",
