@@ -36,7 +36,7 @@ const Landing: React.FC = () => {
           <Title>web browser.</Title>
           <SubTitle>redefined.</SubTitle>
           <Buttons>
-            <WaitlistButton href="https://discord.gg/P7Vn4VX">
+            <WaitlistButton href="https://wexond.net/waitlist">
               JOIN THE WAITLIST
             </WaitlistButton>
             <OutlinedButton href="https://twitter.com/wexond">
