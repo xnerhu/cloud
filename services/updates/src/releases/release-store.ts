@@ -31,12 +31,12 @@ export class ReleaseStore {
     if (index === 0) return { type: 'none' };
 
     const patches = this.list.slice(0, index);
-    const patchesSize = patches.reduce((sum, r) => sum + r.diff_size, 0);
+    const patchesSize = patches.reduce((sum, r) => sum + r.diffSize, 0);
 
-    const full = patchesSize >= this.latestVersion.full_size;
+    const full = patchesSize >= this.latestVersion.fullSize;
     const files = full
-      ? [this.latestVersion.full_file]
-      : patches.map((r) => r.patch_file);
+      ? [this.latestVersion.fullFile]
+      : patches.map((r) => r.patchFile);
 
     return {
       type: full ? 'full' : 'patches',
