@@ -18,7 +18,7 @@ export class ReleaseStore {
     this.list = JSON.parse(data);
   }
 
-  protected get currentVersion() {
+  protected get latestVersion() {
     return this.list[0];
   }
 
@@ -31,9 +31,9 @@ export class ReleaseStore {
     const patches = this.list.slice(0, index);
     const patchesSize = patches.reduce((sum, r) => sum + r.diff_size, 0);
 
-    const full = patchesSize >= this.currentVersion.full_size;
+    const full = patchesSize >= this.latestVersion.full_size;
     const files = full
-      ? [this.currentVersion.full_file]
+      ? [this.latestVersion.full_file]
       : patches.map((r) => r.patch_file);
 
     return {
