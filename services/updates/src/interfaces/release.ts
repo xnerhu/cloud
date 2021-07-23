@@ -1,9 +1,9 @@
 export interface ReleaseModel {
   version: string;
-  patch_file: string;
-  full_file: string;
-  diff_size: number;
-  full_size: number;
+  patchFile: string;
+  fullFile: string;
+  diffSize: number;
+  fullSize: number;
 }
 
 export interface UpdateModel {
