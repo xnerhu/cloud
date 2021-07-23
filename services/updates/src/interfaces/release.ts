@@ -7,6 +7,6 @@ export interface ReleaseModel {
 }
 
 export interface UpdateModel {
-  type: 'full' | 'patches';
-  files: string[];
+  type: 'full' | 'patches' | 'none';
+  files?: string[];
 }

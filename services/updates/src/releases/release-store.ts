@@ -28,6 +28,8 @@ export class ReleaseStore {
     if (index === -1)
       throw new AppError(`Browser version ${version} is incorrect`);
 
+    if (index === 0) return { type: 'none' };
+
     const patches = this.list.slice(0, index);
     const patchesSize = patches.reduce((sum, r) => sum + r.diff_size, 0);
 
