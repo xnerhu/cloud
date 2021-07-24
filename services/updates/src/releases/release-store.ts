@@ -3,12 +3,18 @@ import { AppError, pathExists } from '@services/common';
 
 import { PATH_RELEASES } from '../constants/paths';
 import { ReleaseModel, UpdateModel } from '../interfaces';
-import { UPDATES_PUBLIC_PATH } from '../constants';
+import { CACHE_TIME, UPDATES_PUBLIC_PATH } from '../constants';
 
 export class ReleaseStore {
   public list: ReleaseModel[] = [];
 
+  private cacheTime: number;
+
   public async init() {
+    await this.loadData();
+  }
+
+  protected async loadData() {
     if (!(await pathExists(PATH_RELEASES))) {
       throw new Error(`Releases file doesn't exists at ${PATH_RELEASES}!`);
     }
@@ -16,13 +22,25 @@ export class ReleaseStore {
     const data = await readFile(PATH_RELEASES, 'utf8');
 
     this.list = JSON.parse(data);
+    this.cacheTime = Date.now();
+  }
+
+  protected get isCacheExpired() {
+    return (
+      this.list.length === 0 ||
+      (Date.now() - this.cacheTime) / 1000 / 60 > CACHE_TIME
+    );
   }
 
   protected get latestVersion() {
-    return this.list[0];
+    return this.list?.[0];
   }
 
-  public getForVersion(version: string): UpdateModel {
+  public async getForVersion(version: string): Promise<UpdateModel> {
+    if (this.isCacheExpired) {
+      await this.loadData();
+    }
+
     const index = this.list.findIndex((r) => r.version === version);
 
     if (index === -1)
