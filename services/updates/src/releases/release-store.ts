@@ -68,7 +68,7 @@ export class ReleaseStore {
     } else {
       return {
         type: 'patches',
-        patches: patches.map((r) => formatFile(r.patchFile)),
+        patches: patches.map((r) => formatFile(r.patchFile)).reverse(),
         fullFile,
       };
     }
