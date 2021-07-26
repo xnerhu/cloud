@@ -7,7 +7,7 @@ import { CACHE_TIME, UPDATES_PUBLIC_PATH } from '../constants';
 
 const formatFile = (path: string): ReleaseFileModel => {
   return {
-    url: `${UPDATES_PUBLIC_PATH}/${path}`
+    url: `${UPDATES_PUBLIC_PATH}/${path}`,
     filename: path,
   };
 };
