@@ -8,7 +8,7 @@ export interface ReleaseModel {
 
 export interface UpdateModel {
   type: 'full' | 'patches' | 'none';
-  files?: ReleaseFileModel[];
+  patches?: ReleaseFileModel[];
   fullFile?: ReleaseFileModel;
 }
 

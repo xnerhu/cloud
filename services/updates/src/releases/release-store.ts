@@ -63,13 +63,12 @@ export class ReleaseStore {
     if (full) {
       return {
         type: 'full',
-        files: [this.latestVersion.fullFile].map(formatFile),
         fullFile,
       };
     } else {
       return {
         type: 'patches',
-        files: patches.map((r) => formatFile(r.patchFile)),
+        patches: patches.map((r) => formatFile(r.patchFile)),
         fullFile,
       };
     }
