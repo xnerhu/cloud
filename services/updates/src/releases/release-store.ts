@@ -5,6 +5,9 @@ import { PATH_RELEASES } from '../constants/paths';
 import { ReleaseModel, UpdateModel } from '../interfaces';
 import { CACHE_TIME, UPDATES_PUBLIC_PATH } from '../constants';
 
+const formatFileUrl = (path: string) => {
+  return `${UPDATES_PUBLIC_PATH}/${path}`;
+};
 export class ReleaseStore {
   public list: ReleaseModel[] = [];
 
@@ -52,13 +55,18 @@ export class ReleaseStore {
     const patchesSize = patches.reduce((sum, r) => sum + r.diffSize, 0);
 
     const full = patchesSize >= this.latestVersion.fullSize;
-    const files = full
-      ? [this.latestVersion.fullFile]
-      : patches.map((r) => r.patchFile);
 
-    return {
-      type: full ? 'full' : 'patches',
-      files: files.map((r) => `${UPDATES_PUBLIC_PATH}/${r}`),
-    };
+    if (full) {
+      return {
+        type: 'full',
+        files: [this.latestVersion.fullFile].map(formatFileUrl),
+      };
+    } else {
+      return {
+        type: 'patches',
+        files: patches.map((r) => r.patchFile),
+        fullFile: formatFileUrl(this.latestVersion.fullFile),
+      };
+    }
   }
 }
