@@ -2,11 +2,14 @@ import { readFile } from 'fs/promises';
 import { AppError, pathExists } from '@services/common';
 
 import { PATH_RELEASES } from '../constants/paths';
-import { ReleaseModel, UpdateModel } from '../interfaces';
+import { ReleaseFileModel, ReleaseModel, UpdateModel } from '../interfaces';
 import { CACHE_TIME, UPDATES_PUBLIC_PATH } from '../constants';
 
-const formatFileUrl = (path: string) => {
-  return `${UPDATES_PUBLIC_PATH}/${path}`;
+const formatFile = (path: string): ReleaseFileModel => {
+  return {
+    url: `${UPDATES_PUBLIC_PATH}/${path}`,
+    filename: path,
+  };
 };
 export class ReleaseStore {
   public list: ReleaseModel[] = [];
@@ -55,17 +58,19 @@ export class ReleaseStore {
     const patchesSize = patches.reduce((sum, r) => sum + r.diffSize, 0);
 
     const full = patchesSize >= this.latestVersion.fullSize;
+    const fullFile = formatFile(this.latestVersion.fullFile);
 
     if (full) {
       return {
         type: 'full',
-        files: [this.latestVersion.fullFile].map(formatFileUrl),
+        files: [this.latestVersion.fullFile].map(formatFile),
+        fullFile,
       };
     } else {
       return {
         type: 'patches',
-        files: patches.map((r) => r.patchFile),
-        fullFile: formatFileUrl(this.latestVersion.fullFile),
+        files: patches.map((r) => formatFile(r.patchFile)),
+        fullFile,
       };
     }
   }

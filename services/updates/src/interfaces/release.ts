@@ -8,6 +8,11 @@ export interface ReleaseModel {
 
 export interface UpdateModel {
   type: 'full' | 'patches' | 'none';
-  files?: string[];
-  fullFile?: string;
+  files?: ReleaseFileModel[];
+  fullFile?: ReleaseFileModel;
+}
+
+export interface ReleaseFileModel {
+  filename: string;
+  url: string;
 }
