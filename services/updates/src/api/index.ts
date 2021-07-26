@@ -20,11 +20,10 @@ export default (app: FastifyInstance) => {
     '/v1/',
     { schema: { querystring: SCHEMA_INDEX } },
     async (req: IndexRequest) => {
-      const { type, files } = await App.instance.releaseStore.getForVersion(
-        req.query.browserVersion,
-      );
+      const { type, files, fullFile } =
+        await App.instance.releaseStore.getForVersion(req.query.browserVersion);
 
-      return { success: true, type, files };
+      return { success: true, type, files, fullFile };
     },
   );
 };
