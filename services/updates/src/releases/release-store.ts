@@ -11,7 +11,6 @@ const formatFile = (path: string): ReleaseFileModel => {
     filename: path,
   };
 };
-
 export class ReleaseStore {
   public list: ReleaseModel[] = [];
 
