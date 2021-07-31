@@ -12,6 +12,9 @@ export const SMTP_AUTH_PASSWORD = process.env.SMTP_AUTH_PASSWORD as string;
 
 export const FEEDBACK_RECIPIENTS = process.env.FEEDBACK_RECIPIENTS as string;
 export const FEEDBACK_RECIPIENTS_LIST = FEEDBACK_RECIPIENTS.split(',');
-export const FEEDBACK_SCREENSHOT_MAX_SIZE = parseInt(
-  process.env.FEEDBACK_SCREENSHOT_MAX_SIZE as string,
+export const FEEDBACK_ATTACHMENTS_MAX_NUMBER = parseInt(
+  process.env.FEEDBACK_ATTACHMENTS_MAX_NUMBER as string,
+);
+export const FEEDBACK_ATTACHMENTS_MAX_SIZE = parseInt(
+  process.env.FEEDBACK_ATTACHMENTS_MAX_SIZE as string,
 );

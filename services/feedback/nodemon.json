@@ -1,4 +1,4 @@
 {
-  "watch": ["build"],
+  "watch": ["build", "../common/build"],
   "ext": "js"
 }
