@@ -43,7 +43,7 @@ export default (
   logger: ServiceLogger,
 ) => {
   server.post<{ Body: FeedbackRequestBodyParams }>(
-    '/feedback',
+    '/v1/',
     { schema: { body: SCHEMA_FEEDBACK } },
     async (req, res) => {
       logger.info(`Incoming feedback request`);
