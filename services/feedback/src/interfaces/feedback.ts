@@ -6,4 +6,5 @@ export interface FeedbackModel {
   wexondVersion: string;
   chromiumVersion: string;
   userAgent: string;
+  diagnosticData?: string;
 }

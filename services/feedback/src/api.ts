@@ -20,6 +20,7 @@ const SCHEMA_FEEDBACK = {
     wexondVersion: { type: 'string' },
     chromiumVersion: { type: 'string' },
     userAgent: { type: 'string' },
+    diagnosticData: { type: 'string' },
   },
 } as const;
 
@@ -42,6 +43,7 @@ export default (app: FastifyInstance) => {
         userAgent,
         wexondVersion,
         attachments,
+        diagnosticData,
       } = req.body;
 
       if (
@@ -68,6 +70,7 @@ export default (app: FastifyInstance) => {
         userAgent,
         wexondVersion,
         attachments: attachments?.map((r) => r.data),
+        diagnosticData,
       });
 
       return { success: true };
