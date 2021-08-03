@@ -1,13 +1,36 @@
-export class AppError extends Error {
-  public readonly isOperational: boolean;
+import { format } from 'util';
 
-  constructor(description: string, isOperational = true) {
-    super(description);
+export interface AppErrorDetails {
+  name: string;
+  description?: string;
+  code?: number;
+}
+
+export class AppError extends Error {
+  constructor(
+    public readonly details: AppErrorDetails,
+    public readonly isOperational: boolean,
+  ) {
+    super(details.description);
+
+    this.name = details.name;
 
     Object.setPrototypeOf(this, new.target.prototype);
 
-    this.isOperational = isOperational;
-
     Error.captureStackTrace(this);
   }
+
+  public toString = () => {
+    return `${this.details.name} [${this.details.code}]: ${this.message}, ${this.stack}`;
+  };
 }
+export const createAppError =
+  (details: AppErrorDetails, isOperational = true) =>
+  (...args: any[]) => {
+    return new AppError(
+      !details.description
+        ? details
+        : { ...details, description: format(details.description, ...args) },
+      isOperational,
+    );
+  };

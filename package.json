@@ -8,10 +8,12 @@
     "watch:feedback": "lerna exec yarn watch --scope=@services/feedback",
     "watch:waitlist": "lerna exec yarn watch --scope=@services/waitlist",
     "watch:updates": "lerna exec yarn watch --scope=@services/updates",
+    "build:feedback": "lerna exec yarn build --scope=@services/{common,feedback}",
     "analyze": "lerna run --stream --parallel analyze",
     "start": "lerna run --stream --parallel start",
     "build": "lerna run --stream --parallel build",
     "gen": "lerna run --stream --parallel gen",
+    "clean": "rimraf ",
     "deps": "npx lerna link"
   },
   "devDependencies": {

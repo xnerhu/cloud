@@ -1,12 +1,12 @@
 import { fromBuffer } from 'file-type';
 
 import { FEEDBACK_RECIPIENTS } from './constants/config';
-import { feedbackMailTemplate } from './feedback-mail-template';
 import { FeedbackModel, MailModel } from './interfaces';
-import { MailService } from './mail-service';
+import { MailService } from './mail/mail-service';
+import { feedbackMailTemplate } from './mail/feedback-mail-template';
 
 export class FeedbackService {
-  public static instance = new FeedbackService();
+  constructor(private mailService: MailService) {}
 
   public async report(feedback: FeedbackModel) {
     let mail: MailModel = {
@@ -26,6 +26,6 @@ export class FeedbackService {
       mail = { ...mail, attachments };
     }
 
-    await MailService.instance.send(mail);
+    await this.mailService.send(mail);
   }
 }

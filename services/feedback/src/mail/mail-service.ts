@@ -1,16 +1,17 @@
 import { createTransport, Transporter, SentMessageInfo } from 'nodemailer';
+import { ServiceLogger } from '@services/common';
+
 import {
   SMTP_HOST,
   SMTP_PORT,
   SMTP_AUTH_USER,
   SMTP_AUTH_PASSWORD,
-} from './constants/config';
-import { Logger } from './logger';
+} from '../constants/config';
 
 export class MailService {
-  public static instance = new MailService();
-
   private transporter: Transporter;
+
+  constructor(private logger: ServiceLogger) {}
 
   public init() {
     this.transporter = createTransport({
@@ -27,6 +28,6 @@ export class MailService {
 
   public async send(info: SentMessageInfo) {
     await this.transporter.sendMail(info);
-    Logger.instance.info(`Report email send successfully`);
+    this.logger.info(`Report email send successfully`);
   }
 }
