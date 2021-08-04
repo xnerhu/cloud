@@ -1,3 +1,3 @@
 import { resolve } from 'path';
 
-export const PATH_RELEASES = resolve('data', 'releases.json');
+export const PATH_RELEASES_JSON = resolve('data', 'releases.json');

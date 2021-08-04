@@ -1,18 +1,22 @@
 export interface ReleaseModel {
   version: string;
   patchFile: string;
-  fullFile: string;
+  patchHash?: string;
+  fullFile?: string;
+  fullHash?: string;
   diffSize: number;
-  fullSize: number;
+  fullSize?: number;
 }
 
 export interface UpdateModel {
   type: 'full' | 'patches' | 'none';
-  patches?: ReleaseFileModel[];
-  fullFile?: ReleaseFileModel;
+  patches?: UpdateFileModel[];
+  fullFile?: UpdateFileModel;
 }
 
-export interface ReleaseFileModel {
+export interface UpdateFileModel {
   filename: string;
+  size: number;
   url: string;
+  hash?: string;
 }

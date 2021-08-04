@@ -4,6 +4,7 @@ export interface AppErrorDetails {
   name: string;
   description?: string;
   code?: number;
+  log?: boolean;
 }
 
 export class AppError extends Error {

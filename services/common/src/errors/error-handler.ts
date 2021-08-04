@@ -5,6 +5,10 @@ export class ErrorHandler {
   constructor(protected logger: ServiceLogger) {}
 
   public handle(err: Error | AppError, statusCode?: number) {
+    if (err instanceof AppError && err.details.log) {
+      this.logger.error(err.toString());
+    }
+
     // Status codes less than 500 are related to bad user input
     // 500 is an internal server error
     if (statusCode != null && statusCode < 500) return true;
@@ -15,6 +19,11 @@ export class ErrorHandler {
     }
 
     return true;
+  }
+
+  public getStatusCode(err: Error | AppError) {
+    if (err instanceof AppError) return err.details.code;
+    return undefined;
   }
 
   private isOperational(err: Error | AppError) {
