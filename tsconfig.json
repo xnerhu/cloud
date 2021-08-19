@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
-    "allowJs": true,
+    "allowJs": false,
 
     "module": "commonjs",
     "target": "es6",
