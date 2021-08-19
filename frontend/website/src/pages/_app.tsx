@@ -50,7 +50,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
 
         <meta name="color-scheme" content="dark" />
-        <meta name="theme-color" content="#2196F3" />
+        {/* <meta name="theme-color" content="#2196F3" /> */}
 
         <title>Wexond - Web browser redefined.</title>
         <meta
