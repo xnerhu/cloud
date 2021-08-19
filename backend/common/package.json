@@ -1,0 +1,16 @@
+{
+  "name": "@backend/common",
+  "version": "1.0.0",
+  "private": true,
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "dev": "tsc --watch",
+    "watch": "nodemon ./build/index.js",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "fastify": "^3.19.2"
+  },
+  "dependencies": {}
+}
