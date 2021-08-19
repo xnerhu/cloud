@@ -72,8 +72,8 @@ jobs:
         with:
           filters: |
             release:
-              - 'services/**/release.yaml'
-              - 'web/**/release.yaml'
+              - 'backend/**/release.yaml'
+              - 'frontend/**/release.yaml'
 
   release:
     needs: [release_check]
