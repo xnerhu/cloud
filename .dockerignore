@@ -1,3 +1,5 @@
 node_modules
-./services/**/node_modules
-./web/**/src
+./backend/**/node_modules
+./frontend/**/node_modules
+./backend/**/src
+./frontennd/**/src
