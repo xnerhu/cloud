@@ -9,11 +9,13 @@
     "watch:waitlist": "lerna exec yarn watch --scope=@services/waitlist",
     "watch:updates": "lerna exec yarn watch --scope=@services/updates",
     "build:feedback": "lerna exec yarn build --scope=@services/{common,feedback}",
+    "build:updates": "lerna exec yarn build --scope=@services/{common,updates}",
+    "build:website": "lerna exec yarn build --scope=@web/website",
     "analyze": "lerna run --stream --parallel analyze",
     "start": "lerna run --stream --parallel start",
     "build": "lerna run --stream --parallel build",
     "gen": "lerna run --stream --parallel gen",
-    "clean": "rimraf ",
+    "clean": "rimraf ./services/**/build",
     "deps": "npx lerna link"
   },
   "devDependencies": {
@@ -39,7 +41,7 @@
     "dotenv": "^10.0.0"
   },
   "workspaces": [
-    "services/*",
-    "web/*"
+    "backend/*",
+    "frontend/*"
   ]
 }

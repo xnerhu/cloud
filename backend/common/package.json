@@ -1,5 +1,5 @@
 {
-  "name": "@services/common",
+  "name": "@backend/common",
   "version": "1.0.0",
   "private": true,
   "main": "build/index.js",
