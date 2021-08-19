@@ -1,2 +1,2 @@
 FROM nginx:stable
-COPY ./web/website/build /usr/share/nginx/html
+COPY ./frontend/website/build /usr/share/nginx/html
