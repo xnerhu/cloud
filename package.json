@@ -16,7 +16,8 @@
     "deps": "npx lerna link",
     "ci-build": "ts-node -T scripts/ci-build.ts",
     "lint": "eslint \"./{backend,frontend}/**/*/*.{ts,tsx}\"",
-    "lint-fix": "npm run lint -- --fix"
+    "lint-fix": "npm run lint -- --fix",
+    "test": "lerna run --stream --parallel test"
   },
   "devDependencies": {
     "@types/node": "^14.14.10",
