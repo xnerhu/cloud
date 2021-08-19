@@ -1,5 +1,5 @@
 import { createTransport, Transporter, SentMessageInfo } from 'nodemailer';
-import { ServiceLogger } from '@services/common';
+import { ServiceLogger } from '@backend/common';
 
 import {
   SMTP_HOST,

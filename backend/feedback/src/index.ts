@@ -2,7 +2,7 @@
 // import helmet from 'fastify-helmet';
 // import formBody from 'fastify-formbody';
 // import multipart from 'fastify-multipart';
-// import { ensurePath } from '@services/common';
+// import { ensurePath } from '@backend/common';
 
 // import { FEEDBACK_SCREENSHOT_MAX_SIZE, SERVICE_PORT } from './constants/config';
 // import { MailService } from './mail-service';
@@ -53,7 +53,7 @@
 
 // main();
 
-import { handleNodeErrors } from '@services/common';
+import { handleNodeErrors } from '@backend/common';
 
 import { App } from './app';
 

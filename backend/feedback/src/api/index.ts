@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
-import { ServiceLogger } from '@services/common';
+import { ServiceLogger } from '@backend/common';
 
 import {
   FEEDBACK_ATTACHMENTS_MAX_NUMBER,

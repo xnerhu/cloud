@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import { AppError, pathExists } from '@services/common';
+import { AppError, createAppError, pathExists } from '@backend/common';
 
 import { PATH_RELEASES } from '../constants/paths';
 import { ReleaseFileModel, ReleaseModel, UpdateModel } from '../interfaces';
@@ -11,6 +11,12 @@ const formatFile = (path: string): ReleaseFileModel => {
     filename: path,
   };
 };
+
+const INCORRECT_BROWSER_VERSION = createAppError({
+  name: 'INCORRECT_BROWSER_VERSION',
+  description: 'Incorrect browser version',
+});
+
 export class ReleaseStore {
   public list: ReleaseModel[] = [];
 
@@ -49,8 +55,7 @@ export class ReleaseStore {
 
     const index = this.list.findIndex((r) => r.version === version);
 
-    if (index === -1)
-      throw new AppError(`Browser version ${version} is incorrect`);
+    if (index === -1) throw INCORRECT_BROWSER_VERSION();
 
     if (index === 0) return { type: 'none' };
 

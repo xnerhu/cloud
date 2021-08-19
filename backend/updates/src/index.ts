@@ -1,4 +1,4 @@
-import { handleNodeErrors } from '@services/common';
+import { handleNodeErrors } from '@backend/common';
 
 import { App } from './app';
 

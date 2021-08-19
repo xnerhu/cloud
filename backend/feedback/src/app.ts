@@ -7,7 +7,7 @@ import {
   ServiceLogger,
   ErrorHandler,
   handleFastifyErrors,
-} from '@services/common';
+} from '@backend/common';
 
 import { SERVICE_PORT } from './constants';
 import api from './api';

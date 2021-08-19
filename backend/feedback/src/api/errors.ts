@@ -1,4 +1,4 @@
-import { createAppError } from '@services/common';
+import { createAppError } from '@backend/common';
 
 import {
   FEEDBACK_ATTACHMENTS_MAX_NUMBER,
