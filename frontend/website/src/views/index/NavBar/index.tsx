@@ -26,7 +26,7 @@ export const NavBar: React.FC = () => {
         window.removeEventListener('scroll', onWindowScroll);
       }
     };
-  }, [isSticky]);
+  }, [isSticky, onWindowScroll]);
 
   return (
     <StyledNavBar isSticky={isSticky}>

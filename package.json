@@ -14,7 +14,9 @@
     "analyze": "lerna run --stream --parallel analyze",
     "clean": "rimraf ./backend/**/build && rimraf ./frontend/**/build",
     "deps": "npx lerna link",
-    "ci-build": "ts-node -T scripts/ci-build.ts"
+    "ci-build": "ts-node -T scripts/ci-build.ts",
+    "lint": "eslint \"./{backend,frontend}/**/*/*.{ts,tsx}\"",
+    "lint-fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "@types/node": "^14.14.10",
@@ -24,6 +26,7 @@
     "@typescript-eslint/parser": "^4.21.0",
     "concurrently": "^5.3.0",
     "cross-env": "^7.0.3",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-prettier": "^3.2.0",
     "eslint-plugin-react": "^7.23.1",

@@ -48,11 +48,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
 
-      - name: Build apps
-        run: yarn ci-build
+      - name: Lint
+        run: yarn lint
 
       - name: Test
         run: yarn test
+
+      - name: Build apps
+        run: yarn ci-build
 
   release_check:
     if: ${{ (github.event_name == 'push' || github.event_name == 'pull_request' && github.event.pull_request.merged == true) && github.ref == 'refs/heads/master' }}
