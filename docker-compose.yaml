@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  updates_db:
+    image: 'mongo:latest'
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: updates
+    volumes:
+      - ./backend/updates/scripts/prepare-db.js:/docker-entrypoint-initdb.d/001_users.js:ro
+      - ./backend/updates/.dev/mongodb:/data/db

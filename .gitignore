@@ -20,5 +20,5 @@ coverage
 .next
 .env
 out
-
 services/updates/data
+.dev

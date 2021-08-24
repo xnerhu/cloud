@@ -2,6 +2,7 @@ import fastify, { FastifyInstance } from 'fastify';
 import helmet from 'fastify-helmet';
 import formBody from 'fastify-formbody';
 import { resolve } from 'path';
+import { createConnection, Connection, MongoEntityManager } from 'typeorm';
 import {
   ServiceLogger,
   ErrorHandler,
@@ -11,6 +12,10 @@ import {
 import { SERVICE_PORT } from './constants';
 import { ReleaseStore } from './releases/release-store';
 import api from './api';
+import { ReleaseEntity } from './release/release-entity';
+import { ReleaseController } from './release/release-controller';
+import { DistributionEntity } from './release/distribution-entity';
+import { UpdateController } from './release/update-controller';
 
 export class App {
   public static instance = new App();
@@ -23,8 +28,14 @@ export class App {
 
   public errorHandler = new ErrorHandler(this.logger);
 
+  public connection: Connection;
+
+  public releaseController: ReleaseController;
+
+  public updateController: UpdateController;
+
   public async init() {
-    await this.releaseStore.init();
+    // await this.releaseStore.init();
 
     const server = fastify();
 
@@ -39,5 +50,25 @@ export class App {
     });
 
     this.server = server;
+
+    this.connection = await createConnection({
+      type: 'mongodb',
+      host: 'localhost',
+      port: 27017,
+      database: 'updates',
+      username: 'root',
+      password: 'example',
+      entities: [ReleaseEntity, DistributionEntity],
+    });
+
+    this.releaseController = new ReleaseController(
+      this.connection.manager as MongoEntityManager,
+      this.logger,
+    );
+
+    this.updateController = new UpdateController(
+      this.releaseController,
+      this.logger,
+    );
   }
 }

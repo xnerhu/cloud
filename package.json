@@ -20,6 +20,7 @@
     "test": "lerna run --stream --parallel test"
   },
   "devDependencies": {
+    "@types/execa": "^2.0.0",
     "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
