@@ -1,26 +1,61 @@
 version: '3.7'
 services:
   updates_db:
-    # image: 'mongo:latest'
-    # command: ['--replSet', 'rs0', '--bind_ip_all']
-    # ports:
-    #   - 27017:27017
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: root
-    #   MONGO_INITDB_ROOT_PASSWORD: example
-    #   MONGO_INITDB_DATABASE: updates
-    # volumes:
-    #   - ./scripts/prepare-mongo-db.js:/docker-entrypoint-initdb.d/001_users.js:ro
-    #   - ./.dev/updates/mongodb:/data/db
-    image: bitnami/mongodb
-    ports:
-      - 27017:27017
+    image: bitnami/mysql
     environment:
-      MONGODB_REPLICA_SET_MODE: primary
-      MONGODB_REPLICA_SET_KEY: example
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGODB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE: updates
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: updates
+    ports:
+      - 3306:3306
     volumes:
-      - ./scripts/prepare-mongo-db.js:/docker-entrypoint-initdb.d/001_users.js:ro
-      - ./.dev/updates/mongodb:/data/db
+      - mysql_data:/bitnami/mysql/data
+volumes:
+  mysql_data:
+#     image: postgres
+#     environment:
+#       - POSTGRES_USER=root
+#       - POSTGRES_PASSWORD=example
+#       - POSTGRES_PORT=5432
+#       - POSTGRES_DB=updates
+#     ports:
+#       - 5432:5432
+#     volumes:
+#       - postgres:/var/lib/postgresql/data
+# volumes:
+#   postgres:
+
+# image: 'mongo:latest'
+# command: ['--replSet', 'rs0', '--bind_ip_all']
+# ports:
+#   - 27017:27017
+# environment:
+#   MONGO_INITDB_ROOT_USERNAME: root
+#   MONGO_INITDB_ROOT_PASSWORD: example
+#   MONGO_INITDB_DATABASE: updates
+#   MONGODB_REPLICA_SET_KEY: example
+#   MONGODB_REPLICA_SET_MODE: primary
+# volumes:
+#   # - ./scripts/prepare-mongo-db.js:/docker-entrypoint-initdb.d/001_users.js:ro
+#   - ./.dev/updates/mongodb:/data/db
+# image: bitnami/mongodb
+# ports:
+#   - 27017:27017
+# environment:
+#   - MONGODB_REPLICA_SET_MODE=primary
+#   - MONGODB_REPLICA_SET_KEY=example
+#   - MONGODB_ROOT_PASSWORD=example
+#   # - MONGODB_USERNAME=userxd
+#   # - MONGODB_PASSWORD=example
+#   - MONGODB_DATABASE=updates
+#   # - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
+#   # MONGODB_REPLICA_SET_MODE: primary
+#   # MONGODB_REPLICA_SET_KEY: example
+#   # MONGO_INITDB_ROOT_USERNAME: root
+#   # MONGO_INITDB_ROOT_PASSWORD: example
+#   # MONGODB_ADVERTISED_HOSTNAME: mongo
+#   # MONGODB_ROOT_USERNAME: root
+#   # MONGODB_ROOT_PASSWORD: example
+#   # MONGO_INITDB_DATABASE: updates
+# volumes:
+#   # - ./scripts/prepare-mongo-db.js:/docker-entrypoint-initdb.d/001_users.js:ro
+#   - ./.dev/updates/mongodb:/data/db

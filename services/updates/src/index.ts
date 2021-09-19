@@ -2,25 +2,42 @@ import { resolve } from 'path';
 import fastify from 'fastify';
 import helmet from 'fastify-helmet';
 import formBody from 'fastify-formbody';
+// import { PrismaClient } from './'';
 import { PrismaClient } from '@prisma/client';
 import { ErrorHandler, handleNodeErrors, ServiceLogger } from '@common/node';
 import { handleFastifyErrors } from '@common/fastify';
+import { ReleaseEntity } from './release/release-entity';
+// import { createConnection } from 'typeorm';
 
 const main = async () => {
+  // url: 'mongodb://localhost:27017/updates',
+  // const connection = await createConnection({
+  //   type: 'mongodb',
+  //   host: 'localhost',
+  //   port: 27017,
+  //   database: 'updates',
+  //   username: 'root',
+  //   // w: ''
+  //   password: 'example',
+  //   entities: [ReleaseEntity],
+  //   authSource: 'admin',
+  // });
+  // console.log('xd');
   const prisma = new PrismaClient({
     datasources: {
       db: {
-        url: 'mongodb://localhost:27017/updates',
+        url: 'mysql://root:example@localhost:3306/updates',
       },
     },
   });
 
-  const xd = await prisma.user.create({
+  const xd = await prisma.release.create({
     data: { name: 'xd' },
   });
-
   console.log(xd);
 
+  // prisma.release.
+  // console.log(xd);
   // const logger = new ServiceLogger('Updates', resolve('out/logs.log'));
   // const errorHandler = new ErrorHandler(logger);
   // handleNodeErrors(logger);

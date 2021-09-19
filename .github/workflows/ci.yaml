@@ -63,6 +63,9 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-bazelisk-${{ env.BAZELISK_CACHE_VERSION }}-
 
+      - name: Build Prisma
+        run: yarn prisma
+
       - name: Bazel hash
         id: bazel-hash
         shell: bash

@@ -1,5 +1,5 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin", "nodejs_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -13,7 +13,7 @@ ts_config(
     ],
 )
 
-TEST_FILES = ["src/**/*.test.ts"]
+TEST_FILES = ["./src/**/*.test.ts"]
 
 SRC_FILES = glob(
     ["src/**/*.ts"],
@@ -40,7 +40,6 @@ ts_project(
 nodejs_binary(
     name = "updates",
     data = [
-        "package.json",
         ":components",
     ],
     entry_point = "src/index.ts",

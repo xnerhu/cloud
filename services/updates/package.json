@@ -1,9 +1,0 @@
-{
-  "name": "@services/updates",
-  "scripts": {
-    
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  }
-}

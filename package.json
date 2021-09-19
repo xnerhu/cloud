@@ -12,7 +12,7 @@
     "build:updates": "lerna exec yarn build --scope=@backend/{common,updates}",
     "build:website": "lerna exec yarn build --scope=@web/website",
     "analyze": "lerna run --stream --parallel analyze",
-    "clean": "rimraf ./backend/**/build && rimraf ./frontend/**/build",
+    "clean": "bazel clean",
     "deps": "npx lerna link",
     "ci-build": "ts-node -T scripts/ci-build.ts",
     "lint": "eslint \"./{backend,frontend}/**/*/*.{ts,tsx}\"",
@@ -21,7 +21,9 @@
     "build": "bazel build //...",
     "test": "bazel test //... --build_tests_only",
     "docker:start": "docker-compose up --build",
-    "docker:stop": "docker-compose down"
+    "docker:stop": "docker-compose down",
+    "prisma:updates": "npx prisma generate --schema ./services/updates/prisma/schema.prisma",
+    "prisma": "concurrently \"npm run prisma:updates\""
   },
   "devDependencies": {
     "@bazel/bazelisk": "^1.10.1",
@@ -44,7 +46,7 @@
     "@types/react-dom": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
-    "concurrently": "^5.3.0",
+    "concurrently": "^6.2.1",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^7.0.0",
