@@ -1,0 +1,47 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+        "//common/fastify:tsconfig",
+        "//common/node:tsconfig",
+    ],
+)
+
+TEST_FILES = ["src/**/*.test.ts"]
+
+SRC_FILES = glob(
+    ["src/**/*.ts"],
+    exclude = TEST_FILES,
+)
+
+DEPS = [
+    "//common/node",
+    "//common/fastify",
+    "@npm//@types/node",
+]
+
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig",
+    deps = DEPS,
+)
+
+nodejs_binary(
+    name = "updates",
+    data = [
+        "package.json",
+        ":components",
+    ],
+    entry_point = "src/index.ts",
+)

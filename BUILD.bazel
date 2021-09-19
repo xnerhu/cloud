@@ -1,0 +1,9 @@
+exports_files(
+    [
+        "tsconfig.json",
+        "package.json",
+        "jest.config.js",
+        "jest-reporter.js",
+    ],
+    visibility = ["//visibility:public"],
+)

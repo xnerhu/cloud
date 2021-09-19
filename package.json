@@ -2,9 +2,9 @@
   "name": "wexond-cloud",
   "private": true,
   "scripts": {
+    "dev:updates": "ibazel run //services/updates",
     "dev:feedback": "lerna exec yarn dev --parallel --scope=@backend/{common,feedback}",
     "dev:waitlist": "lerna exec yarn dev --parallel --scope=@backend/waitlist",
-    "dev:updates": "lerna exec yarn dev --parallel --scope=@backend/{common,updates}",
     "watch:feedback": "lerna exec yarn watch --scope=@backend/feedback",
     "watch:waitlist": "lerna exec yarn watch --scope=@backend/waitlist",
     "watch:updates": "lerna exec yarn watch --scope=@backend/updates",
@@ -17,11 +17,29 @@
     "ci-build": "ts-node -T scripts/ci-build.ts",
     "lint": "eslint \"./{backend,frontend}/**/*/*.{ts,tsx}\"",
     "lint-fix": "npm run lint -- --fix",
-    "test": "lerna run --stream --parallel test"
+    "test-old": "lerna run --stream --parallel test",
+    "build": "bazel build //...",
+    "test": "bazel test //... --build_tests_only",
+    "docker:start": "docker-compose up --build",
+    "docker:stop": "docker-compose down"
   },
   "devDependencies": {
+    "@bazel/bazelisk": "^1.10.1",
+    "@bazel/buildifier": "^4.2.1",
+    "@bazel/ibazel": "^0.15.10",
+    "@bazel/labs": "^4.2.0",
+    "@bazel/runfiles": "^4.2.0",
+    "@bazel/typescript": "^4.2.0",
+    "@grpc/grpc-js": "^1.3.7",
+    "@prisma/client": "^3.0.2",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/busboy": "^0.2.4",
     "@types/execa": "^2.0.0",
+    "@types/jest": "^27.0.1",
     "@types/node": "^14.14.10",
+    "@types/nodemailer": "^6.4.4",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
@@ -34,19 +52,34 @@
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "execa": "^5.1.1",
+    "fastify": "^3.21.3",
+    "fastify-formbody": "^5.1.0",
+    "fastify-helmet": "^5.3.2",
+    "fastify-multipart": "^5.0.0",
+    "file-type": "^16.5.3",
+    "google-protobuf": "^3.18.0",
+    "grpc-tools": "^1.11.2",
+    "grpc-web": "^1.2.1",
+    "jest": "^27.2.0",
+    "jest-cli": "^27.2.0",
+    "json-schema-to-ts": "^1.6.4",
     "lerna": "^3.22.1",
+    "mongodb": "^4.1.2",
+    "nodemailer": "^6.6.3",
     "nodemon": "^2.0.12",
     "prettier": "^2.2.1",
+    "prisma": "^3.0.2",
     "rimraf": "^3.0.2",
     "ts-loader": "^8.0.11",
     "ts-node": "^10.2.1",
-    "typescript": "^4.1.2"
+    "ts-protoc-gen": "^0.15.0",
+    "typeorm": "^0.2.37",
+    "typescript": "^4.1.2",
+    "web-vitals": "^2.1.0",
+    "winston": "^3.3.3"
   },
   "dependencies": {
     "dotenv": "^10.0.0"
   },
-  "workspaces": [
-    "backend/*",
-    "frontend/*"
-  ]
+  "workspaces": []
 }
