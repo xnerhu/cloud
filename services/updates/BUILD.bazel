@@ -1,5 +1,5 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin", "nodejs_binary")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -24,6 +24,9 @@ DEPS = [
     "//common/node",
     "//common/fastify",
     "@npm//@types/node",
+    "@npm//fastify-helmet",
+    "@npm//fastify-formbody",
+    "@npm//@prisma/client",
 ]
 
 ts_project(

@@ -66,7 +66,6 @@
     "jest-cli": "^27.2.0",
     "json-schema-to-ts": "^1.6.4",
     "lerna": "^3.22.1",
-    "mongodb": "^4.1.2",
     "nodemailer": "^6.6.3",
     "nodemon": "^2.0.12",
     "prettier": "^2.2.1",
@@ -75,7 +74,6 @@
     "ts-loader": "^8.0.11",
     "ts-node": "^10.2.1",
     "ts-protoc-gen": "^0.15.0",
-    "typeorm": "^0.2.37",
     "typescript": "^4.1.2",
     "web-vitals": "^2.1.0",
     "winston": "^3.3.3"
