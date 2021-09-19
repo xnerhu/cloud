@@ -23,7 +23,8 @@
     "docker:start": "docker-compose up --build",
     "docker:stop": "docker-compose down",
     "prisma:updates": "npx prisma generate --schema ./services/updates/prisma/schema.prisma",
-    "prisma": "concurrently \"npm run prisma:updates\""
+    "prisma": "concurrently \"npm run prisma:updates\"",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@bazel/bazelisk": "^1.10.1",
@@ -68,6 +69,7 @@
     "lerna": "^3.22.1",
     "nodemailer": "^6.6.3",
     "nodemon": "^2.0.12",
+    "patch-package": "^6.4.7",
     "prettier": "^2.2.1",
     "prisma": "^3.0.2",
     "rimraf": "^3.0.2",

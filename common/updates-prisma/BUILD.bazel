@@ -1,0 +1,30 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin", "js_library")
+load("@npm//prisma:index.bzl", "prisma")
+
+package(default_visibility = ["//visibility:public"])
+
+copy_to_bin(
+    name = "copy_prisma",
+    srcs = ["schema.prisma"],
+)
+
+prisma(
+    name = "prisma_build",
+    outs = ["prisma"],
+    args = [
+        # "--nobazel_patch_module_resolver",
+        "generate",
+        "--schema",
+        "$(RULEDIR)/schema.prisma",
+    ],
+    data = [
+        ":copy_prisma",
+    ],
+)
+
+js_library(
+    name = "updates-prisma",
+    package_name = "@common/updates-prisma",
+    srcs = ["package.json"],
+    deps = [":prisma_build"],
+)

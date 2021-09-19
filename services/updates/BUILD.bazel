@@ -16,22 +16,26 @@ ts_config(
 TEST_FILES = ["./src/**/*.test.ts"]
 
 SRC_FILES = glob(
-    ["src/**/*.ts"],
+    [
+        "src/**/*.ts",
+    ],
     exclude = TEST_FILES,
 )
 
 DEPS = [
     "//common/node",
     "//common/fastify",
+    "//common/updates-prisma",
     "@npm//@types/node",
     "@npm//fastify-helmet",
     "@npm//fastify-formbody",
-    "@npm//@prisma/client",
+    # "@npm//@prisma/client",
 ]
 
 ts_project(
     name = "components",
     srcs = SRC_FILES,
+    allow_js = True,
     composite = True,
     declaration = True,
     incremental = True,
