@@ -20,7 +20,10 @@ ts_config(
 
 copy_to_bin(
     name = "copy_prisma",
-    srcs = ["schema.prisma", ".env"],
+    srcs = [
+        ".env",
+        "schema.prisma",
+    ],
 )
 
 prisma(
@@ -48,6 +51,7 @@ prisma(
         # "schema.prisma",
         ":copy_prisma",
     ],
+    tags = ["manual"],
     # output_dir = True,
 )
 
@@ -55,5 +59,6 @@ js_library(
     name = "updates-prisma",
     package_name = "@common/updates-prisma",
     srcs = ["package.json"],
+    tags = ["manual"],
     deps = [":prisma_build"],
 )
