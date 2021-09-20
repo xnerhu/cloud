@@ -42,7 +42,7 @@ jobs:
         env:
           ADBLOCK: true
 
-      - name: Restore Eslint Cache t
+      - name: Restore Eslint Cache
         uses: actions/cache@v2
         id: eslint-cache
         with:
