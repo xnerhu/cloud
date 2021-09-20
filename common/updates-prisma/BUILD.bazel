@@ -1,25 +1,54 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin", "js_library")
 load("@npm//prisma:index.bzl", "prisma")
+load("@npm//@bazel/typescript:index.bzl", "ts_config")
 
 package(default_visibility = ["//visibility:public"])
 
+exports_files(
+    [
+        "tsconfig.json",
+    ],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+    ],
+)
+
 copy_to_bin(
     name = "copy_prisma",
-    srcs = ["schema.prisma"],
+    srcs = ["schema.prisma", ".env"],
 )
 
 prisma(
     name = "prisma_build",
-    outs = ["prisma"],
+    outs = [
+        "gen/index.d.ts",
+        "gen/index.js",
+        "gen/index-browser.js",
+        "gen/query_engine-windows.dll.node",
+        # "gen/libquery_engine-debian-openssl-1.1.x.so.node",
+        "gen/runtime/index.d.ts",
+        "gen/runtime/index.js",
+        "gen/runtime/index-browser.d.ts",
+        "gen/runtime/index-browser.js",
+        "gen/schema.prisma",
+    ],
     args = [
-        # "--nobazel_patch_module_resolver",
+        "--nobazel_patch_module_resolver",
         "generate",
         "--schema",
+        # "./$(execpath schema.prisma)",
         "$(RULEDIR)/schema.prisma",
     ],
     data = [
+        # "schema.prisma",
         ":copy_prisma",
     ],
+    # output_dir = True,
 )
 
 js_library(

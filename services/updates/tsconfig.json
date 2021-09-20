@@ -1,13 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "allowJs": true
+    "rootDir": "."
   },
   "references": [
     { "path": "../../common/node" },
-    { "path": "../../common/fastify" }
-    // { "path": "./.prisma" }
+    { "path": "../../common/fastify" },
+    { "path": "../../common/updates-db" }
   ],
   "exclude": ["src/**/*.js"]
 }

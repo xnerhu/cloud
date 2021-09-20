@@ -5,10 +5,11 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  output   = "prisma"
+  output   = "gen"
 }
 
 model Release {
   id   Int    @id @default(autoincrement())
   name String
+  aha  String
 }

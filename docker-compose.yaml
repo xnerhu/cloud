@@ -8,9 +8,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - mysql_data:/bitnami/mysql/data
-volumes:
-  mysql_data:
+      - ./.dev/updates:/bitnami/mysql/data
 #     image: postgres
 #     environment:
 #       - POSTGRES_USER=root

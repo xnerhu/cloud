@@ -1,30 +1,22 @@
+import 'reflect-metadata';
+
 import { join, normalize, resolve } from 'path';
 import fastify from 'fastify';
 import helmet from 'fastify-helmet';
 import formBody from 'fastify-formbody';
-// import { PrismaClient } from './'';
-// import { PrismaClient } from '../.prisma';
+import { createConnection } from 'typeorm';
 import { ErrorHandler, handleNodeErrors, ServiceLogger } from '@common/node';
 import { handleFastifyErrors } from '@common/fastify';
 
-import { PrismaClient } from '@common/updates-prisma/prisma';
-
-console.log(PrismaClient);
-
 // import { ReleaseEntity } from './release/release-entity';
-// import { createConnection } from 'typeorm';
 
 const main = async () => {
-  // console.log(normalize(join(__dirname, 'xdd')));
-  // join(process.cwd(), './bazel-out\x64_windows-fastbuild\bin\common\updates-prisma\prisma\schema.prisma');
-  // url: 'mongodb://localhost:27017/updates',
-  // const connection = await createConnection({
+  //  const connection = await createConnection({
   //   type: 'mongodb',
   //   host: 'localhost',
   //   port: 27017,
   //   database: 'updates',
   //   username: 'root',
-  //   // w: ''
   //   password: 'example',
   //   entities: [ReleaseEntity],
   //   authSource: 'admin',

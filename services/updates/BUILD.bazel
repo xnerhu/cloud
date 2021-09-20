@@ -10,10 +10,11 @@ ts_config(
         "//:tsconfig.json",
         "//common/fastify:tsconfig",
         "//common/node:tsconfig",
+        "//common/updates-db:tsconfig",
     ],
 )
 
-TEST_FILES = ["./src/**/*.test.ts"]
+TEST_FILES = ["src/**/*.test.ts"]
 
 SRC_FILES = glob(
     [
@@ -25,21 +26,33 @@ SRC_FILES = glob(
 DEPS = [
     "//common/node",
     "//common/fastify",
-    "//common/updates-prisma",
+    "//common/updates-db",
     "@npm//@types/node",
     "@npm//fastify-helmet",
     "@npm//fastify-formbody",
-    # "@npm//@prisma/client",
+    "@npm//typeorm",
+    "@npm//mysql2",
 ]
 
 ts_project(
     name = "components",
     srcs = SRC_FILES,
-    allow_js = True,
     composite = True,
     declaration = True,
     incremental = True,
     source_map = True,
+    tsconfig = ":tsconfig",
+    deps = DEPS,
+)
+
+ts_project(
+    name = "components_seed",
+    srcs = ["db/seed.ts"],
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tags = ["manual"],
     tsconfig = ":tsconfig",
     deps = DEPS,
 )
@@ -50,4 +63,13 @@ nodejs_binary(
         ":components",
     ],
     entry_point = "src/index.ts",
+)
+
+nodejs_binary(
+    name = "seed",
+    data = [
+        ":components_seed",
+    ],
+    entry_point = "db/seed.ts",
+    tags = ["manual"],
 )
