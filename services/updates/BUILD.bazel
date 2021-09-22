@@ -1,5 +1,7 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
+load("@npm//cross-env:index.bzl", "cross_env")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -9,8 +11,10 @@ ts_config(
     deps = [
         "//:tsconfig.json",
         "//common/fastify:tsconfig",
+        "//common/nest:tsconfig",
         "//common/node:tsconfig",
         "//common/updates-db:tsconfig",
+        "//common/utils:tsconfig",
     ],
 )
 
@@ -26,12 +30,26 @@ SRC_FILES = glob(
 DEPS = [
     "//common/node",
     "//common/fastify",
+    "//common/nest",
     "//common/updates-db",
+    "//common/utils",
     "@npm//@types/node",
     "@npm//fastify-helmet",
     "@npm//fastify-formbody",
     "@npm//typeorm",
-    "@npm//mysql2",
+    "@npm//pg",
+    "@npm//reflect-metadata",
+    "@npm//@nestjs/common",
+    "@npm//@nestjs/core",
+    "@npm//@nestjs/platform-fastify",
+    "@npm//@nestjs/typeorm",
+    "@npm//class-validator",
+    "@npm//class-transformer",
+    "@npm//rxjs",
+    "@npm//@mikro-orm/core",
+    "@npm//@mikro-orm/nestjs",
+    "@npm//@mikro-orm/postgresql",
+    "@npm//@mikro-orm/seeder",
 ]
 
 ts_project(
@@ -39,22 +57,28 @@ ts_project(
     srcs = SRC_FILES,
     composite = True,
     declaration = True,
+    extends = ":tsconfig",
     incremental = True,
     source_map = True,
-    tsconfig = ":tsconfig",
+    tsconfig = {},
     deps = DEPS,
 )
 
 ts_project(
     name = "components_seed",
-    srcs = ["db/seed.ts"],
+    srcs = glob(["db/**/*.ts"]),
     composite = True,
     declaration = True,
+    # tsconfig = ":tsconfig",
+    extends = ":tsconfig",
     incremental = True,
     source_map = True,
     tags = ["manual"],
-    tsconfig = ":tsconfig",
-    deps = DEPS,
+    tsconfig = {
+    },
+    deps = DEPS + [
+        ":components",
+    ],
 )
 
 nodejs_binary(
@@ -63,13 +87,75 @@ nodejs_binary(
         ":components",
     ],
     entry_point = "src/index.ts",
+    env = {
+        "NODE_ENV": "production",
+    },
 )
 
-nodejs_binary(
+# nodejs_binary(
+#     name = "seed",
+#     data = [
+#         "package.json",
+#         ":components_seed",
+#     ],
+#     entry_point = "db/seed.ts",
+#     env = {
+#         "MIKRO_ORM_CLI": "./services/updates/src/mikro-orm.config.js",
+#     },
+#     tags = ["manual"],
+# )
+
+# nodejs_binary(
+#     name = "updates_dev",
+#     data = [
+#         ":components",
+#     ],
+#     entry_point = "src/index.ts",
+#     env = {
+#         "NODE_ENV": "development",
+#     },
+#     tags = ["manual"],
+# )
+
+filegroup(
+    name = "src_files",
+    srcs = glob(["src/**/*.ts"]),
+)
+
+mikro_orm(
     name = "seed",
-    data = [
-        ":components_seed",
+    args = [
+        "schema:update",
+        "--run",
+        "--fk-checks",
     ],
-    entry_point = "db/seed.ts",
+    data = [
+        "package.json",
+        "tsconfig.json",
+        ":components",
+        # ":src_files",
+        "//:package.json",
+        "//:tsconfig.json",
+    ],
+    env = {
+        "MIKRO_ORM_CLI": "./services/updates/src/mikro-orm.config.js",
+    },
     tags = ["manual"],
 )
+# mikro_orm(
+#     name = "seed",
+#     args = [
+#         "schema:update",
+#         "--run",
+#         # "MIKRO_ORM_CLI=src/mikro-orm.config.ts",
+#     ],
+#     data = [
+#         "package.json",
+#         ":components",
+#         ":src_files",
+#     ],
+#     env = {
+#         "MIKRO_ORM_CLI": "src/mikro-orm.config.ts",
+#     },
+#     tags = ["manual"],
+# )

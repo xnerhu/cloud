@@ -1,26 +1,46 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+// import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 import {
   Distribution,
   DistributionArchitecture,
   DistributionOSVersion,
-  DistributionPlatform,
+  DistributionOS,
 } from './interfaces';
 import { PatchEntity } from './patch-entity';
 
-@Entity({ name: 'distributions' })
-export class DistributionEntity implements Distribution {
-  @PrimaryGeneratedColumn()
+// @Entity({ name: 'distributions' })
+// export class DistributionEntity implements Distribution {
+//   @PrimaryGeneratedColumn()
+//   id: number;
+
+//   @Column()
+//   os: DistributionOS;
+
+//   @Column()
+//   osVersion: DistributionOSVersion;
+
+//   @Column()
+//   architecture: DistributionArchitecture;
+
+//   @OneToMany(() => PatchEntity, (patch) => patch.distribution)
+//   patches: PatchEntity[];
+// }
+
+import { Entity, PrimaryKey, Property, OneToMany } from '@mikro-orm/core';
+
+@Entity({ tableName: 'distributions' })
+export class DistributionEntity {
+  @PrimaryKey()
   id: number;
 
-  @Column()
-  platform: DistributionPlatform;
+  @Property()
+  os: DistributionOS;
 
-  @Column()
-  architecture: DistributionArchitecture;
-
-  @Column()
+  @Property()
   osVersion: DistributionOSVersion;
+
+  @Property()
+  architecture: DistributionArchitecture;
 
   @OneToMany(() => PatchEntity, (patch) => patch.distribution)
   patches: PatchEntity[];

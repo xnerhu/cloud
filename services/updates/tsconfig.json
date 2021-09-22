@@ -1,12 +1,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "."
+    "composite": true
   },
   "references": [
     { "path": "../../common/node" },
     { "path": "../../common/fastify" },
+    { "path": "../../common/nest" },
+    { "path": "../../common/utils" },
     { "path": "../../common/updates-db" }
-  ],
-  "exclude": ["src/**/*.js"]
+  ]
 }

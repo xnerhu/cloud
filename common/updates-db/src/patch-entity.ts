@@ -1,29 +1,29 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
 
 import { Patch } from './interfaces';
 import { DistributionEntity } from './distribution-entity';
 import { ReleaseEntity } from './release-entity';
 
-@Entity({ name: 'patches' })
+@Entity({ tableName: 'patches' })
 export class PatchEntity implements Patch {
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   id: number;
 
-  @Column()
+  @Property()
   hash: string;
 
-  @Column()
+  @Property()
   size: number;
 
-  @Column()
+  @Property()
   fullHash: string;
 
-  @Column()
+  @Property()
   fullSize: number;
 
-  @ManyToOne(() => DistributionEntity, (distro) => distro.patches)
+  @ManyToOne(() => DistributionEntity)
   distribution: DistributionEntity;
 
-  @ManyToOne(() => ReleaseEntity, (release) => release.patches)
+  @ManyToOne(() => ReleaseEntity)
   release: ReleaseEntity;
 }

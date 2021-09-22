@@ -26,7 +26,6 @@ SRC_FILES = glob(
 
 DEPS = [
     "@npm//@types/node",
-    "@npm//@mikro-orm/core",
 ]
 
 ts_project(
@@ -41,8 +40,8 @@ ts_project(
 )
 
 js_library(
-    name = "updates-db",
-    package_name = "@common/updates-db",
+    name = "utils",
+    package_name = "@common/utils",
     srcs = ["package.json"],
     deps = [":components"],
 )

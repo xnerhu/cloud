@@ -1,4 +1,4 @@
-import { Distribution } from '@common/updates-db';
+import { Distribution } from './distribution';
 
 export interface Patch {
   id: number;

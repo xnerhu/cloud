@@ -1,11 +1,14 @@
+import { Patch } from './patch';
+
 export interface Distribution {
   id: number;
-  platform: DistributionPlatform;
-  architecture: DistributionArchitecture;
+  os: DistributionOS;
   osVersion: DistributionOSVersion;
+  architecture: DistributionArchitecture;
+  patches: Patch[];
 }
 
-export type DistributionPlatform = 'windows' | 'macos' | 'linux';
+export type DistributionOS = 'windows' | 'macos' | 'linux';
 
 export type DistributionArchitecture = 'x64' | 'arm';
 

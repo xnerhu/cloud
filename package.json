@@ -2,13 +2,8 @@
   "name": "wexond-cloud",
   "private": true,
   "scripts": {
-    "dev:updates": "ibazel run //services/updates",
-    "dev:feedback": "lerna exec yarn dev --parallel --scope=@backend/{common,feedback}",
-    "dev:waitlist": "lerna exec yarn dev --parallel --scope=@backend/waitlist",
-    "watch:feedback": "lerna exec yarn watch --scope=@backend/feedback",
-    "watch:waitlist": "lerna exec yarn watch --scope=@backend/waitlist",
-    "watch:updates": "lerna exec yarn watch --scope=@backend/updates",
-    "build:feedback": "lerna exec yarn build --scope=@backend/{common,feedback}",
+    "dev:updates": "ibazel run //services/updates:updates_dev",
+    "seed:updates": "bazel run //services/updates:seed",
     "build:updates": "lerna exec yarn build --scope=@backend/{common,updates}",
     "build:website": "lerna exec yarn build --scope=@web/website",
     "analyze": "lerna run --stream --parallel analyze",
@@ -33,6 +28,15 @@
     "@bazel/runfiles": "^4.2.0",
     "@bazel/typescript": "^4.2.0",
     "@grpc/grpc-js": "^1.3.7",
+    "@mikro-orm/cli": "^4.5.9",
+    "@mikro-orm/core": "^4.5.9",
+    "@mikro-orm/nestjs": "^4.3.0",
+    "@mikro-orm/postgresql": "^4.5.9",
+    "@mikro-orm/seeder": "^5.0.0-dev.112",
+    "@nestjs/common": "^8.0.6",
+    "@nestjs/core": "^8.0.6",
+    "@nestjs/platform-fastify": "^8.0.6",
+    "@nestjs/typeorm": "^8.0.2",
     "@prisma/client": "^3.0.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.0",
@@ -47,6 +51,8 @@
     "@types/webidl-conversions": "^6.1.1",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "concurrently": "^6.2.1",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
@@ -67,14 +73,15 @@
     "jest-cli": "^27.2.0",
     "json-schema-to-ts": "^1.6.4",
     "lerna": "^3.22.1",
-    "mysql2": "^2.3.0",
     "nodemailer": "^6.6.3",
     "nodemon": "^2.0.12",
     "patch-package": "^6.4.7",
+    "pg": "^8.7.1",
     "prettier": "^2.2.1",
     "prisma": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
+    "rxjs": "^7.3.0",
     "ts-loader": "^8.0.11",
     "ts-node": "^10.2.1",
     "ts-protoc-gen": "^0.15.0",
@@ -86,5 +93,9 @@
   "dependencies": {
     "dotenv": "^10.0.0"
   },
-  "workspaces": []
+  "workspaces": [],
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": []
+  }
 }

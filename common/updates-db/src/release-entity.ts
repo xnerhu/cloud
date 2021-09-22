@@ -1,19 +1,23 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+// import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryKey, Property, OneToMany } from '@mikro-orm/core';
 
-import { Release } from './interfaces';
+import { Release, ReleaseChannel } from './interfaces';
 import { PatchEntity } from './patch-entity';
 
-@Entity({ name: 'releases' })
+@Entity({ tableName: 'releases' })
 export class ReleaseEntity implements Release {
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   id: number;
 
-  @Column()
+  @Property()
   tag: string;
+
+  @Property()
+  channel: ReleaseChannel;
 
   @OneToMany(() => PatchEntity, (patch) => patch.release)
   patches: PatchEntity[];
 
-  @Column()
+  @Property()
   notes: string;
 }

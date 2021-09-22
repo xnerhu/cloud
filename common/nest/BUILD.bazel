@@ -14,6 +14,7 @@ ts_config(
     src = "tsconfig.json",
     deps = [
         "//:tsconfig.json",
+        "//common/node:tsconfig",
     ],
 )
 
@@ -25,8 +26,11 @@ SRC_FILES = glob(
 ) + ["index.ts"]
 
 DEPS = [
+    "//common/node",
     "@npm//@types/node",
-    "@npm//@mikro-orm/core",
+    "@npm//@nestjs/common",
+    "@npm//@nestjs/core",
+    "@npm//fastify",
 ]
 
 ts_project(
@@ -41,8 +45,8 @@ ts_project(
 )
 
 js_library(
-    name = "updates-db",
-    package_name = "@common/updates-db",
+    name = "nest",
+    package_name = "@common/nest",
     srcs = ["package.json"],
     deps = [":components"],
 )

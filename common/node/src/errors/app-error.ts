@@ -6,13 +6,18 @@ export interface AppErrorDetails {
   code?: number;
 }
 
+const DEFAULT_DETAILS: Partial<AppErrorDetails> = { code: 400 };
+
 export class AppError extends Error {
+  public readonly details: AppErrorDetails;
+
   constructor(
-    public readonly details: AppErrorDetails,
+    details: AppErrorDetails,
     public readonly isOperational: boolean,
   ) {
     super(details.description);
 
+    this.details = { ...DEFAULT_DETAILS, ...details };
     this.name = details.name;
 
     Object.setPrototypeOf(this, new.target.prototype);

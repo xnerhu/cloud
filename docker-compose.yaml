@@ -1,24 +1,24 @@
 version: '3.7'
 services:
   updates_db:
-    image: bitnami/mysql
+    image: bitnami/postgresql
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: updates
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=updates
     ports:
-      - 3306:3306
+      - 5432:5432
     volumes:
-      - ./.dev/updates:/bitnami/mysql/data
-#     image: postgres
-#     environment:
-#       - POSTGRES_USER=root
-#       - POSTGRES_PASSWORD=example
-#       - POSTGRES_PORT=5432
-#       - POSTGRES_DB=updates
-#     ports:
-#       - 5432:5432
-#     volumes:
-#       - postgres:/var/lib/postgresql/data
+      - ./.dev/updates:/var/lib/postgresql/data
+    # image: bitnami/mysql
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: example
+    #   MYSQL_DATABASE: updates
+    # ports:
+    #   - 3306:3306
+    # volumes:
+    #   - ./.dev/updates:/bitnami/mysql/data
 # volumes:
 #   postgres:
 
