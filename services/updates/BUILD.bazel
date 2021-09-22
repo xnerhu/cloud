@@ -57,40 +57,40 @@ ts_project(
     srcs = SRC_FILES,
     composite = True,
     declaration = True,
-    extends = ":tsconfig",
     incremental = True,
     source_map = True,
-    tsconfig = {},
+    tsconfig = ":tsconfig",
+    # tsconfig = {},
     deps = DEPS,
 )
 
-ts_project(
-    name = "components_seed",
-    srcs = glob(["db/**/*.ts"]),
-    composite = True,
-    declaration = True,
-    # tsconfig = ":tsconfig",
-    extends = ":tsconfig",
-    incremental = True,
-    source_map = True,
-    tags = ["manual"],
-    tsconfig = {
-    },
-    deps = DEPS + [
-        ":components",
-    ],
-)
+# ts_project(
+#     name = "components_seed",
+#     srcs = glob(["db/**/*.ts"]),
+#     composite = True,
+#     declaration = True,
+#     # tsconfig = ":tsconfig",
+#     extends = ":tsconfig",
+#     incremental = True,
+#     source_map = True,
+#     tags = ["manual"],
+#     tsconfig = {
+#     },
+#     deps = DEPS + [
+#         ":components",
+#     ],
+# )
 
-nodejs_binary(
-    name = "updates",
-    data = [
-        ":components",
-    ],
-    entry_point = "src/index.ts",
-    env = {
-        "NODE_ENV": "production",
-    },
-)
+# nodejs_binary(
+#     name = "updates",
+#     data = [
+#         ":components",
+#     ],
+#     entry_point = "src/index.ts",
+#     env = {
+#         "NODE_ENV": "production",
+#     },
+# )
 
 # nodejs_binary(
 #     name = "seed",
