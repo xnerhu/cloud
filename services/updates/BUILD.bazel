@@ -1,165 +1,165 @@
-# load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-# load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
-# load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
 
-# package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//visibility:public"])
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "tsconfig.app.json",
+        # "tsconfig.db.json",
+        "//:tsconfig.json",
+    ],
+)
+
+ts_config(
+    name = "tsconfig_app",
+    src = "tsconfig.app.json",
+    deps = [
+        "tsconfig.json",
+        "//common/fastify:tsconfig",
+        "//common/nest:tsconfig",
+        "//common/node:tsconfig",
+        "//common/updates-db:tsconfig",
+        "//common/utils:tsconfig",
+    ],
+)
 
 # ts_config(
-#     name = "tsconfig",
-#     src = "tsconfig.json",
+#     name = "tsconfig_db",
+#     src = "tsconfig.db.json",
 #     deps = [
-#         "tsconfig.app.json",
-#         # "tsconfig.db.json",
-#         "//:tsconfig.json",
-#         "//common/fastify:tsconfig",
-#         "//common/nest:tsconfig",
-#         "//common/node:tsconfig",
-#         "//common/updates-db:tsconfig",
-#         "//common/utils:tsconfig",
+#         ":tsconfig.json",
 #     ],
 # )
 
-# ts_config(
-#     name = "tsconfig_app",
-#     src = "tsconfig.app.json",
-#     deps = [
-#         "tsconfig.json",
-#     ],
-# )
+TEST_FILES = ["src/**/*.test.ts"]
 
-# # ts_config(
-# #     name = "tsconfig_db",
-# #     src = "tsconfig.db.json",
-# #     deps = [
-# #         ":tsconfig.json",
-# #     ],
-# # )
+SRC_FILES = glob(
+    [
+        "src/**/*.ts",
+    ],
+    exclude = TEST_FILES,
+)
 
-# TEST_FILES = ["src/**/*.test.ts"]
+DEPS = [
+    "//common/node",
+    "//common/fastify",
+    "//common/nest",
+    "//common/updates-db",
+    "//common/utils",
+    "@npm//@types/node",
+    "@npm//fastify-helmet",
+    "@npm//fastify-formbody",
+    "@npm//typeorm",
+    "@npm//pg",
+    "@npm//reflect-metadata",
+    "@npm//@nestjs/common",
+    "@npm//@nestjs/core",
+    "@npm//@nestjs/platform-fastify",
+    "@npm//@nestjs/typeorm",
+    "@npm//@nestjs/config",
+    "@npm//class-validator",
+    "@npm//class-transformer",
+    "@npm//rxjs",
+    "@npm//@mikro-orm/core",
+    "@npm//@mikro-orm/nestjs",
+    "@npm//@mikro-orm/postgresql",
+    "@npm//@mikro-orm/seeder",
+]
 
-# SRC_FILES = glob(
-#     [
-#         "src/**/*.ts",
-#     ],
-#     exclude = TEST_FILES,
-# )
-
-# DEPS = [
-#     "//common/node",
-#     "//common/fastify",
-#     "//common/nest",
-#     "//common/updates-db",
-#     "//common/utils",
-#     "@npm//@types/node",
-#     "@npm//fastify-helmet",
-#     "@npm//fastify-formbody",
-#     "@npm//typeorm",
-#     "@npm//pg",
-#     "@npm//reflect-metadata",
-#     "@npm//@nestjs/common",
-#     "@npm//@nestjs/core",
-#     "@npm//@nestjs/platform-fastify",
-#     "@npm//@nestjs/typeorm",
-#     "@npm//@nestjs/config",
-#     "@npm//class-validator",
-#     "@npm//class-transformer",
-#     "@npm//rxjs",
-#     "@npm//@mikro-orm/core",
-#     "@npm//@mikro-orm/nestjs",
-#     "@npm//@mikro-orm/postgresql",
-#     "@npm//@mikro-orm/seeder",
-# ]
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig_app",
+    deps = DEPS,
+)
 
 # ts_project(
-#     name = "components",
-#     srcs = SRC_FILES,
+#     name = "components_seed",
+#     srcs = glob(
+#         ["db/**/*.ts"],
+#     ),
 #     composite = True,
 #     declaration = True,
 #     incremental = True,
 #     source_map = True,
-#     tsconfig = ":tsconfig_app",
-#     deps = DEPS,
+#     tsconfig = ":tsconfig_db",
+#     deps = DEPS + [":components"],
 # )
 
-# # ts_project(
-# #     name = "components_seed",
-# #     srcs = glob(
-# #         ["db/**/*.ts"],
-# #     ),
-# #     composite = True,
-# #     declaration = True,
-# #     incremental = True,
-# #     source_map = True,
-# #     tsconfig = ":tsconfig_db",
-# #     deps = DEPS + [":components"],
-# # )
+# nodejs_binary(
+#     name = "updates",
+#     data = [
+#         ":components",
+#     ],
+#     entry_point = "src/index.ts",
+#     env = {
+#         "NODE_ENV": "production",
+#     },
+# )
 
-# # nodejs_binary(
-# #     name = "updates",
-# #     data = [
-# #         ":components",
-# #     ],
-# #     entry_point = "src/index.ts",
-# #     env = {
-# #         "NODE_ENV": "production",
-# #     },
-# # )
+# nodejs_binary(
+#     name = "updates_dev",
+#     data = [
+#         ".env",
+#         ":components",
+#     ],
+#     entry_point = "src/index.ts",
+#     env = {
+#         "NODE_ENV": "development",
+#     },
+# )
 
-# # nodejs_binary(
-# #     name = "updates_dev",
-# #     data = [
-# #         ".env",
-# #         ":components",
-# #     ],
-# #     entry_point = "src/index.ts",
-# #     env = {
-# #         "NODE_ENV": "development",
-# #     },
-# # )
+# nodejs_binary(
+#     name = "seed",
+#     data = [
+#         ":components_seed",
+#     ],
+#     entry_point = "db/seed.ts",
+#     tags = ["manual"],
+# )
 
-# # nodejs_binary(
-# #     name = "seed",
-# #     data = [
-# #         ":components_seed",
-# #     ],
-# #     entry_point = "db/seed.ts",
-# #     tags = ["manual"],
-# # )
+# DEPS_MIKRO_ORM = [
+#     "package.json",
+#     "tsconfig.json",
+#     ":components_seed",
+#     ":components",
+#     "//:package.json",
+#     "//:tsconfig.json",
+# ]
 
-# # DEPS_MIKRO_ORM = [
-# #     "package.json",
-# #     "tsconfig.json",
-# #     ":components_seed",
-# #     ":components",
-# #     "//:package.json",
-# #     "//:tsconfig.json",
-# # ]
+# ENV_MIKRO_ORM = {
+#     "MIKRO_ORM_CLI": "./services/updates/src/mikro-orm-config.js",
+# }
 
-# # ENV_MIKRO_ORM = {
-# #     "MIKRO_ORM_CLI": "./services/updates/src/mikro-orm-config.js",
-# # }
+# mikro_orm(
+#     name = "schema_drop",
+#     args = [
+#         "schema:drop",
+#         "--run",
+#         "--fk-checks",
+#         "--drop-migrations-table",
+#     ],
+#     data = DEPS_MIKRO_ORM,
+#     env = ENV_MIKRO_ORM,
+#     tags = ["manual"],
+# )
 
-# # mikro_orm(
-# #     name = "schema_drop",
-# #     args = [
-# #         "schema:drop",
-# #         "--run",
-# #         "--fk-checks",
-# #         "--drop-migrations-table",
-# #     ],
-# #     data = DEPS_MIKRO_ORM,
-# #     env = ENV_MIKRO_ORM,
-# #     tags = ["manual"],
-# # )
-
-# # mikro_orm(
-# #     name = "schema_update",
-# #     args = [
-# #         "schema:update",
-# #         "--run",
-# #         "--fk-checks",
-# #     ],
-# #     data = DEPS_MIKRO_ORM,
-# #     env = ENV_MIKRO_ORM,
-# #     tags = ["manual"],
-# # )
+# mikro_orm(
+#     name = "schema_update",
+#     args = [
+#         "schema:update",
+#         "--run",
+#         "--fk-checks",
+#     ],
+#     data = DEPS_MIKRO_ORM,
+#     env = ENV_MIKRO_ORM,
+#     tags = ["manual"],
+# )
