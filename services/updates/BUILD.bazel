@@ -4,82 +4,82 @@ load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
 
 package(default_visibility = ["//visibility:public"])
 
-# ts_config(
-#     name = "tsconfig",
-#     src = "tsconfig.json",
-#     deps = [
-#         ":tsconfig.app.json",
-#         ":tsconfig.db.json",
-#         "//:tsconfig.json",
-#         "//common/fastify:tsconfig",
-#         "//common/nest:tsconfig",
-#         "//common/node:tsconfig",
-#         "//common/updates-db:tsconfig",
-#         "//common/utils:tsconfig",
-#     ],
-# )
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "tsconfig.app.json",
+        # "tsconfig.db.json",
+        "//:tsconfig.json",
+        "//common/fastify:tsconfig",
+        "//common/nest:tsconfig",
+        "//common/node:tsconfig",
+        "//common/updates-db:tsconfig",
+        "//common/utils:tsconfig",
+    ],
+)
+
+ts_config(
+    name = "tsconfig_app",
+    src = "tsconfig.app.json",
+    deps = [
+        "tsconfig.json",
+    ],
+)
 
 # ts_config(
-#     name = "tsconfig_app",
-#     src = "tsconfig.app.json",
+#     name = "tsconfig_db",
+#     src = "tsconfig.db.json",
 #     deps = [
 #         ":tsconfig.json",
 #     ],
 # )
 
-# # ts_config(
-# #     name = "tsconfig_db",
-# #     src = "tsconfig.db.json",
-# #     deps = [
-# #         ":tsconfig.json",
-# #     ],
-# # )
+TEST_FILES = ["src/**/*.test.ts"]
 
-# TEST_FILES = ["src/**/*.test.ts"]
+SRC_FILES = glob(
+    [
+        "src/**/*.ts",
+    ],
+    exclude = TEST_FILES,
+)
 
-# SRC_FILES = glob(
-#     [
-#         "src/**/*.ts",
-#     ],
-#     exclude = TEST_FILES,
-# )
+DEPS = [
+    "//common/node",
+    "//common/fastify",
+    "//common/nest",
+    "//common/updates-db",
+    "//common/utils",
+    "@npm//@types/node",
+    "@npm//fastify-helmet",
+    "@npm//fastify-formbody",
+    "@npm//typeorm",
+    "@npm//pg",
+    "@npm//reflect-metadata",
+    "@npm//@nestjs/common",
+    "@npm//@nestjs/core",
+    "@npm//@nestjs/platform-fastify",
+    "@npm//@nestjs/typeorm",
+    "@npm//@nestjs/config",
+    "@npm//class-validator",
+    "@npm//class-transformer",
+    "@npm//rxjs",
+    "@npm//@mikro-orm/core",
+    "@npm//@mikro-orm/nestjs",
+    "@npm//@mikro-orm/postgresql",
+    "@npm//@mikro-orm/seeder",
+]
 
-# DEPS = [
-#     "//common/node",
-#     "//common/fastify",
-#     "//common/nest",
-#     "//common/updates-db",
-#     "//common/utils",
-#     "@npm//@types/node",
-#     "@npm//fastify-helmet",
-#     "@npm//fastify-formbody",
-#     "@npm//typeorm",
-#     "@npm//pg",
-#     "@npm//reflect-metadata",
-#     "@npm//@nestjs/common",
-#     "@npm//@nestjs/core",
-#     "@npm//@nestjs/platform-fastify",
-#     "@npm//@nestjs/typeorm",
-#     "@npm//@nestjs/config",
-#     "@npm//class-validator",
-#     "@npm//class-transformer",
-#     "@npm//rxjs",
-#     "@npm//@mikro-orm/core",
-#     "@npm//@mikro-orm/nestjs",
-#     "@npm//@mikro-orm/postgresql",
-#     "@npm//@mikro-orm/seeder",
-# ]
-
-# ts_project(
-#     name = "components",
-#     srcs = SRC_FILES,
-#     composite = True,
-#     declaration = True,
-#     incremental = True,
-#     source_map = True,
-#     tsconfig = ":tsconfig_app",
-#     deps = DEPS,
-# )
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig_app",
+    deps = DEPS,
+)
 
 # ts_project(
 #     name = "components_seed",
