@@ -9,16 +9,8 @@ ts_config(
     src = "tsconfig.json",
     deps = [
         "tsconfig.app.json",
-        # "tsconfig.db.json",
+        "tsconfig.db.json",
         "//:tsconfig.json",
-    ],
-)
-
-ts_config(
-    name = "tsconfig_app",
-    src = "tsconfig.app.json",
-    deps = [
-        "tsconfig.json",
         "//common/fastify:tsconfig",
         "//common/nest:tsconfig",
         "//common/node:tsconfig",
@@ -27,11 +19,19 @@ ts_config(
     ],
 )
 
+ts_config(
+    name = "tsconfig_app",
+    src = "tsconfig.app.json",
+    deps = [
+        ":tsconfig",
+    ],
+)
+
 # ts_config(
 #     name = "tsconfig_db",
 #     src = "tsconfig.db.json",
 #     deps = [
-#         ":tsconfig.json",
+#         "tsconfig.json",
 #     ],
 # )
 

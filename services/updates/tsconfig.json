@@ -4,7 +4,7 @@
     "rootDir": "."
   },
   "references": [
-    { "path": "./tsconfig.app.json" }
-    // { "path": "./tsconfig.db.json" }
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.db.json" }
   ]
 }
