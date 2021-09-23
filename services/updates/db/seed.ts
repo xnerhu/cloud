@@ -84,7 +84,7 @@ const main = async () => {
     },
     {
       version: '1.2.0',
-      notes: 'first-release',
+      notes: 'first-releasetest',
       channel: 'stable',
       patches: [
         {
