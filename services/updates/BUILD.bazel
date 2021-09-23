@@ -68,6 +68,7 @@ DEPS = [
     "@npm//@mikro-orm/nestjs",
     "@npm//@mikro-orm/postgresql",
     "@npm//@mikro-orm/seeder",
+    "@npm//joi",
 ]
 
 ts_project(
