@@ -4,10 +4,7 @@
     "rootDir": "."
   },
   "references": [
-    { "path": "../../common/node" },
-    { "path": "../../common/fastify" },
-    { "path": "../../common/nest" },
-    { "path": "../../common/utils" },
-    { "path": "../../common/updates-db" }
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.db.json" }
   ]
 }

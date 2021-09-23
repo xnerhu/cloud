@@ -2,8 +2,8 @@ import { Patch } from './patch';
 
 export interface Release {
   id: number;
-  // semantic version
-  tag: string;
+  // semantic
+  version: string;
   channel: ReleaseChannel;
   patches: Patch[];
   notes: string;

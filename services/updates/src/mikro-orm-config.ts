@@ -1,12 +1,11 @@
 import { Options } from '@mikro-orm/core';
-import { resolve } from 'path';
 import {
   ReleaseEntity,
   DistributionEntity,
   PatchEntity,
 } from '@common/updates-db';
 
-const config: Options = {
+export const config: Options = {
   type: 'postgresql',
   host: 'localhost',
   port: 5432,
@@ -14,7 +13,6 @@ const config: Options = {
   user: 'root',
   password: 'example',
   entities: [ReleaseEntity, DistributionEntity, PatchEntity],
-  baseDir: resolve(__dirname, '../'),
   debug: true,
   discovery: {
     requireEntitiesArray: true,

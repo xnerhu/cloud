@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "references": [
+    { "path": "../../common/node" },
+    { "path": "../../common/fastify" },
+    { "path": "../../common/nest" },
+    { "path": "../../common/utils" },
+    { "path": "../../common/updates-db" }
+  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

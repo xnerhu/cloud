@@ -1,55 +1,28 @@
-import { EntityManager, MikroORM } from '@mikro-orm/core';
-import { Seeder, Factory } from '@mikro-orm/seeder';
+import { MikroORM } from '@mikro-orm/core';
 import {
   ReleaseEntity,
   DistributionEntity,
   PatchEntity,
+  Release,
+  Patch,
 } from '@common/updates-db';
-
-// import { DistributionEntity } from '../src/distributions/distribution-entity';
-// import {
-//   Distribution,
-//   DistributionEntity,
-//   Patch,
-//   PatchEntity,
-//   Release,
-//   ReleaseEntity,
-// } from '@common/updates-db';
-
-// export class AuthorFactory extends Factory<ReleaseEntity> {
-//   model = ReleaseEntity;
-
-//   definition(): Partial<ReleaseEntity> {
-//     return {
-//       channel: 'alpha',
-//       notes: 'xd',
-//       tag: '1.0.0',
-//     };
-//   }
-// }
-// class DatabaseSeeder extends Seeder {
-//   async run(em: EntityManager): Promise<void> {
-//     new AuthorFactory(em).createOne();
-//   }
-// }
 
 const main = async () => {
   console.log('Seeding updates db');
 
-  // const connection = await createConnection({
-  //   type: 'postgres',
-  //   host: 'localhost',
-  //   port: 5432,
-  //   database: 'updates',
-  //   username: 'root',
-  //   password: 'example',
-  //   migrationsRun: true,
-  //   synchronize: true,
-  //   dropSchema: true,
-  //   entities: [DistributionEntity, PatchEntity, ReleaseEntity],
-  // });
-
-  const connection = await MikroORM.init();
+  const connection = await MikroORM.init({
+    type: 'postgresql',
+    host: 'localhost',
+    port: 5432,
+    dbName: 'updates',
+    user: 'root',
+    password: 'example',
+    entities: [ReleaseEntity, DistributionEntity, PatchEntity],
+    debug: true,
+    discovery: {
+      requireEntitiesArray: true,
+    },
+  });
 
   const windowsDistro = new DistributionEntity();
   const linuxDistro = new DistributionEntity();
@@ -76,149 +49,147 @@ const main = async () => {
 
   const distroRepo = connection.em.getRepository(DistributionEntity);
 
-  const res = await distroRepo.create([
+  await distroRepo.persistAndFlush([
     windowsDistro,
     linuxDistro,
     macosDistro,
     macosArmDistro,
   ]);
 
-  // console.log(await distroRepo.findAll());
+  const releases: (Omit<Release, 'id' | 'patches'> & {
+    patches: (Omit<Patch, 'id' | 'distribution'> & {
+      distribution: DistributionEntity;
+    })[];
+  })[] = [
+    {
+      version: '2.0.0',
+      notes: 'first-release',
+      channel: 'stable',
+      patches: [
+        {
+          hash: 'fourth-2.0.0-patch',
+          size: 11663861,
+          fullHash: 'windows-2.0.0-full',
+          fullSize: 61212089,
+          distribution: windowsDistro,
+        },
+        {
+          hash: 'macos-2.0.0-patch',
+          size: 16663861,
+          fullHash: 'macos-2.0.0-full',
+          fullSize: 71212089,
+          distribution: macosDistro,
+        },
+      ],
+    },
+    {
+      version: '1.2.0',
+      notes: 'first-release',
+      channel: 'stable',
+      patches: [
+        {
+          hash: 'third-1.2.0-patch',
+          size: 11663861,
+          fullHash: 'windows-1.2.0-full',
+          fullSize: 61212089,
+          distribution: windowsDistro,
+        },
+        {
+          hash: 'macos-1.2.0-patch',
+          size: 16663861,
+          fullHash: 'macos-1.2.0-full',
+          fullSize: 71212089,
+          distribution: macosDistro,
+        },
+        {
+          hash: 'linux-1.2.0-patch',
+          size: 16663861,
+          fullHash: 'linux-1.2.0-full',
+          fullSize: 71212089,
+          distribution: linuxDistro,
+        },
+      ],
+    },
+    {
+      version: '1.1.0',
+      notes: 'second-release',
+      channel: 'stable',
+      patches: [
+        {
+          hash: 'windows-1.1.0-patch',
+          size: 11663861,
+          fullHash: 'windows-1.1.0-full',
+          fullSize: 61212089,
+          distribution: windowsDistro,
+        },
+        {
+          hash: 'macos-1.1.0-patch',
+          size: 16663861,
+          fullHash: 'macos-1.1.0-full',
+          fullSize: 71212089,
+          distribution: macosDistro,
+        },
+      ],
+    },
+    {
+      version: '1.0.0',
+      notes: 'first-release',
+      channel: 'stable',
+      patches: [
+        {
+          hash: 'windows-1.0.0-patch',
+          size: 11663861,
+          fullHash: 'windows-1.0.0-full',
+          fullSize: 61212089,
+          distribution: windowsDistro,
+        },
+        {
+          hash: 'macos-1.0.0-patch',
+          size: 16663861,
+          fullHash: 'macos-1.0.0-full',
+          fullSize: 71212089,
+          distribution: macosDistro,
+        },
+        {
+          hash: 'linux-1.0.0-patch',
+          size: 16663861,
+          fullHash: 'linux-1.0.0-full',
+          fullSize: 71212089,
+          distribution: linuxDistro,
+        },
+      ],
+    },
+  ];
 
-  // const releases: (Omit<Release, 'id' | 'patches'> & {
-  //   patches: (Omit<Patch, 'id' | 'distribution'> & {
-  //     distribution: DistributionEntity;
-  //   })[];
-  // })[] = [
-  //   {
-  //     tag: '2.0.0',
-  //     notes: 'first-release',
-  //     channel: 'stable',
-  //     patches: [
-  //       {
-  //         hash: 'fourth-2.0.0-patch',
-  //         size: 11663861,
-  //         fullHash: 'windows-2.0.0-full',
-  //         fullSize: 61212089,
-  //         distribution: windowsDistro,
-  //       },
-  //       {
-  //         hash: 'macos-2.0.0-patch',
-  //         size: 16663861,
-  //         fullHash: 'macos-2.0.0-full',
-  //         fullSize: 71212089,
-  //         distribution: macosDistro,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     tag: '1.2.0',
-  //     notes: 'first-release',
-  //     channel: 'stable',
-  //     patches: [
-  //       {
-  //         hash: 'third-1.2.0-patch',
-  //         size: 11663861,
-  //         fullHash: 'windows-1.2.0-full',
-  //         fullSize: 61212089,
-  //         distribution: windowsDistro,
-  //       },
-  //       {
-  //         hash: 'macos-1.2.0-patch',
-  //         size: 16663861,
-  //         fullHash: 'macos-1.2.0-full',
-  //         fullSize: 71212089,
-  //         distribution: macosDistro,
-  //       },
-  //       {
-  //         hash: 'linux-1.2.0-patch',
-  //         size: 16663861,
-  //         fullHash: 'linux-1.2.0-full',
-  //         fullSize: 71212089,
-  //         distribution: linuxDistro,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     tag: '1.1.0',
-  //     notes: 'second-release',
-  //     channel: 'stable',
-  //     patches: [
-  //       {
-  //         hash: 'windows-1.1.0-patch',
-  //         size: 11663861,
-  //         fullHash: 'windows-1.1.0-full',
-  //         fullSize: 61212089,
-  //         distribution: windowsDistro,
-  //       },
-  //       {
-  //         hash: 'macos-1.1.0-patch',
-  //         size: 16663861,
-  //         fullHash: 'macos-1.1.0-full',
-  //         fullSize: 71212089,
-  //         distribution: macosDistro,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     tag: '1.0.0',
-  //     notes: 'first-release',
-  //     channel: 'stable',
-  //     patches: [
-  //       {
-  //         hash: 'windows-1.0.0-patch',
-  //         size: 11663861,
-  //         fullHash: 'windows-1.0.0-full',
-  //         fullSize: 61212089,
-  //         distribution: windowsDistro,
-  //       },
-  //       {
-  //         hash: 'macos-1.0.0-patch',
-  //         size: 16663861,
-  //         fullHash: 'macos-1.0.0-full',
-  //         fullSize: 71212089,
-  //         distribution: macosDistro,
-  //       },
-  //       {
-  //         hash: 'linux-1.0.0-patch',
-  //         size: 16663861,
-  //         fullHash: 'linux-1.0.0-full',
-  //         fullSize: 71212089,
-  //         distribution: linuxDistro,
-  //       },
-  //     ],
-  //   },
-  // ];
+  const patchRepo = connection.em.getRepository(PatchEntity);
+  const releaseRepo = connection.em.getRepository(ReleaseEntity);
 
-  // const patchRepo = connection.getRepository(PatchEntity);
-  // const releaseRepo = connection.getRepository(ReleaseEntity);
+  for (const release of releases) {
+    const releaseEntity = new ReleaseEntity();
 
-  // for (const release of releases) {
-  //   const releaseEntity = new ReleaseEntity();
+    const patches = await Promise.all(
+      release.patches.map(async (patch) => {
+        const patchEntity = new PatchEntity();
 
-  //   const patches = await Promise.all(
-  //     release.patches.map(async (patch) => {
-  //       const patchEntity = new PatchEntity();
+        patchEntity.hash = patch.hash;
+        patchEntity.size = patch.size;
+        patchEntity.fullHash = patch.fullHash;
+        patchEntity.fullSize = patch.fullSize;
+        patchEntity.distribution = patch.distribution;
 
-  //       patchEntity.hash = patch.hash;
-  //       patchEntity.size = patch.size;
-  //       patchEntity.fullHash = patch.fullHash;
-  //       patchEntity.fullSize = patch.fullSize;
-  //       patchEntity.distribution = patch.distribution;
+        await patchRepo.persistAndFlush(patchEntity);
 
-  //       await patchRepo.save(patchEntity);
+        return patchEntity;
+      }),
+    );
 
-  //       return patchEntity;
-  //     }),
-  //   );
+    releaseEntity.channel = release.channel;
+    releaseEntity.version = release.version;
+    releaseEntity.notes = release.notes;
+    releaseEntity.patches = patches;
 
-  //   releaseEntity.channel = release.channel;
-  //   releaseEntity.tag = release.tag;
-  //   releaseEntity.notes = release.notes;
-  //   releaseEntity.patches = patches;
-
-  //   await releaseRepo.save(releaseEntity);
-  // }
+    await releaseRepo.persistAndFlush(releaseEntity);
+  }
 
   await connection.close();
 };

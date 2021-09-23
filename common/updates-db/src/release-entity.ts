@@ -10,7 +10,7 @@ export class ReleaseEntity implements Release {
   id: number;
 
   @Property()
-  tag: string;
+  version: string;
 
   @Property()
   channel: ReleaseChannel;
