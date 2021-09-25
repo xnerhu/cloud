@@ -1,15 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
 import {
   DEFAULT_DISTRIBUTION_SEARCH_OPTIONS,
   DistributionsService,
-} from '../distributions/distributions-service';
-import { PatchesService } from '../patches/patches-service';
-import { GetUpdatesDto } from './updates-dto';
-import { UpdateResponse, UpdateV1Response } from './updates-response';
-import { getUpdateEntryFetchInfo, getUpdateStrategy } from './updates-utils';
-import { transformUpdateResV1 } from './updates-v1';
+} from "../distributions/distributions-service";
+import { PatchesService } from "../patches/patches-service";
+import { GetUpdatesDto } from "./updates-dto";
+import { UpdateResponse, UpdateV1Response } from "./updates-response";
+import { getUpdateEntryFetchInfo, getUpdateStrategy } from "./updates-utils";
+import { transformUpdateResV1 } from "./updates-v1";
 
 export interface ReleaseSearchOptions {
   version: string;
@@ -36,7 +36,7 @@ export class UpdatesService {
     });
 
     if (!distribution) {
-      throw new NotFoundException('Distribution not found');
+      throw new NotFoundException("Distribution not found");
     }
 
     const { id: distributionId } = distribution;
@@ -49,12 +49,12 @@ export class UpdatesService {
 
     const strategy = getUpdateStrategy(latest, patches);
 
-    if (strategy === 'none') {
+    if (strategy === "none") {
       return { strategy };
     }
 
     const publicPath = this.configService.get<string>(
-      'UPDATES_FILES_PUBLIC_PATH',
+      "UPDATES_FILES_PUBLIC_PATH",
     );
 
     const res: UpdateResponse = {
@@ -62,7 +62,7 @@ export class UpdatesService {
       full: getUpdateEntryFetchInfo(latest, false, publicPath),
     };
 
-    if (strategy === 'full') {
+    if (strategy === "full") {
       return res;
     }
 
@@ -76,10 +76,10 @@ export class UpdatesService {
 
   public async getV1(version: string): Promise<UpdateV1Response> {
     const update = await this.get({
-      os: 'windows',
-      architecture: 'x64',
-      osVersion: 'any',
-      channel: 'stable',
+      os: "windows",
+      architecture: "x64",
+      osVersion: "any",
+      channel: "stable",
       version,
     });
 

@@ -1,4 +1,4 @@
-import { format } from 'util';
+import { format } from "util";
 
 export interface AppErrorDetails {
   name: string;

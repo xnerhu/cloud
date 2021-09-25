@@ -1,5 +1,5 @@
-import { ServiceLogger } from '../logger';
-import { AppError } from './app-error';
+import { ServiceLogger } from "../logger";
+import { AppError } from "./app-error";
 
 export class ErrorHandler {
   constructor(protected logger: ServiceLogger) {}

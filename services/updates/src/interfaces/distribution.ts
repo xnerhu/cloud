@@ -1,4 +1,4 @@
-import { Patch } from './patch';
+import { Patch } from "./patch";
 
 export interface Distribution {
   id: number;
@@ -8,8 +8,8 @@ export interface Distribution {
   patches: Patch[];
 }
 
-export type DistributionOS = 'windows' | 'macos' | 'linux';
+export type DistributionOS = "windows" | "macos" | "linux";
 
-export type DistributionArchitecture = 'x64' | 'arm';
+export type DistributionArchitecture = "x64" | "arm";
 
-export type DistributionOSVersion = 'any';
+export type DistributionOSVersion = "any";

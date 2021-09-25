@@ -3,11 +3,11 @@ import {
   UpdateV1Response,
   UpdateEntry,
   UpdateEntryV1,
-} from './updates-response';
+} from "./updates-response";
 
 export const transformUpdateResV1 = (res: UpdateResponse): UpdateV1Response => {
-  if (res.strategy === 'none') {
-    return { type: 'none' };
+  if (res.strategy === "none") {
+    return { type: "none" };
   }
 
   const resV1: UpdateV1Response = {
@@ -15,7 +15,7 @@ export const transformUpdateResV1 = (res: UpdateResponse): UpdateV1Response => {
     fullFile: transformUpdateEntryV1(res.full!),
   };
 
-  if (res.strategy === 'full') {
+  if (res.strategy === "full") {
     return resV1;
   }
 

@@ -1,6 +1,6 @@
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance } from "fastify";
 
-import { ErrorHandler } from '@common/node';
+import { ErrorHandler } from "@common/node";
 
 export const handleFastifyErrors = (
   app: FastifyInstance,

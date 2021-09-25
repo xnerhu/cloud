@@ -1,4 +1,4 @@
-export type UpdateStrategy = 'patches' | 'full' | 'none';
+export type UpdateStrategy = "patches" | "full" | "none";
 
 export interface UpdateEntry {
   version: string;

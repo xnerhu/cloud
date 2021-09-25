@@ -1,4 +1,4 @@
-import { Patch } from './patch';
+import { Patch } from "./patch";
 
 export interface Release {
   id: number;
@@ -9,4 +9,4 @@ export interface Release {
   notes: string;
 }
 
-export type ReleaseChannel = 'stable' | 'alpha';
+export type ReleaseChannel = "stable" | "alpha";

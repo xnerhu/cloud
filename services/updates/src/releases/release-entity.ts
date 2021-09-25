@@ -1,9 +1,9 @@
-import { Entity, PrimaryKey, Property, OneToMany } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, OneToMany } from "@mikro-orm/core";
 
-import { Release, ReleaseChannel } from '../interfaces';
-import { PatchEntity } from '../patches/patch-entity';
+import { Release, ReleaseChannel } from "../interfaces";
+import { PatchEntity } from "../patches/patch-entity";
 
-@Entity({ tableName: 'releases' })
+@Entity({ tableName: "releases" })
 export class ReleaseEntity implements Release {
   @PrimaryKey()
   id: number;

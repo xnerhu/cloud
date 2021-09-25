@@ -1,1 +1,1 @@
-export * from './fastify-errors';
+export * from "./fastify-errors";

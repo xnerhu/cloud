@@ -1,14 +1,14 @@
-import 'reflect-metadata';
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import "reflect-metadata";
+import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { NestErrorHandler } from '@common/nest';
+} from "@nestjs/platform-fastify";
+import { ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { NestErrorHandler } from "@common/nest";
 
-import { AppModule } from './app-module';
+import { AppModule } from "./app-module";
 
 const main = async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -17,7 +17,7 @@ const main = async () => {
   );
 
   const config = app.get(ConfigService);
-  const port = config.get<number>('PORT', { infer: true });
+  const port = config.get<number>("PORT", { infer: true });
 
   const { httpAdapter } = app.get(HttpAdapterHost);
 

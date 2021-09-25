@@ -1,4 +1,4 @@
-import { Distribution } from './distribution';
+import { Distribution } from "./distribution";
 
 export interface Patch {
   id: number;

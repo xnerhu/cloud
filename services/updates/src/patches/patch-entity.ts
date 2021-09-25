@@ -1,10 +1,10 @@
-import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, ManyToOne } from "@mikro-orm/core";
 
-import { Patch } from '../interfaces';
-import { DistributionEntity } from '../distributions/distribution-entity';
-import { ReleaseEntity } from '../releases/release-entity';
+import { Patch } from "../interfaces";
+import { DistributionEntity } from "../distributions/distribution-entity";
+import { ReleaseEntity } from "../releases/release-entity";
 
-@Entity({ tableName: 'patches' })
+@Entity({ tableName: "patches" })
 export class PatchEntity implements Patch {
   @PrimaryKey()
   id: number;
