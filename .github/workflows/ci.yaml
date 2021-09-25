@@ -80,8 +80,5 @@ jobs:
       - name: Start docker
         run: docker-compose up --build -d
 
-      - name: Stop docker
-        run: docker-compose down
-
       - name: Test
         run: yarn test
