@@ -93,5 +93,5 @@ jobs:
       - name: Stop databases
         run: docker-compose down
 
-      # - name: Test
-      #   run: yarn test
+      # - name: Testt
+      #   run: yarn testd
