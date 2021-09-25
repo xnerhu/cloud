@@ -82,13 +82,21 @@ jobs:
 
         # Pull the latest image to build, and avoid caching pull-only images.
         # (docker pull is faster than caching in most cases.)
-      - run: docker-compose pull
+      - name: Pull docker
+        run: docker-compose pull
 
-      - name: Start databases
+      - name: Start docker
         run: docker-compose up --build -d
 
-      - name: Stop databases
+      - name: Stop docker
         run: docker-compose down
 
       # - name: Test
       #   run: yarn testd
+      - name: "Xd"
+        run: |
+          echo ${{ github.ref }}
+          echo "aha"
+          echo ${{ github.head_ref }}
+          echo "xdd"
+          echo ${{ github.sha }}
