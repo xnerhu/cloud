@@ -87,7 +87,11 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
 
-      - run: docker-compose up --build
+      - name: Start databases
+        run: docker-compose up --build -d
+
+      - name: Stop databases
+        run: docker-compose downdown
 
       # - name: Test
       #   run: yarn test
