@@ -124,17 +124,11 @@ nodejs_app(
 
 nodejs_binary(
     name = "seed",
-    args = [
-        "--nobazel_run_linker",
-        "--nobazel_node_patches",
-    ],
     data = [
         ":components_db",
-        ":schema_drop",
         "@npm//execa",
     ],
     entry_point = "db/seed.ts",
-    tags = ["manual"],
 )
 
 ENV_MIKRO_ORM = {
@@ -145,7 +139,8 @@ jest_test(
     name = "test",
     srcs = [
         ":components_test",
-        ":schema_update",
+        ":schema_drop",
+        ":schema_up",
     ],
     env = ENV_MIKRO_ORM,
     deps = DEPS + [
@@ -167,7 +162,10 @@ mikro_orm(
     ],
     data = DEPS_MIKRO_ORM,
     env = ENV_MIKRO_ORM,
-    tags = ["schema_up"],
+    tags = [
+        "manual",
+        "schema_up",
+    ],
 )
 
 mikro_orm(
@@ -182,6 +180,6 @@ mikro_orm(
     env = ENV_MIKRO_ORM,
     tags = [
         "manual",
-        "schema_down",
+        "schema_drop",
     ],
 )
