@@ -9,7 +9,7 @@ const mikroORM = (cwd: string, _config?: string) => {
   if (!config) throw new Error("Config file not specified");
 
   const run = (file: string, args: string[]) => {
-    return execa(resolve(__dirname, file), args, {
+    return execa(resolve(cwd, file), args, {
       stderr: process.stderr,
       stdout: process.stdout,
       env: {
@@ -32,7 +32,7 @@ const mikroORM = (cwd: string, _config?: string) => {
 };
 
 const main = async () => {
-  const { up } = mikroORM(resolve(__dirname), "services/updates");
+  const { up } = mikroORM(resolve(__dirname));
 
   await up();
 };

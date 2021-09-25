@@ -137,6 +137,10 @@ nodejs_binary(
     tags = ["manual"],
 )
 
+ENV_MIKRO_ORM = {
+    "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
+}
+
 jest_test(
     name = "test",
     srcs = [
@@ -153,10 +157,6 @@ DEPS_MIKRO_ORM = [
     ":components_db",
     "//:package.json",
 ]
-
-ENV_MIKRO_ORM = {
-    "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
-}
 
 mikro_orm(
     name = "schema_up",
