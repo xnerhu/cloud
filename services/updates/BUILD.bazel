@@ -92,7 +92,6 @@ ts_project(
     tsconfig = ":tsconfig_db",
     deps = DEPS + [
         ":components",
-        "@npm//execa",
     ],
 )
 
@@ -108,6 +107,8 @@ ts_project(
     tsconfig = ":tsconfig_test",
     deps = DEPS + [
         "@npm//@types/jest",
+        "@npm//ci-info",
+        "@npm//execa",
         ":components",
         ":components_db",
     ],
@@ -142,6 +143,7 @@ jest_test(
         ":components_test",
         ":schema_update",
     ],
+    env = ENV_MIKRO_ORM,
     deps = DEPS + [
         "@npm//docker-compose",
     ],
@@ -157,6 +159,18 @@ ENV_MIKRO_ORM = {
 }
 
 mikro_orm(
+    name = "schema_up",
+    args = [
+        "schema:update",
+        "--run",
+        "--fk-checks",
+    ],
+    data = DEPS_MIKRO_ORM,
+    env = ENV_MIKRO_ORM,
+    tags = ["schema_up"],
+)
+
+mikro_orm(
     name = "schema_drop",
     args = [
         "schema:drop",
@@ -170,16 +184,4 @@ mikro_orm(
         "manual",
         "schema_down",
     ],
-)
-
-mikro_orm(
-    name = "schema_update",
-    args = [
-        "schema:update",
-        "--run",
-        "--fk-checks",
-    ],
-    data = DEPS_MIKRO_ORM,
-    env = ENV_MIKRO_ORM,
-    tags = ["schema_up"],
 )

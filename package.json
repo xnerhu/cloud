@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev:updates": "ibazel run //services/updates:updates_dev",
-    "seed:updates": "bazel run //services/updates:schema_update && bazel run //services/updates:seed",
+    "seed:updates": "bazel run //services/updates:schema_up && bazel run //services/updates:seed",
     "drop:updates": "bazel run //services/updates:schema_drop",
     "build:updates": "lerna exec yarn build --scope=@backend/{common,updates}",
     "build:website": "lerna exec yarn build --scope=@web/website",
@@ -54,6 +54,7 @@
     "@types/webidl-conversions": "^6.1.1",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
+    "ci-info": "^3.2.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "concurrently": "^6.2.1",
