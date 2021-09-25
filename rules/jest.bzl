@@ -5,6 +5,7 @@ def jest_test(
         name,
         srcs,
         deps = [],
+        env = {},
         jest_config = "//:jest.config.js",
         coverage = False,
         is_web = False,
@@ -49,13 +50,13 @@ def jest_test(
         # "@npm//c8",
     ]
 
+    env.update({"TEST_ENVIRONMENT": test_env})
+
     _jest_test(
         name = name,
         data = data,
         templated_args = templated_args,
-        env = {
-            "TEST_ENVIRONMENT": test_env,
-        },
+        env = env,
         size = size,
         **kwargs
     )
