@@ -67,9 +67,8 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/bazel
-          key: ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-${{ github.ref }}-${{ github.sha }}
+          key: ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-${{ github.ref }}-
             ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-
 
       - name: Build
