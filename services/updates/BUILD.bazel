@@ -90,7 +90,10 @@ ts_project(
     incremental = True,
     source_map = True,
     tsconfig = ":tsconfig_db",
-    deps = DEPS + [":components"],
+    deps = DEPS + [
+        ":components",
+        "@npm//execa",
+    ],
 )
 
 ts_project(
@@ -104,6 +107,7 @@ ts_project(
     source_map = True,
     tsconfig = ":tsconfig_test",
     deps = DEPS + [
+        "@npm//@types/jest",
         ":components",
         ":components_db",
     ],
