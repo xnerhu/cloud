@@ -63,25 +63,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bazelisk-${{ env.BAZELISK_CACHE_VERSION }}-
 
-      - name: Bazel hash
-        id: bazel-hash
-        shell: bash
-        run: |
-          echo "::set-output name=hash::$(/bin/date -u "+%Y%m%d%s")"
-
       - name: Restore Bazel cache
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/bazel
-          key: ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-${{ steps.bazel-hash.outputs.hash }}
+          key: ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
+            ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-${{ github.ref }}-
             ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-
 
       - name: Build
         run: yarn build
 
-        # Pull the latest image to build, and avoid caching pull-only images.
-        # (docker pull is faster than caching in most cases.)
       - name: Pull docker
         run: docker-compose pull
 
@@ -91,12 +84,5 @@ jobs:
       - name: Stop docker
         run: docker-compose down
 
-      # - name: Test
-      #   run: yarn testd
-      - name: "Xd"
-        run: |
-          echo ${{ github.ref }}
-          echo "aha"
-          echo ${{ github.head_ref }}
-          echo "xdd"
-          echo ${{ github.sha }}
+      - name: Test
+        run: yarn test
