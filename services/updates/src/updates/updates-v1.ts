@@ -1,9 +1,9 @@
 import {
-  UpdateEntry,
-  UpdateEntryV1,
   UpdateResponse,
   UpdateV1Response,
-} from './update-response';
+  UpdateEntry,
+  UpdateEntryV1,
+} from './updates-response';
 
 export const transformUpdateResV1 = (res: UpdateResponse): UpdateV1Response => {
   if (res.strategy === 'none') {

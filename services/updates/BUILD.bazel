@@ -1,29 +1,20 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin", "nodejs_binary")
 load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
+load("//rules:jest.bzl", "jest_test")
+load("//rules:node.bzl", "nodejs_app")
 
 package(default_visibility = ["//visibility:public"])
-
-ts_config(
-    name = "tsconfig",
-    src = "tsconfig.json",
-    deps = [
-        "tsconfig.app.json",
-        "tsconfig.db.json",
-        "//:tsconfig.json",
-        "//common/fastify:tsconfig",
-        "//common/nest:tsconfig",
-        "//common/node:tsconfig",
-        "//common/updates-db:tsconfig",
-        "//common/utils:tsconfig",
-    ],
-)
 
 ts_config(
     name = "tsconfig_app",
     src = "tsconfig.app.json",
     deps = [
-        ":tsconfig",
+        "//:tsconfig.json",
+        "//common/fastify:tsconfig",
+        "//common/nest:tsconfig",
+        "//common/node:tsconfig",
+        "//common/utils:tsconfig",
     ],
 )
 
@@ -31,7 +22,15 @@ ts_config(
     name = "tsconfig_db",
     src = "tsconfig.db.json",
     deps = [
-        ":tsconfig",
+        "//:tsconfig.json",
+    ],
+)
+
+ts_config(
+    name = "tsconfig_test",
+    src = "tsconfig.spec.json",
+    deps = [
+        "//:tsconfig.json",
     ],
 )
 
@@ -48,7 +47,6 @@ DEPS = [
     "//common/node",
     "//common/fastify",
     "//common/nest",
-    "//common/updates-db",
     "//common/utils",
     "@npm//@types/node",
     "@npm//fastify-helmet",
@@ -83,7 +81,7 @@ ts_project(
 )
 
 ts_project(
-    name = "components_seed",
+    name = "components_db",
     srcs = glob(
         ["db/**/*.ts"],
     ),
@@ -95,49 +93,63 @@ ts_project(
     deps = DEPS + [":components"],
 )
 
-nodejs_binary(
+ts_project(
+    name = "components_test",
+    srcs = glob(
+        TEST_FILES + ["e2e/**/*.ts"],
+    ),
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig_test",
+    deps = DEPS + [
+        ":components",
+        ":components_db",
+    ],
+)
+
+nodejs_app(
     name = "updates",
     data = [
         ":components",
     ],
     entry_point = "src/index.ts",
-    env = {
-        "NODE_ENV": "production",
-    },
-)
-
-nodejs_binary(
-    name = "updates_dev",
-    data = [
-        ".env",
-        ":components",
-    ],
-    entry_point = "src/index.ts",
-    env = {
-        "NODE_ENV": "development",
-    },
 )
 
 nodejs_binary(
     name = "seed",
+    args = [
+        "--nobazel_run_linker",
+        "--nobazel_node_patches",
+    ],
     data = [
-        ":components_seed",
+        ":components_db",
+        ":schema_drop",
+        "@npm//execa",
     ],
     entry_point = "db/seed.ts",
     tags = ["manual"],
 )
 
+jest_test(
+    name = "test",
+    srcs = [
+        ":components_test",
+        ":schema_update",
+    ],
+    deps = DEPS + [
+        "@npm//docker-compose",
+    ],
+)
+
 DEPS_MIKRO_ORM = [
-    "package.json",
-    "tsconfig.json",
-    ":components_seed",
-    ":components",
+    ":components_db",
     "//:package.json",
-    "//:tsconfig.json",
 ]
 
 ENV_MIKRO_ORM = {
-    "MIKRO_ORM_CLI": "./services/updates/src/mikro-orm-config.js",
+    "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
 }
 
 mikro_orm(
@@ -150,7 +162,10 @@ mikro_orm(
     ],
     data = DEPS_MIKRO_ORM,
     env = ENV_MIKRO_ORM,
-    tags = ["manual"],
+    tags = [
+        "manual",
+        "schema_down",
+    ],
 )
 
 mikro_orm(
@@ -162,5 +177,5 @@ mikro_orm(
     ],
     data = DEPS_MIKRO_ORM,
     env = ENV_MIKRO_ORM,
-    tags = ["manual"],
+    tags = ["schema_up"],
 )

@@ -1,8 +1,7 @@
-// import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Entity, PrimaryKey, Property, OneToMany } from '@mikro-orm/core';
 
-import { Release, ReleaseChannel } from './interfaces';
-import { PatchEntity } from './patch-entity';
+import { Release, ReleaseChannel } from '../interfaces';
+import { PatchEntity } from '../patches/patch-entity';
 
 @Entity({ tableName: 'releases' })
 export class ReleaseEntity implements Release {

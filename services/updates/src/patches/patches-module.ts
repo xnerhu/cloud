@@ -1,21 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { ConfigModule } from '@nestjs/config';
-import {
-  DistributionEntity,
-  PatchEntity,
-  ReleaseEntity,
-} from '@common/updates-db';
 
-import { PatchController } from './patches-controller';
+import { PatchEntity } from './patch-entity';
 import { PatchesService } from './patches-service';
 
 @Module({
-  imports: [
-    MikroOrmModule.forFeature([PatchEntity, ReleaseEntity, DistributionEntity]),
-    ConfigModule,
-  ],
+  imports: [MikroOrmModule.forFeature([PatchEntity])],
   providers: [PatchesService],
-  controllers: [PatchController],
+  exports: [PatchesService],
 })
-export class PatchModule {}
+export class PatchesModule {}

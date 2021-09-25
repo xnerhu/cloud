@@ -1,7 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/common/updates-db"
-  }
-}

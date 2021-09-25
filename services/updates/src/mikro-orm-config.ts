@@ -1,9 +1,8 @@
 import { Options } from '@mikro-orm/core';
-import {
-  ReleaseEntity,
-  DistributionEntity,
-  PatchEntity,
-} from '@common/updates-db';
+
+import { DistributionEntity } from './distributions/distribution-entity';
+import { PatchEntity } from './patches/patch-entity';
+import { ReleaseEntity } from './releases/release-entity';
 
 export const config: Options = {
   type: 'postgresql',

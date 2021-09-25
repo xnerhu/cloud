@@ -1,5 +1,11 @@
 {
-  "extends": "./tsconfig.json",
-  "references": [{ "path": "../../common/updates-db" }],
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDirs": [
+      "db",
+      "../../bazel-out/x64_windows-fastbuild/bin/services/updates/src"
+    ]
+  },
+  "references": [{ "path": "./tsconfig.app.json" }],
   "include": ["db/**/*.ts"]
 }

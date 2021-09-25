@@ -1,6 +1,7 @@
 exports_files(
     [
         "jest.bzl",
+        "node.bzl",
     ],
     visibility = ["//visibility:public"],
 )

@@ -8,6 +8,7 @@ def jest_test(
         jest_config = "//:jest.config.js",
         coverage = False,
         is_web = False,
+        size = "small",
         **kwargs):
     DEPS = deps + [
         "@npm//@types/jest",
@@ -55,6 +56,7 @@ def jest_test(
         env = {
             "TEST_ENVIRONMENT": test_env,
         },
+        size = size,
         **kwargs
     )
 

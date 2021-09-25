@@ -1,9 +1,9 @@
-import { PatchDatabaseEntry } from './patches-service';
-import { UpdateEntry, UpdateStrategy } from './update-response';
+import { PatchEntry } from '../patches/patches-service';
+import { UpdateStrategy, UpdateEntry } from './updates-response';
 
 export const getUpdateStrategy = (
-  latest: PatchDatabaseEntry | undefined,
-  patches: PatchDatabaseEntry[],
+  latest: PatchEntry | undefined,
+  patches: PatchEntry[],
 ): UpdateStrategy => {
   if (latest == null) return 'none';
 
@@ -13,8 +13,9 @@ export const getUpdateStrategy = (
 };
 
 export const getUpdateEntryFetchInfo = (
-  { hash, fullHash, notes, size, version }: PatchDatabaseEntry,
+  { hash, fullHash, notes, size, version }: PatchEntry,
   patch: boolean,
+  publicUrl = '',
 ): UpdateEntry => {
   const ext = patch ? 'patch' : 'packed.7z';
 
@@ -25,7 +26,7 @@ export const getUpdateEntryFetchInfo = (
     notes,
     size,
     version,
-    url: `updates.wexond.net/files/${filename}`,
+    url: `${publicUrl}/${filename}`,
     filename,
   };
 };

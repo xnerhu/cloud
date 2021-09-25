@@ -1944,6 +1944,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/cross-spawn@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@types/cross-spawn/-/cross-spawn-6.0.2.tgz#168309de311cd30a2b8ae720de6475c2fbf33ac7"
+  integrity sha512-KuwNhp3eza+Rhu8IFI5HUXRP0LIhqH5cAjubUvGXXthh4YYBuP2ntwEX+Cz8GJoZUHlKo247wPWOfA9LYEq4cw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/execa@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@types/execa/-/execa-2.0.0.tgz#4dd5523520c51834bf8d0c280f460814e5238281"
@@ -3915,6 +3922,13 @@ dir-glob@^3.0.1:
   integrity sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==
   dependencies:
     path-type "^4.0.0"
+
+docker-compose@^0.23.13:
+  version "0.23.13"
+  resolved "https://registry.yarnpkg.com/docker-compose/-/docker-compose-0.23.13.tgz#77d37bd05b6a966345f631e6d05e961c79514f06"
+  integrity sha512-/9fYC4g3AO+qsqxIZhmbVnFvJJPcYEV2yJbAPPXH+6AytU3urIY8lUAXOlvY8sl4u25pdKu1JrOfAmWC7lJDJg==
+  dependencies:
+    yaml "^1.10.2"
 
 doctrine@^2.1.0:
   version "2.1.0"
@@ -10549,7 +10563,7 @@ which@^1.2.14, which@^1.2.9, which@^1.3.1:
   dependencies:
     isexe "^2.0.0"
 
-which@^2.0.1:
+which@^2.0.1, which@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/which/-/which-2.0.2.tgz#7c6a8dd0a636a0327e10b59c9286eee93f3f51b1"
   integrity sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==
@@ -10750,6 +10764,11 @@ yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
+
+yaml@^1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
+  integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
 yargonaut@1.1.4, yargonaut@^1.1.4:
   version "1.1.4"

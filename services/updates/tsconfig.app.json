@@ -1,12 +1,14 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates/src"
+  },
   "references": [
     { "path": "../../common/node" },
     { "path": "../../common/fastify" },
     { "path": "../../common/nest" },
-    { "path": "../../common/utils" },
-    { "path": "../../common/updates-db" }
+    { "path": "../../common/utils" }
   ],
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts"]
+  "include": ["src/**/*.ts", "index.ts"]
 }

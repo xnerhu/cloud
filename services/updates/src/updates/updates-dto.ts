@@ -1,6 +1,6 @@
 import { IsString, IsOptional } from 'class-validator';
 
-export class GetPatchesDto {
+export class GetUpdatesDto {
   @IsString()
   version: string;
 
@@ -20,7 +20,7 @@ export class GetPatchesDto {
   architecture: string;
 }
 
-export class GetPatchesV1Dto {
+export class GetUpdatesV1Dto {
   @IsString()
   browserVersion: string;
 }

@@ -4,9 +4,9 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { resolve } from 'path';
 import { IS_DEV } from '@common/node';
 
-import { PatchModule } from './patches/patches-module';
 import { config } from './mikro-orm-config';
 import { SCHEMA_ENV } from './config/env';
+import { UpdatesModule } from './updates/updates-module';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { SCHEMA_ENV } from './config/env';
       ignoreEnvFile: !IS_DEV,
       validationSchema: SCHEMA_ENV,
     }),
-    PatchModule,
+    UpdatesModule,
   ],
   controllers: [],
   providers: [],

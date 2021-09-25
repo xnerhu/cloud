@@ -37,6 +37,8 @@ const webConfig = {
 const nodeConfig = {
   testEnvironment: "node",
   testMatch: ["**/*.test.js"],
+  globalSetup: `<rootDir>/${workspacePath}/e2e/setup.js`,
+  globalTeardown: `<rootDir>/${workspacePath}/e2e/teardown.js`,
 };
 
 module.exports = {
