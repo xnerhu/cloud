@@ -80,5 +80,14 @@ jobs:
       - name: Build
         run: yarn build
 
+        # Pull the latest image to build, and avoid caching pull-only images.
+        # (docker pull is faster than caching in most cases.)
+      - run: docker-compose pull
+
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
+      - run: docker-compose up --build
+
       # - name: Test
       #   run: yarn test
