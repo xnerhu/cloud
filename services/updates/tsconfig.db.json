@@ -7,9 +7,6 @@
     ],
     "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates"
   },
-  "references": [
-    { "path": "./tsconfig.json" },
-    { "path": "./tsconfig.spec.json" }
-  ],
+  "references": [{ "path": "./tsconfig.json" }],
   "include": ["db/**/*.ts"]
 }
