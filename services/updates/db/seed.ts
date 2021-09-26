@@ -47,8 +47,22 @@ export default async () => {
     })[];
   })[] = [
     {
+      version: "2.1.0-alpha",
+      notes: "alpha-third-release",
+      channel: "alpha",
+      patches: [
+        {
+          hash: "windows-alpha-2.1.0-patch",
+          size: 11663861,
+          fullHash: "windows-alpha-2.1.0-full",
+          fullSize: 61212089,
+          distribution: windowsDistro,
+        },
+      ],
+    },
+    {
       version: "2.0.0",
-      notes: "first-release",
+      notes: "fourth-release",
       channel: "stable",
       patches: [
         {
@@ -68,8 +82,22 @@ export default async () => {
       ],
     },
     {
+      version: "1.2.0-alpha",
+      notes: "alpha-second-release",
+      channel: "alpha",
+      patches: [
+        {
+          hash: "windows-alpha-1.2.0-patch",
+          size: 11663861,
+          fullHash: "windows-alpha-1.2.0-full",
+          fullSize: 61212089,
+          distribution: windowsDistro,
+        },
+      ],
+    },
+    {
       version: "1.2.0",
-      notes: "first-release",
+      notes: "third-release",
       channel: "stable",
       patches: [
         {
@@ -113,6 +141,20 @@ export default async () => {
           fullHash: "macos-1.1.0-full",
           fullSize: 71212089,
           distribution: macosDistro,
+        },
+      ],
+    },
+    {
+      version: "1.0.0-alpha",
+      notes: "alpha-first-release",
+      channel: "alpha",
+      patches: [
+        {
+          hash: "windows-alpha-1.0.0-patch",
+          size: 11663861,
+          fullHash: "windows-alpha-1.0.0-full",
+          fullSize: 61212089,
+          distribution: windowsDistro,
         },
       ],
     },
@@ -162,7 +204,7 @@ export default async () => {
         patchEntity.fullSize = patch.fullSize;
         patchEntity.distribution = patch.distribution;
 
-        await patchRepo.persistAndFlush(patchEntity);
+        // await patchRepo.flush(patchEntity);
 
         return patchEntity;
       }),
