@@ -125,64 +125,64 @@ nodejs_app(
     entry_point = "src/index.ts",
 )
 
-# nodejs_binary(
-#     name = "seed",
-#     data = [
-#         ":components_db",
-#         "@npm//execa",
-#     ],
-#     entry_point = "db/seed.ts",
-# )
+nodejs_binary(
+    name = "seed",
+    data = [
+        ":components_db",
+        "@npm//execa",
+    ],
+    entry_point = "db/seed.ts",
+)
 
-# ENV_MIKRO_ORM = {
-#     "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
-# }
+ENV_MIKRO_ORM = {
+    "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
+}
 
-# jest_test(
-#     name = "test",
-#     srcs = [
-#         ":components_test",
-#         ":schema_drop",
-#         ":schema_up",
-#     ],
-#     env = ENV_MIKRO_ORM,
-#     deps = DEPS + [
-#         "@npm//docker-compose",
-#     ],
-# )
+jest_test(
+    name = "test",
+    srcs = [
+        ":components_test",
+        ":schema_drop",
+        ":schema_up",
+    ],
+    env = ENV_MIKRO_ORM,
+    deps = DEPS + [
+        "@npm//docker-compose",
+    ],
+)
 
-# DEPS_MIKRO_ORM = [
-#     ":components_db",
-#     "//:package.json",
-# ]
+DEPS_MIKRO_ORM = [
+    ":components_db",
+    "//:package.json",
+]
 
-# mikro_orm(
-#     name = "schema_up",
-#     args = [
-#         "schema:update",
-#         "--run",
-#         "--fk-checks",
-#     ],
-#     data = DEPS_MIKRO_ORM,
-#     env = ENV_MIKRO_ORM,
-#     tags = [
-#         "manual",
-#         "schema_up",
-#     ],
-# )
+mikro_orm(
+    name = "schema_up",
+    args = [
+        "schema:update",
+        "--run",
+        "--fk-checks",
+    ],
+    data = DEPS_MIKRO_ORM,
+    env = ENV_MIKRO_ORM,
+    tags = [
+        "manual",
+        "schema_up",
+    ],
+)
 
-# mikro_orm(
-#     name = "schema_drop",
-#     args = [
-#         "schema:drop",
-#         "--run",
-#         "--fk-checks",
-#         "--drop-migrations-table",
-#     ],
-#     data = DEPS_MIKRO_ORM,
-#     env = ENV_MIKRO_ORM,
-#     tags = [
-#         "manual",
-#         "schema_drop",
-#     ],
-# )
+mikro_orm(
+    name = "schema_drop",
+    args = [
+        "schema:drop",
+        "--run",
+        "--fk-checks",
+        "--drop-migrations-table",
+    ],
+    data = DEPS_MIKRO_ORM,
+    env = ENV_MIKRO_ORM,
+    tags = [
+        "manual",
+        "schema_drop",
+    ],
+)
