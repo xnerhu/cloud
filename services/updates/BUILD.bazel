@@ -22,6 +22,7 @@ ts_config(
     name = "tsconfig_db",
     src = "tsconfig.db.json",
     deps = [
+        ":tsconfig_app",
         "//:tsconfig.json",
     ],
 )
@@ -95,26 +96,26 @@ ts_project(
     ],
 )
 
-ts_project(
-    name = "components_test",
-    srcs = glob(
-        TEST_FILES + ["e2e/**/*.ts"],
-    ),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    source_map = True,
-    tsconfig = ":tsconfig_test",
-    deps = DEPS + [
-        "@npm//@types/jest",
-        "@npm//ci-info",
-        "@npm//execa",
-        "@npm//supertest",
-        "@npm//@types/supertest",
-        ":components",
-        ":components_db",
-    ],
-)
+# ts_project(
+#     name = "components_test",
+#     srcs = glob(
+#         TEST_FILES + ["e2e/**/*.ts"],
+#     ),
+#     composite = True,
+#     declaration = True,
+#     incremental = True,
+#     source_map = True,
+#     tsconfig = ":tsconfig_test",
+#     deps = DEPS + [
+#         "@npm//@types/jest",
+#         "@npm//ci-info",
+#         "@npm//execa",
+#         "@npm//supertest",
+#         "@npm//@types/supertest",
+#         ":components",
+#         ":components_db",
+#     ],
+# )
 
 nodejs_app(
     name = "updates",
@@ -124,18 +125,18 @@ nodejs_app(
     entry_point = "src/index.ts",
 )
 
-nodejs_binary(
-    name = "seed",
-    data = [
-        ":components_db",
-        "@npm//execa",
-    ],
-    entry_point = "db/seed.ts",
-)
+# nodejs_binary(
+#     name = "seed",
+#     data = [
+#         ":components_db",
+#         "@npm//execa",
+#     ],
+#     entry_point = "db/seed.ts",
+# )
 
-ENV_MIKRO_ORM = {
-    "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
-}
+# ENV_MIKRO_ORM = {
+#     "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
+# }
 
 # jest_test(
 #     name = "test",
@@ -150,38 +151,38 @@ ENV_MIKRO_ORM = {
 #     ],
 # )
 
-DEPS_MIKRO_ORM = [
-    ":components_db",
-    "//:package.json",
-]
+# DEPS_MIKRO_ORM = [
+#     ":components_db",
+#     "//:package.json",
+# ]
 
-mikro_orm(
-    name = "schema_up",
-    args = [
-        "schema:update",
-        "--run",
-        "--fk-checks",
-    ],
-    data = DEPS_MIKRO_ORM,
-    env = ENV_MIKRO_ORM,
-    tags = [
-        "manual",
-        "schema_up",
-    ],
-)
+# mikro_orm(
+#     name = "schema_up",
+#     args = [
+#         "schema:update",
+#         "--run",
+#         "--fk-checks",
+#     ],
+#     data = DEPS_MIKRO_ORM,
+#     env = ENV_MIKRO_ORM,
+#     tags = [
+#         "manual",
+#         "schema_up",
+#     ],
+# )
 
-mikro_orm(
-    name = "schema_drop",
-    args = [
-        "schema:drop",
-        "--run",
-        "--fk-checks",
-        "--drop-migrations-table",
-    ],
-    data = DEPS_MIKRO_ORM,
-    env = ENV_MIKRO_ORM,
-    tags = [
-        "manual",
-        "schema_drop",
-    ],
-)
+# mikro_orm(
+#     name = "schema_drop",
+#     args = [
+#         "schema:drop",
+#         "--run",
+#         "--fk-checks",
+#         "--drop-migrations-table",
+#     ],
+#     data = DEPS_MIKRO_ORM,
+#     env = ENV_MIKRO_ORM,
+#     tags = [
+#         "manual",
+#         "schema_drop",
+#     ],
+# )
