@@ -71,6 +71,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-
 
+      - name: Setup Bazel config
+        run: |
+          cat .bazelrc.ci >> .bazelrc
+
       - name: Build
         run: yarn build
 
