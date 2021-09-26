@@ -1,8 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src"
-    // "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates/src"
+    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates"
   },
   "references": [
     { "path": "../../common/node" },

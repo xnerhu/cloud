@@ -96,26 +96,26 @@ ts_project(
     ],
 )
 
-# ts_project(
-#     name = "components_test",
-#     srcs = glob(
-#         TEST_FILES + ["e2e/**/*.ts"],
-#     ),
-#     composite = True,
-#     declaration = True,
-#     incremental = True,
-#     source_map = True,
-#     tsconfig = ":tsconfig_test",
-#     deps = DEPS + [
-#         "@npm//@types/jest",
-#         "@npm//ci-info",
-#         "@npm//execa",
-#         "@npm//supertest",
-#         "@npm//@types/supertest",
-#         ":components",
-#         ":components_db",
-#     ],
-# )
+ts_project(
+    name = "components_test",
+    srcs = glob(
+        TEST_FILES + ["e2e/**/*.ts"],
+    ),
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig_test",
+    deps = DEPS + [
+        "@npm//@types/jest",
+        "@npm//ci-info",
+        "@npm//execa",
+        "@npm//supertest",
+        "@npm//@types/supertest",
+        ":components",
+        ":components_db",
+    ],
+)
 
 nodejs_app(
     name = "updates",
