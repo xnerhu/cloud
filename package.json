@@ -18,7 +18,8 @@
     "docker:stop": "docker-compose down",
     "prisma:updates": "npx prisma generate --schema ./services/updates/prisma/schema.prisma",
     "prisma": "concurrently \"npm run prisma:updates\"",
-    "lint": "eslint \"common/**/src/**\" \"services/**/src/**\" --ext \".js,.jsx,.ts,.tsx\" --cache --cache-strategy content",
+    "lint": "eslint \"common/**/src/**\" \"services/**/src/**\" --ext \".js,.jsx,.ts,.tsx\"",
+    "lint-cache": "npx run lint -- --cache --cache-strategy content",
     "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {

@@ -42,15 +42,15 @@ jobs:
         env:
           ADBLOCK: true
 
-      - name: Restore Eslint Cache
-        uses: actions/cache@v2.1.6
-        id: eslint-cache
-        with:
-          path: |
-            .eslintcache
-          key: ${{ runner.os }}-eslint-${{ hashFiles('**/.eslintcache') }}
-          restore-keys: |
-            ${{ runner.os }}-eslint-
+      # - name: Restore Eslint Cache
+      #   uses: actions/cache@v2.1.6
+      #   id: eslint-cache
+      #   with:
+      #     path: |
+      #       .eslintcache
+      #     key: ${{ runner.os }}-eslint-${{ hashFiles('**/.eslintcache') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-eslint-
 
       - name: Lint
         run: yarn lint
