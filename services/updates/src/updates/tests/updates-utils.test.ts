@@ -58,7 +58,7 @@ describe("Update utils", () => {
           {
             fullHash: "fullHash",
             notes: "full_notes",
-            size: 4096,
+            fullSize: 4096,
             version: "2.0.0",
           } as PatchEntry,
           false,

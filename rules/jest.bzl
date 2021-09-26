@@ -50,7 +50,10 @@ def jest_test(
         # "@npm//c8",
     ]
 
-    env.update({"TEST_ENVIRONMENT": test_env})
+    env.update({
+        "TEST_ENVIRONMENT": test_env,
+        "NODE_ENV": "test",
+    })
 
     _jest_test(
         name = name,

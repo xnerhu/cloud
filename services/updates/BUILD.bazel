@@ -1,5 +1,5 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin", "nodejs_binary")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
 load("//rules:jest.bzl", "jest_test")
 load("//rules:node.bzl", "nodejs_app")
@@ -8,7 +8,7 @@ package(default_visibility = ["//visibility:public"])
 
 ts_config(
     name = "tsconfig_app",
-    src = "tsconfig.app.json",
+    src = "tsconfig.json",
     deps = [
         "//:tsconfig.json",
         "//common/fastify:tsconfig",
@@ -80,39 +80,41 @@ ts_project(
     deps = DEPS,
 )
 
-ts_project(
-    name = "components_db",
-    srcs = glob(
-        ["db/**/*.ts"],
-    ),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    source_map = True,
-    tsconfig = ":tsconfig_db",
-    deps = DEPS + [
-        ":components",
-    ],
-)
+# ts_project(
+#     name = "components_db",
+#     srcs = glob(
+#         ["db/**/*.ts"],
+#     ),
+#     composite = True,
+#     declaration = True,
+#     incremental = True,
+#     source_map = True,
+#     tsconfig = ":tsconfig_db",
+#     deps = DEPS + [
+#         ":components",
+#     ],
+# )
 
-ts_project(
-    name = "components_test",
-    srcs = glob(
-        TEST_FILES + ["e2e/**/*.ts"],
-    ),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    source_map = True,
-    tsconfig = ":tsconfig_test",
-    deps = DEPS + [
-        "@npm//@types/jest",
-        "@npm//ci-info",
-        "@npm//execa",
-        ":components",
-        ":components_db",
-    ],
-)
+# ts_project(
+#     name = "components_test",
+#     srcs = glob(
+#         TEST_FILES + ["e2e/**/*.ts"],
+#     ),
+#     composite = True,
+#     declaration = True,
+#     incremental = True,
+#     source_map = True,
+#     tsconfig = ":tsconfig_test",
+#     deps = DEPS + [
+#         "@npm//@types/jest",
+#         "@npm//ci-info",
+#         "@npm//execa",
+#         "@npm//supertest",
+#         "@npm//@types/supertest",
+#         ":components",
+#         ":components_db",
+#     ],
+# )
 
 nodejs_app(
     name = "updates",
@@ -122,64 +124,64 @@ nodejs_app(
     entry_point = "src/index.ts",
 )
 
-nodejs_binary(
-    name = "seed",
-    data = [
-        ":components_db",
-        "@npm//execa",
-    ],
-    entry_point = "db/seed.ts",
-)
+# nodejs_binary(
+#     name = "seed",
+#     data = [
+#         ":components_db",
+#         "@npm//execa",
+#     ],
+#     entry_point = "db/seed.ts",
+# )
 
 ENV_MIKRO_ORM = {
     "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
 }
 
-jest_test(
-    name = "test",
-    srcs = [
-        ":components_test",
-        ":schema_drop",
-        ":schema_up",
-    ],
-    env = ENV_MIKRO_ORM,
-    deps = DEPS + [
-        "@npm//docker-compose",
-    ],
-)
+# jest_test(
+#     name = "test",
+#     srcs = [
+#         ":components_test",
+#         ":schema_drop",
+#         ":schema_up",
+#     ],
+#     env = ENV_MIKRO_ORM,
+#     deps = DEPS + [
+#         "@npm//docker-compose",
+#     ],
+# )
 
 DEPS_MIKRO_ORM = [
     ":components_db",
     "//:package.json",
 ]
 
-mikro_orm(
-    name = "schema_up",
-    args = [
-        "schema:update",
-        "--run",
-        "--fk-checks",
-    ],
-    data = DEPS_MIKRO_ORM,
-    env = ENV_MIKRO_ORM,
-    tags = [
-        "manual",
-        "schema_up",
-    ],
-)
+# mikro_orm(
+#     name = "schema_up",
+#     args = [
+#         "schema:update",
+#         "--run",
+#         "--fk-checks",
+#     ],
+#     data = DEPS_MIKRO_ORM,
+#     env = ENV_MIKRO_ORM,
+#     tags = [
+#         "manual",
+#         "schema_up",
+#     ],
+# )
 
-mikro_orm(
-    name = "schema_drop",
-    args = [
-        "schema:drop",
-        "--run",
-        "--fk-checks",
-        "--drop-migrations-table",
-    ],
-    data = DEPS_MIKRO_ORM,
-    env = ENV_MIKRO_ORM,
-    tags = [
-        "manual",
-        "schema_drop",
-    ],
-)
+# mikro_orm(
+#     name = "schema_drop",
+#     args = [
+#         "schema:drop",
+#         "--run",
+#         "--fk-checks",
+#         "--drop-migrations-table",
+#     ],
+#     data = DEPS_MIKRO_ORM,
+#     env = ENV_MIKRO_ORM,
+#     tags = [
+#         "manual",
+#         "schema_drop",
+#     ],
+# )

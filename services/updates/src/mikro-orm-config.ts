@@ -12,7 +12,7 @@ export const config: Options = {
   user: "root",
   password: "example",
   entities: [ReleaseEntity, DistributionEntity, PatchEntity],
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
   discovery: {
     requireEntitiesArray: true,
   },

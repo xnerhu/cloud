@@ -13,7 +13,7 @@ export const getUpdateStrategy = (
 };
 
 export const getUpdateEntryFetchInfo = (
-  { hash, fullHash, notes, size, version }: PatchEntry,
+  { hash, fullHash, notes, size, fullSize, version }: PatchEntry,
   patch: boolean,
   publicUrl = "",
 ): UpdateEntry => {
@@ -24,7 +24,7 @@ export const getUpdateEntryFetchInfo = (
   return {
     hash: patch ? hash : fullHash,
     notes,
-    size,
+    size: patch ? size : fullSize,
     version,
     url: `${publicUrl}/${filename}`,
     filename,

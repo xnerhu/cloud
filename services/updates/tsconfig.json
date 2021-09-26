@@ -10,5 +10,5 @@
     { "path": "../../common/nest" },
     { "path": "../../common/utils" }
   ],
-  "include": ["src/**/*.ts", "index.ts"]
+  "include": ["src/**/*.ts"]
 }

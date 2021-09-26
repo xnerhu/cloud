@@ -41,11 +41,13 @@ export class UpdatesService {
 
     const { id: distributionId } = distribution;
 
-    const [latest, ...patches] = await this.patchesService.find({
+    const releases = await this.patchesService.find({
       version,
       channel,
       distributionId,
     });
+
+    const [latest, ...patches] = releases;
 
     const strategy = getUpdateStrategy(latest, patches);
 
@@ -68,7 +70,7 @@ export class UpdatesService {
 
     return {
       ...res,
-      patches: patches.map((patch) =>
+      patches: releases.map((patch) =>
         getUpdateEntryFetchInfo(patch, true, publicPath),
       ),
     };
