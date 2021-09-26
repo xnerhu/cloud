@@ -2,10 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDirs": [
-      "db",
-      "../../bazel-out/x64_windows-fastbuild/bin/services/updates/src"
-    ],
-    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates"
+      "db"
+      // "../../bazel-out/x64_windows-fastbuild/bin/services/updates/src"
+    ]
+    // "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates"
   },
   "references": [{ "path": "./tsconfig.json" }],
   "include": ["db/**/*.ts"]
