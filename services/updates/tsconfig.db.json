@@ -3,7 +3,7 @@
   "compilerOptions": {
     "rootDirs": [
       "db",
-      "../../bazel-out/x64_windows-fastbuild/bin/services/updates"
+      "../../bazel-out/x64_windows-fastbuild/bin/services/updates/src"
     ],
     "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates"
   },
