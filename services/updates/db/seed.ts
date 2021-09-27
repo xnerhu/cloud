@@ -58,7 +58,7 @@ export default async () => {
           fullSize: 61212089,
           distribution: windowsDistro,
         },
-      ],
+      ].reverse(),
     },
     {
       version: "2.0.0",
@@ -79,7 +79,7 @@ export default async () => {
           fullSize: 51212089,
           distribution: macosDistro,
         },
-      ],
+      ].reverse(),
     },
     {
       version: "1.2.0-alpha",
@@ -93,7 +93,7 @@ export default async () => {
           fullSize: 61212089,
           distribution: windowsDistro,
         },
-      ],
+      ].reverse(),
     },
     {
       version: "1.2.0",
@@ -121,7 +121,7 @@ export default async () => {
           fullSize: 71212089,
           distribution: linuxDistro,
         },
-      ],
+      ].reverse(),
     },
     {
       version: "1.1.0",
@@ -142,7 +142,7 @@ export default async () => {
           fullSize: 71212089,
           distribution: macosDistro,
         },
-      ],
+      ].reverse(),
     },
     {
       version: "1.0.0-alpha",
@@ -156,7 +156,7 @@ export default async () => {
           fullSize: 61212089,
           distribution: windowsDistro,
         },
-      ],
+      ].reverse(),
     },
     {
       version: "1.0.0",
@@ -184,9 +184,9 @@ export default async () => {
           fullSize: 71212089,
           distribution: linuxDistro,
         },
-      ],
+      ].reverse(),
     },
-  ];
+  ].reverse();
 
   const patchRepo = connection.em.getRepository(PatchEntity);
   const releaseRepo = connection.em.getRepository(ReleaseEntity);

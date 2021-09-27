@@ -7,6 +7,7 @@ import { IS_DEV } from "@common/node";
 import { config } from "./mikro-orm-config";
 import { SCHEMA_ENV } from "./config/env";
 import { UpdatesModule } from "./updates/updates-module";
+import { AdminModule } from "./admin/admin-module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UpdatesModule } from "./updates/updates-module";
       validationSchema: SCHEMA_ENV,
     }),
     UpdatesModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [],

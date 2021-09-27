@@ -122,6 +122,7 @@ nodejs_app(
     data = [
         ":components",
     ],
+    dev_data = [".env"],
     entry_point = "src/index.ts",
 )
 

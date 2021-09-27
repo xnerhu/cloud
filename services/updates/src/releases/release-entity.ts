@@ -1,6 +1,12 @@
-import { Entity, PrimaryKey, Property, OneToMany } from "@mikro-orm/core";
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  OneToMany,
+  Index,
+} from "@mikro-orm/core";
 
-import { Release, ReleaseChannel } from "../interfaces";
+import { Release } from "../interfaces";
 import { PatchEntity } from "../patches/patch-entity";
 
 @Entity({ tableName: "releases" })
@@ -9,10 +15,12 @@ export class ReleaseEntity implements Release {
   id: number;
 
   @Property()
+  @Index()
   version: string;
 
   @Property()
-  channel: ReleaseChannel;
+  @Index()
+  channel: string;
 
   @OneToMany(() => PatchEntity, (patch) => patch.release)
   patches: PatchEntity[];

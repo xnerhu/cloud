@@ -4,7 +4,7 @@ export interface Release {
   id: number;
   // semantic
   version: string;
-  channel: ReleaseChannel;
+  channel: string;
   patches: Patch[];
   notes: string;
 }
