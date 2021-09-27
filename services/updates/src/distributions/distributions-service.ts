@@ -7,7 +7,7 @@ import { Distribution } from "../interfaces";
 import { DistributionEntity } from "../distributions/distribution-entity";
 
 export type DistributionSearchOptions = Record<
-  keyof Omit<Distribution, "id" | "patches">,
+  keyof Pick<Distribution, "os" | "osVersion" | "architecture">,
   string
 >;
 

@@ -13,6 +13,8 @@ export const config: Options = {
   password: "example",
   entities: [ReleaseEntity, DistributionEntity, PatchEntity],
   debug: process.env.NODE_ENV === "development",
+  forceUtcTimezone: true,
+  strict: true,
   discovery: {
     requireEntitiesArray: true,
   },

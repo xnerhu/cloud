@@ -27,4 +27,7 @@ export class ReleaseEntity implements Release {
 
   @Property()
   notes: string;
+
+  @Property({ columnType: "timestamp", default: "now" })
+  createdAt: string;
 }

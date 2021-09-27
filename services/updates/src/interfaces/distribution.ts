@@ -6,6 +6,7 @@ export interface Distribution {
   osVersion: DistributionOSVersion;
   architecture: DistributionArchitecture;
   patches: Patch[];
+  createdAt: string;
 }
 
 export type DistributionOS = "windows" | "macos" | "linux";

@@ -26,4 +26,7 @@ export class PatchEntity implements Patch {
 
   @ManyToOne(() => ReleaseEntity)
   release: ReleaseEntity;
+
+  @Property({ columnType: "timestamp", default: "now" })
+  createdAt: string;
 }

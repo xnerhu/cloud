@@ -10,7 +10,6 @@ import multipart from "fastify-multipart";
 import { NestErrorHandler } from "@common/nest";
 
 import { AppModule } from "./app-module";
-import { IS_DEV } from "@common/node";
 
 export const runApp = async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -28,8 +27,6 @@ export const runApp = async () => {
 
   app.register(multipart as any);
   app.enableCors();
-
-  console.log(port);
 
   await app.listen(port);
 

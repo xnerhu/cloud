@@ -7,4 +7,5 @@ export interface Patch {
   fullHash: string;
   fullSize: number;
   distribution: Distribution;
+  createdAt: string;
 }

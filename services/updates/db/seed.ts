@@ -41,8 +41,8 @@ export default async () => {
     macosArmDistro,
   ]);
 
-  const releases: (Omit<Release, "id" | "patches"> & {
-    patches: (Omit<Patch, "id" | "distribution"> & {
+  const releases: (Omit<Release, "id" | "patches" | "createdAt"> & {
+    patches: (Omit<Patch, "id" | "distribution" | "createdAt"> & {
       distribution: DistributionEntity;
     })[];
   })[] = [
@@ -203,8 +203,6 @@ export default async () => {
         patchEntity.fullHash = patch.fullHash;
         patchEntity.fullSize = patch.fullSize;
         patchEntity.distribution = patch.distribution;
-
-        // await patchRepo.flush(patchEntity);
 
         return patchEntity;
       }),

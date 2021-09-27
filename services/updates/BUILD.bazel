@@ -60,6 +60,7 @@ DEPS = [
     "@npm//@nestjs/platform-fastify",
     "@npm//@nestjs/typeorm",
     "@npm//@nestjs/config",
+    "@npm//fastify-multipart",
     "@npm//class-validator",
     "@npm//class-transformer",
     "@npm//rxjs",
@@ -132,7 +133,7 @@ nodejs_binary(
         ":components_db",
         "@npm//execa",
     ],
-    entry_point = "db/seed.ts",
+    entry_point = "db/index.ts",
 )
 
 ENV_MIKRO_ORM = {
