@@ -53,6 +53,8 @@ export default async () => {
       patches: [
         {
           hash: "windows-alpha-2.1.0-patch",
+          filename: "2.1.0-windows.patch",
+          fullFilename: "2.1.0-windows.packed.7z",
           size: 11663861,
           fullHash: "windows-alpha-2.1.0-full",
           fullSize: 61212089,
@@ -67,6 +69,8 @@ export default async () => {
       patches: [
         {
           hash: "fourth-2.0.0-patch",
+          filename: "2.0.0-windows.patch",
+          fullFilename: "2.0.0-windows.packed.7z",
           size: 11663861,
           fullHash: "windows-2.0.0-full",
           fullSize: 61212089,
@@ -74,6 +78,8 @@ export default async () => {
         },
         {
           hash: "macos-2.0.0-patch",
+          filename: "2.0.0-macos.patch",
+          fullFilename: "2.0.0-macos.packed.7z",
           size: 16663861,
           fullHash: "macos-2.0.0-full",
           fullSize: 51212089,
@@ -88,6 +94,8 @@ export default async () => {
       patches: [
         {
           hash: "windows-alpha-1.2.0-patch",
+          filename: "1.2.0-alpha-windows.patch",
+          fullFilename: "1.2.0-alpha-windows.packed.7z",
           size: 11663861,
           fullHash: "windows-alpha-1.2.0-full",
           fullSize: 61212089,
@@ -103,6 +111,8 @@ export default async () => {
         {
           hash: "third-1.2.0-patch",
           size: 11663861,
+          filename: "1.2.0-windows.patch",
+          fullFilename: "1.2.0-windows.packed.7z",
           fullHash: "windows-1.2.0-full",
           fullSize: 61212089,
           distribution: windowsDistro,
@@ -110,12 +120,16 @@ export default async () => {
         {
           hash: "macos-1.2.0-patch",
           size: 16663861,
+          filename: "1.2.0-macos.patch",
+          fullFilename: "1.2.0-macos.packed.7z",
           fullHash: "macos-1.2.0-full",
           fullSize: 71212089,
           distribution: macosDistro,
         },
         {
           hash: "linux-1.2.0-patch",
+          filename: "1.2.0-linux.patch",
+          fullFilename: "1.2.0-linux.packed.7z",
           size: 16663861,
           fullHash: "linux-1.2.0-full",
           fullSize: 71212089,
@@ -130,6 +144,8 @@ export default async () => {
       patches: [
         {
           hash: "windows-1.1.0-patch",
+          filename: "1.1.0-windows.patch",
+          fullFilename: "1.1.0-windows.packed.7z",
           size: 11663861,
           fullHash: "windows-1.1.0-full",
           fullSize: 61212089,
@@ -137,6 +153,8 @@ export default async () => {
         },
         {
           hash: "macos-1.1.0-patch",
+          filename: "1.1.0-macos.patch",
+          fullFilename: "1.1.0-macos.packed.7z",
           size: 41212089,
           fullHash: "macos-1.1.0-full",
           fullSize: 71212089,
@@ -152,6 +170,8 @@ export default async () => {
         {
           hash: "windows-alpha-1.0.0-patch",
           size: 11663861,
+          filename: "1.0.0-alpha-windows.patch",
+          fullFilename: "1.0.0-alpha-windows.packed.7z",
           fullHash: "windows-alpha-1.0.0-full",
           fullSize: 61212089,
           distribution: windowsDistro,
@@ -167,6 +187,8 @@ export default async () => {
           hash: "windows-1.0.0-patch",
           size: 11663861,
           fullHash: "windows-1.0.0-full",
+          filename: "1.0.0-windows.patch",
+          fullFilename: "1.0.0-windows.packed.7z",
           fullSize: 61212089,
           distribution: windowsDistro,
         },
@@ -174,6 +196,8 @@ export default async () => {
           hash: "macos-1.0.0-patch",
           size: 16663861,
           fullHash: "macos-1.0.0-full",
+          filename: "1.0.0-macos.patch",
+          fullFilename: "1.0.0-macos.packed.7z",
           fullSize: 71212089,
           distribution: macosDistro,
         },
@@ -181,6 +205,8 @@ export default async () => {
           hash: "linux-1.0.0-patch",
           size: 16663861,
           fullHash: "linux-1.0.0-full",
+          filename: "1.0.0-linux.patch",
+          fullFilename: "1.0.0-linux.packed.7z",
           fullSize: 71212089,
           distribution: linuxDistro,
         },
@@ -203,6 +229,8 @@ export default async () => {
         patchEntity.fullHash = patch.fullHash;
         patchEntity.fullSize = patch.fullSize;
         patchEntity.distribution = patch.distribution;
+        patchEntity.filename = patch.filename;
+        patchEntity.fullFilename = patch.fullFilename;
 
         return patchEntity;
       }),

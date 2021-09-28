@@ -34,38 +34,38 @@ describe("[e2e]: Patches", () => {
       expect(res.body).toHaveProperty("strategy", "patches");
 
       expect(res.body.full).toEqual({
-        hash: "windows-2.0.0-full",
-        notes: "fourth-release",
-        size: 61212089,
         version: "2.0.0",
-        url: "/2.0.0.packed.7z",
-        filename: "2.0.0.packed.7z",
+        notes: "fourth-release",
+        hash: "windows-2.0.0-full",
+        size: 61212089,
+        filename: "2.0.0-windows.packed.7z",
+        url: "/updates/2.0.0-windows.packed.7z",
       });
 
       expect(res.body.patches).toEqual([
         {
-          hash: "fourth-2.0.0-patch",
-          notes: "fourth-release",
-          size: 11663861,
           version: "2.0.0",
-          url: "/2.0.0.patch",
-          filename: "2.0.0.patch",
+          notes: "fourth-release",
+          hash: "fourth-2.0.0-patch",
+          size: 11663861,
+          filename: "2.0.0-windows.patch",
+          url: "/updates/2.0.0-windows.patch",
         },
         {
-          hash: "third-1.2.0-patch",
-          notes: "third-release",
-          size: 11663861,
           version: "1.2.0",
-          url: "/1.2.0.patch",
-          filename: "1.2.0.patch",
+          notes: "third-release",
+          hash: "third-1.2.0-patch",
+          size: 11663861,
+          filename: "1.2.0-windows.patch",
+          url: "/updates/1.2.0-windows.patch",
         },
         {
-          hash: "windows-1.1.0-patch",
-          notes: "second-release",
-          size: 11663861,
           version: "1.1.0",
-          url: "/1.1.0.patch",
-          filename: "1.1.0.patch",
+          notes: "second-release",
+          hash: "windows-1.1.0-patch",
+          size: 11663861,
+          filename: "1.1.0-windows.patch",
+          url: "/updates/1.1.0-windows.patch",
         },
       ]);
     });
@@ -80,12 +80,12 @@ describe("[e2e]: Patches", () => {
       expect(res.body).toHaveProperty("strategy", "full");
 
       expect(res.body.full).toEqual({
-        hash: "macos-2.0.0-full",
-        notes: "fourth-release",
-        size: 51212089,
         version: "2.0.0",
-        url: "/2.0.0.packed.7z",
-        filename: "2.0.0.packed.7z",
+        notes: "fourth-release",
+        hash: "macos-2.0.0-full",
+        size: 51212089,
+        filename: "2.0.0-macos.packed.7z",
+        url: "/updates/2.0.0-macos.packed.7z",
       });
     });
 
@@ -98,22 +98,22 @@ describe("[e2e]: Patches", () => {
       expect(res.body).toHaveProperty("strategy", "patches");
 
       expect(res.body.full).toEqual({
-        hash: "linux-1.2.0-full",
-        notes: "third-release",
-        size: 71212089,
         version: "1.2.0",
-        url: "/1.2.0.packed.7z",
-        filename: "1.2.0.packed.7z",
+        notes: "third-release",
+        hash: "linux-1.2.0-full",
+        size: 71212089,
+        filename: "1.2.0-linux.packed.7z",
+        url: "/updates/1.2.0-linux.packed.7z",
       });
 
       expect(res.body.patches).toEqual([
         {
-          hash: "linux-1.2.0-patch",
-          notes: "third-release",
-          size: 16663861,
           version: "1.2.0",
-          url: "/1.2.0.patch",
-          filename: "1.2.0.patch",
+          notes: "third-release",
+          hash: "linux-1.2.0-patch",
+          size: 16663861,
+          filename: "1.2.0-linux.patch",
+          url: "/updates/1.2.0-linux.patch",
         },
       ]);
     });
@@ -127,30 +127,30 @@ describe("[e2e]: Patches", () => {
       expect(res.body).toHaveProperty("strategy", "patches");
 
       expect(res.body.full).toEqual({
-        hash: "windows-alpha-2.1.0-full",
-        notes: "alpha-third-release",
-        size: 61212089,
         version: "2.1.0-alpha",
-        url: "/2.1.0-alpha.packed.7z",
-        filename: "2.1.0-alpha.packed.7z",
+        notes: "alpha-third-release",
+        hash: "windows-alpha-2.1.0-full",
+        size: 61212089,
+        filename: "2.1.0-windows.packed.7z",
+        url: "/updates/2.1.0-windows.packed.7z",
       });
 
       expect(res.body.patches).toEqual([
         {
-          hash: "windows-alpha-2.1.0-patch",
-          notes: "alpha-third-release",
-          size: 11663861,
           version: "2.1.0-alpha",
-          url: "/2.1.0-alpha.patch",
-          filename: "2.1.0-alpha.patch",
+          notes: "alpha-third-release",
+          hash: "windows-alpha-2.1.0-patch",
+          size: 11663861,
+          filename: "2.1.0-windows.patch",
+          url: "/updates/2.1.0-windows.patch",
         },
         {
-          hash: "windows-alpha-1.2.0-patch",
-          notes: "alpha-second-release",
-          size: 11663861,
           version: "1.2.0-alpha",
-          url: "/1.2.0-alpha.patch",
-          filename: "1.2.0-alpha.patch",
+          notes: "alpha-second-release",
+          hash: "windows-alpha-1.2.0-patch",
+          size: 11663861,
+          filename: "1.2.0-alpha-windows.patch",
+          url: "/updates/1.2.0-alpha-windows.patch",
         },
       ]);
     });

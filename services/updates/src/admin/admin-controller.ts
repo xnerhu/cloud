@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Put, Query, Req, Res } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Put,
+  Query,
+  Req,
+  Res,
+} from "@nestjs/common";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 import { CreateReleaseDto, GetDiffInfoDto } from "./admin-dto";
@@ -13,15 +22,31 @@ export class AdminController {
     return this.adminService.createRelease(data);
   }
 
-  @Get("info")
+  @Get("diff")
   public getDiffInfo(@Query() data: GetDiffInfoDto) {
     return this.adminService.getDiffInfo(data);
   }
 
-  // @Put("release")
-  // public getUpdates(@Req() req: FastifyRequest, @Res() res: FastifyReply<any>) {
-  //   // req.isMultipart()
-  //   // return "aha";
-  //   // return this.adminService.get(data);
-  // }
+  @Put("patch")
+  public async uploadPatch(
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply<any>,
+  ) {
+    const parts = req.parts();
+
+    // for await (const part of parts) {
+    //   if (part.file) {
+    //     await pump(part.file, fs.createWriteStream(part.filename))
+    //   }
+    //   console.log(part);
+    // }
+
+    // if (!req.isMultipart()) {
+    //   throw new BadRequestException();
+    // }
+
+    // await this.adminService.uploadPatch(req);
+
+    res.send("xdd");
+  }
 }

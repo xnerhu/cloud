@@ -1,9 +1,15 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { FastifyRequest } from "fastify";
+import { createWriteStream } from "fs";
+import { resolve } from "path";
+import { pump } from "@common/node";
 
 import { DistributionsService } from "../distributions/distributions-service";
 import { PatchesService } from "../patches/patches-service";
 import { ReleaseEntity } from "../releases/release-entity";
 import { ReleasesService } from "../releases/releases-service";
+import { getUpdateDownloadInfo } from "../updates/updates-utils";
 import { CreateReleaseDto, GetDiffInfoDto } from "./admin-dto";
 import { AdminCreateReleaseResponse } from "./admin-response";
 
@@ -13,6 +19,7 @@ export class AdminService {
     private readonly distributionsService: DistributionsService,
     private readonly patchesService: PatchesService,
     private readonly releasesService: ReleasesService,
+    private readonly configService: ConfigService,
   ) {}
 
   public async createRelease({
@@ -45,21 +52,47 @@ export class AdminService {
 
     const { id: distributionId } = distro;
 
-    const release = await this.releasesService.findOneBefore({
-      channel,
-      version,
-    });
+    const publicPath = this.configService.get<string>("UPDATES_PUBLIC_PATH");
 
-    if (!release) {
-      throw new NotFoundException(`Can't find release before ${version}`);
-    }
+    return [];
+    // const entry = await this.patchesService.getDiffInfo({
+    //   distributionId,
+    //   channel,
+    //   version,
+    // });
 
-    const patch = await this.patchesService.getDiffInfo({
-      distributionId,
-      channel,
-      version,
-    });
-
-    return { patch, release };
+    // return getUpdateDownloadInfo(entry, false, publicPath!);
   }
+
+  public uploadPatch(req: FastifyRequest) {
+    return new Promise<void>((resolve, reject) => {
+      const params = new Map<string, any>();
+
+      const onEnd = () => {
+        resolve();
+      };
+
+      const mp = req.multipart(this.handlePatchUpload, onEnd);
+
+      mp.on("field", (key: string, value: any) => {
+        params.set(key, value);
+      });
+    });
+  }
+
+  private handlePatchUpload = async (
+    field: string,
+    file: any,
+    filename: string,
+    encoding: string,
+    mimetype: string,
+  ) => {
+    const updatesPath = this.configService.get<string>("UPDATES_PATH");
+
+    const filePath = resolve(updatesPath!, filename);
+
+    const stream = createWriteStream(filePath);
+
+    await pump(file, stream);
+  };
 }

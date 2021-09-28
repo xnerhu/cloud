@@ -29,8 +29,9 @@ export class AppError extends Error {
     return `${this.details.name} [${this.details.code}]: ${this.message}, ${this.stack}`;
   };
 }
+
 export const createAppError =
-  (details: AppErrorDetails, isOperational = true) =>
+  (details: AppErrorDetails, isOperational = false) =>
   (...args: any[]) => {
     return new AppError(
       !details.description

@@ -8,7 +8,7 @@ import {
 import { PatchesService } from "../patches/patches-service";
 import { GetUpdatesDto } from "./updates-dto";
 import { UpdateResponse, UpdateV1Response } from "./updates-response";
-import { getUpdateEntryFetchInfo, getUpdateStrategy } from "./updates-utils";
+import { getUpdateDownloadInfo, getUpdateStrategy } from "./updates-utils";
 import { transformUpdateResV1 } from "./updates-v1";
 
 export interface ReleaseSearchOptions {
@@ -55,13 +55,11 @@ export class UpdatesService {
       return { strategy };
     }
 
-    const publicPath = this.configService.get<string>(
-      "UPDATES_FILES_PUBLIC_PATH",
-    );
+    const publicPath = this.configService.get<string>("UPDATES_PUBLIC_PATH");
 
     const res: UpdateResponse = {
       strategy,
-      full: getUpdateEntryFetchInfo(latest, false, publicPath),
+      full: getUpdateDownloadInfo(latest, false, publicPath!),
     };
 
     if (strategy === "full") {
@@ -71,7 +69,7 @@ export class UpdatesService {
     return {
       ...res,
       patches: releases.map((patch) =>
-        getUpdateEntryFetchInfo(patch, true, publicPath),
+        getUpdateDownloadInfo(patch, true, publicPath!),
       ),
     };
   }

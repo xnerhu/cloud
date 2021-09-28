@@ -10,10 +10,16 @@ export class PatchEntity implements Patch {
   id: number;
 
   @Property()
+  filename: string;
+
+  @Property()
   hash: string;
 
   @Property()
   size: number;
+
+  @Property()
+  fullFilename: string;
 
   @Property()
   fullHash: string;

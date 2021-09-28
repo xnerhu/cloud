@@ -1,3 +1,4 @@
+import { getUpdateDownloadUrl } from "../files/file-utils";
 import { PatchEntry } from "../patches/patches-service";
 import { UpdateStrategy, UpdateEntry } from "./updates-response";
 
@@ -12,21 +13,42 @@ export const getUpdateStrategy = (
   return patchesSize >= latest.fullSize ? "full" : "patches";
 };
 
-export const getUpdateEntryFetchInfo = (
-  { hash, fullHash, notes, size, fullSize, version }: PatchEntry,
-  patch: boolean,
-  publicUrl = "",
+export const getUpdateDownloadInfo = (
+  entry: PatchEntry,
+  isPatch: boolean,
+  publicPath: string,
 ): UpdateEntry => {
-  const ext = patch ? "patch" : "packed.7z";
+  const {
+    hash,
+    filename,
+    fullHash,
+    fullFilename,
+    notes,
+    version,
+    size,
+    fullSize,
+  } = entry;
 
-  const filename = `${version}.${ext}`;
+  const updateEntry = {
+    version,
+    notes,
+  };
+
+  if (isPatch) {
+    return {
+      ...updateEntry,
+      hash,
+      size,
+      filename,
+      url: getUpdateDownloadUrl(filename, publicPath),
+    };
+  }
 
   return {
-    hash: patch ? hash : fullHash,
-    notes,
-    size: patch ? size : fullSize,
-    version,
-    url: `${publicUrl}/${filename}`,
-    filename,
+    ...updateEntry,
+    hash: fullHash,
+    size: fullSize,
+    filename: fullFilename,
+    url: getUpdateDownloadUrl(fullFilename, publicPath),
   };
 };

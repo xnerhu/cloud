@@ -2,7 +2,7 @@ import "jest";
 
 import { PatchEntry } from "../../patches/patches-service";
 import { UpdateStrategy, UpdateEntry } from "../updates-response";
-import { getUpdateEntryFetchInfo, getUpdateStrategy } from "../updates-utils";
+import { getUpdateDownloadInfo, getUpdateStrategy } from "../updates-utils";
 
 describe("Update utils", () => {
   describe("getUpdateStrategy", () => {
@@ -29,11 +29,12 @@ describe("Update utils", () => {
     });
   });
 
-  describe("getUpdateEntryFetchInfo", () => {
+  describe("getUpdateFetchInfo", () => {
     it("formats patch file", () => {
       expect(
-        getUpdateEntryFetchInfo(
+        getUpdateDownloadInfo(
           {
+            filename: "1.0.0_windows_1.patch",
             hash: "patchHash",
             notes: "patch_notes",
             size: 1024,
@@ -43,19 +44,20 @@ describe("Update utils", () => {
           "PUBLIC_URL",
         ),
       ).toEqual<UpdateEntry>({
-        filename: "1.0.0.patch",
+        filename: "1.0.0_windows_1.patch",
         hash: "patchHash",
         version: "1.0.0",
         notes: "patch_notes",
         size: 1024,
-        url: "PUBLIC_URL/1.0.0.patch",
+        url: "PUBLIC_URL/1.0.0_windows_1.patch",
       });
     });
 
     it("formats full file", () => {
       expect(
-        getUpdateEntryFetchInfo(
+        getUpdateDownloadInfo(
           {
+            fullFilename: "2.0.0_macos_4.packed.7z",
             fullHash: "fullHash",
             notes: "full_notes",
             fullSize: 4096,
@@ -65,12 +67,12 @@ describe("Update utils", () => {
           "PUBLIC_URL",
         ),
       ).toEqual<UpdateEntry>({
-        filename: "2.0.0.packed.7z",
+        filename: "2.0.0_macos_4.packed.7z",
         hash: "fullHash",
         version: "2.0.0",
         notes: "full_notes",
         size: 4096,
-        url: "PUBLIC_URL/2.0.0.packed.7z",
+        url: "PUBLIC_URL/2.0.0_macos_4.packed.7z",
       });
     });
   });

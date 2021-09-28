@@ -6,15 +6,18 @@ import {
 } from "@nestjs/platform-fastify";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import multipart from "fastify-multipart";
+import multipart, { FastifyMultipartOptions } from "fastify-multipart";
 import { NestErrorHandler } from "@common/nest";
 
 import { AppModule } from "./app-module";
+import { FastifyInstance } from "fastify";
 
 export const runApp = async () => {
+  const adapter = new FastifyAdapter();
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    adapter,
   );
 
   const config = app.get(ConfigService);
@@ -25,7 +28,13 @@ export const runApp = async () => {
   app.useGlobalFilters(new NestErrorHandler(httpAdapter));
   app.useGlobalPipes(new ValidationPipe());
 
-  app.register(multipart as any);
+  // (adapter.getInstance() as FastifyInstance).register(multipart, {
+  //   addToBody: true,
+  // });
+
+  app.register(multipart as any, {} as FastifyMultipartOptions);
+
+  // app.register( as any);
   app.enableCors();
 
   await app.listen(port);

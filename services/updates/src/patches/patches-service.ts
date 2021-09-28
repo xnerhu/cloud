@@ -6,7 +6,9 @@ import { PatchEntity } from "./patch-entity";
 
 export interface PatchEntry {
   hash: string;
+  filename: string;
   size: number;
+  fullFilename: string;
   fullHash: string;
   fullSize: number;
   version: string;
@@ -19,11 +21,16 @@ export interface FindPatchesOptions {
   channel: string;
 }
 
-export interface PatchGetDiffInfoOptions {
+export interface GetDiffTargetOptions {
   distributionId: number;
   version: string;
   channel: string;
 }
+
+export type DiffTarget = Pick<
+  PatchEntry,
+  "filename" | "hash" | "size" | "notes" | "version"
+>;
 
 @Injectable()
 export class PatchesService {
@@ -36,13 +43,16 @@ export class PatchesService {
     const patches = await this.patchesRepo
       .createQueryBuilder("patches")
       .select([
+        "patches.filename",
         "patches.hash",
         "patches.size",
+        "patches.fullFilename",
         "patches.fullHash",
         "patches.fullSize",
+        "releases.version",
+        "releases.notes",
       ])
       .leftJoin("patches.release", "releases")
-      .addSelect(["releases.version", "releases.notes"])
       .where({
         distribution: distributionId,
         release: { channel, version: { $gt: version } },
@@ -53,29 +63,35 @@ export class PatchesService {
     return patches;
   }
 
-  public async getDiffInfo({
+  public async getDiffTarget({
     distributionId,
     channel,
-    version,
-  }: PatchGetDiffInfoOptions) {
-    const patch = await this.patchesRepo
+    version: _version,
+  }: GetDiffTargetOptions): Promise<DiffTarget> {
+    const {
+      fullFilename: filename,
+      fullHash: hash,
+      fullSize: size,
+      notes,
+      version,
+    } = await this.patchesRepo
       .createQueryBuilder("patches")
       .select([
-        "patches.hash",
-        "patches.size",
+        "patches.fullFilename",
         "patches.fullHash",
         "patches.fullSize",
+        "releases.version",
+        "releases.notes",
       ])
       .leftJoin("patches.release", "releases")
-      .addSelect(["releases.version", "releases.notes"])
       .where({
         distribution: distributionId,
-        release: { channel, version: { $lt: version } },
+        release: { channel, version: { $lt: _version } },
       })
       .limit(1)
       .orderBy({ "releases.version": "DESC" })
       .execute<PatchEntry>("get");
 
-    return patch;
+    return { filename, hash, size, notes, version };
   }
 }
