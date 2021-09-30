@@ -22,7 +22,7 @@ import { TokenGuard } from "../security/token-guard";
 import { AllowUnauthorizedTokenRequest } from "../security/token-exception";
 import { UploadFiles } from "./upload-files-decorator";
 import {
-  diskStorage,
+  DiskStorage,
   FileFieldsInterceptor,
   FileInterceptor,
   StorageFile,
@@ -53,7 +53,10 @@ export class AdminController {
   // @UseInterceptors(FilesInterceptor("files", { saveToDisk: true }))
   @UseInterceptors(
     FileFieldsInterceptor([{ name: "xd", maxCount: 4 }, { name: "xdd" }], {
-      storage: diskStorage(),
+      storage: new DiskStorage({
+        dest: resolve(__dirname, "xddd"),
+        removeAfter: true,
+      }),
     }),
   )
   // @UseInterceptors(Filesint())

@@ -6,7 +6,7 @@ export interface StorageFile {
   file: MultipartFile;
 }
 
-export interface Storage<T extends StorageFile, K = any> {
+export interface Storage<T extends StorageFile = StorageFile, K = any> {
   handleFile: (file: MultipartFile, req: FastifyRequest) => Promise<T>;
   removeFile: (file: T) => Promise<void> | void;
   options?: K;

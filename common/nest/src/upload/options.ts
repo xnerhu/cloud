@@ -1,15 +1,10 @@
-import {
-  diskStorage,
-  DiskStorage,
-  memoryStorage,
-  MemoryStorage,
-} from "./storage";
+import { DiskStorage, MemoryStorage, Storage } from "./storage";
 
 export type UploadOptions = busboy.BusboyConfig &
-  ({ dest?: string } & { storage?: MemoryStorage | DiskStorage });
+  ({ dest?: string } & { storage?: Storage<any, any> });
 
 export const DEFAULT_UPLOAD_OPTIONS: Partial<UploadOptions> = {
-  storage: memoryStorage(),
+  storage: new MemoryStorage(),
 };
 
 export const transformUploadOptions = (opts?: UploadOptions) => {
@@ -18,7 +13,7 @@ export const transformUploadOptions = (opts?: UploadOptions) => {
   if (opts.dest != null) {
     return {
       ...opts,
-      storage: diskStorage({
+      storage: new DiskStorage({
         dest: opts.dest,
         ...opts.storage?.options,
       }),

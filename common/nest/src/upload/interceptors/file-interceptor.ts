@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
 import {
   CallHandler,
   ExecutionContext,
@@ -63,7 +63,11 @@ export function FileInterceptor(
       req.body = body;
       req.storageFile = file;
 
-      return next.handle();
+      return next.handle().pipe(
+        tap(async () => {
+          return await this.options.storage!.removeFile(file);
+        }),
+      );
     }
   }
 

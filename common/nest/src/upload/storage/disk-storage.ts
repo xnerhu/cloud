@@ -2,8 +2,10 @@ import { MultipartFile } from "fastify-multipart";
 import { FastifyRequest } from "fastify";
 import { tmpdir } from "os";
 import { createWriteStream } from "fs";
-import { mkdir } from "fs/promises";
+import { mkdir, unlink } from "fs/promises";
+import { Server, IncomingMessage } from "http";
 import { join } from "path";
+import { RouteGenericInterface } from "fastify/types/route";
 import { getUniqueFilename, pathExists, pump } from "@common/node";
 
 import { StorageFile, Storage } from "./storage";
@@ -15,19 +17,20 @@ export interface DiskStorageFile extends StorageFile {
   path: string;
 }
 
-type DiskStorageFilePropertyFormater =
+type DiskStorageOptionHandler =
   | ((file: MultipartFile, req: FastifyRequest) => Promise<string> | string)
   | string;
 
 export interface DiskStorageOptions {
-  dest?: DiskStorageFilePropertyFormater;
-  filename?: DiskStorageFilePropertyFormater;
+  dest?: DiskStorageOptionHandler;
+  filename?: DiskStorageOptionHandler;
+  removeAfter?: boolean;
 }
 
 const getFileDestination = async (
   file: MultipartFile,
   req: FastifyRequest,
-  obj?: DiskStorageFilePropertyFormater,
+  obj?: DiskStorageOptionHandler,
 ): Promise<string> => {
   if (typeof obj === "function") {
     return obj(file, req);
@@ -41,7 +44,7 @@ const getFileDestination = async (
 const getFilename = async (
   file: MultipartFile,
   req: FastifyRequest,
-  obj?: DiskStorageFilePropertyFormater,
+  obj?: DiskStorageOptionHandler,
 ): Promise<string> => {
   if (typeof obj === "function") {
     return obj(file, req);
@@ -52,35 +55,40 @@ const getFilename = async (
   return getUniqueFilename(file.filename);
 };
 
-export type DiskStorage = Storage<DiskStorageFile, DiskStorageOptions>;
+export class DiskStorage
+  implements Storage<DiskStorageFile, DiskStorageOptions>
+{
+  constructor(public readonly options?: DiskStorageOptions) {}
 
-export const diskStorage = (options?: DiskStorageOptions): DiskStorage => {
-  return {
-    handleFile: async (file, req) => {
-      const filename = await getFilename(file, req, options?.filename);
-      const dest = await getFileDestination(file, req, options?.dest);
+  public async handleFile(
+    file: MultipartFile,
+    req: FastifyRequest<RouteGenericInterface, Server, IncomingMessage>,
+  ) {
+    const filename = await getFilename(file, req, this.options?.filename);
+    const dest = await getFileDestination(file, req, this.options?.dest);
 
-      if (!(await pathExists(dest))) {
-        await mkdir(dest, { recursive: true });
-      }
+    if (!(await pathExists(dest))) {
+      await mkdir(dest, { recursive: true });
+    }
 
-      const path = join(dest, filename);
-      const stream = createWriteStream(path);
+    const path = join(dest, filename);
+    const stream = createWriteStream(path);
 
-      await pump(file.file, stream);
+    await pump(file.file, stream);
 
-      return {
-        size: stream.bytesWritten,
-        dest,
-        filename,
-        originalFilename: file.filename,
-        path,
-        file,
-      };
-    },
-    removeFile: (file) => {
-      delete (file as any).buffer;
-    },
-    options,
-  };
-};
+    return {
+      size: stream.bytesWritten,
+      dest,
+      filename,
+      originalFilename: file.filename,
+      path,
+      file,
+    };
+  }
+
+  public async removeFile(file: DiskStorageFile) {
+    if (!this.options?.removeAfter) return;
+
+    await unlink(file.path);
+  }
+}

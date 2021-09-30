@@ -1,4 +1,4 @@
-import { catchError, Observable, throwError } from "rxjs";
+import { Observable, tap } from "rxjs";
 import {
   CallHandler,
   ExecutionContext,
@@ -94,7 +94,17 @@ export function FileFieldsInterceptor(
       req.body = body;
       req.storageFiles = files;
 
-      return next.handle();
+      return next.handle().pipe(
+        tap(async () => {
+          const allFiles = ([] as StorageFile[]).concat(
+            ...Object.values(files),
+          );
+
+          return await Promise.all(
+            allFiles.map((file) => this.options.storage!.removeFile(file)),
+          );
+        }),
+      );
     }
   }
 
