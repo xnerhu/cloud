@@ -31,6 +31,8 @@ DEPS = [
     "@npm//@nestjs/common",
     "@npm//@nestjs/core",
     "@npm//fastify",
+    "@npm//fastify-multipart",
+    "@npm//@types/busboy",
 ]
 
 ts_project(
