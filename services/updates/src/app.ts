@@ -6,11 +6,29 @@ import {
 } from "@nestjs/platform-fastify";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import multipart, { FastifyMultipartOptions } from "fastify-multipart";
+import multipart, {
+  FastifyMultipartAttactFieldsToBodyOptions,
+  FastifyMultipartOptions,
+  MultipartFile,
+} from "fastify-multipart";
 import { NestErrorHandler } from "@common/nest";
 
 import { AppModule } from "./app-module";
 import { FastifyInstance } from "fastify";
+import { createWriteStream } from "fs";
+import { unlink } from "fs/promises";
+import { pump } from "@common/node";
+import { resolve } from "path";
+
+const onFile = async (part: MultipartFile) => {
+  const path = resolve(part.filename);
+
+  await pump(part.file, createWriteStream(path));
+
+  if ((part.file as any).truncated) {
+    await unlink(path);
+  }
+};
 
 export const runApp = async () => {
   const adapter = new FastifyAdapter();
@@ -32,7 +50,14 @@ export const runApp = async () => {
   //   addToBody: true,
   // });
 
-  app.register(multipart as any, {} as FastifyMultipartOptions);
+  app.register(
+    multipart as any,
+    {
+      // attachFieldsToBody: true,
+      // limits: { fileSize: 10 },
+      // onFile,
+    } as FastifyMultipartAttactFieldsToBodyOptions,
+  );
 
   // app.register( as any);
   app.enableCors();

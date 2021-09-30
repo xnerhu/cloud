@@ -14,6 +14,7 @@ ts_config(
     src = "tsconfig.json",
     deps = [
         "//:tsconfig.json",
+        "//common/utils:tsconfig",
     ],
 )
 
@@ -27,6 +28,7 @@ SRC_FILES = glob(
 DEPS = [
     "@npm//@types/node",
     "@npm//winston",
+    "//common/utils",
 ]
 
 ts_project(

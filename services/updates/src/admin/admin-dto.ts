@@ -28,3 +28,8 @@ export class GetDiffInfoDto {
   @IsString()
   architecture: string;
 }
+
+export class UploadTestDto {
+  @IsString()
+  aha: string;
+}

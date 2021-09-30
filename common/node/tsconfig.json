@@ -3,5 +3,6 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "../../bazel-out/x64_windows-fastbuild/bin/common/node"
-  }
+  },
+  "references": [{ "path": "../utils" }]
 }

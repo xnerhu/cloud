@@ -3,6 +3,8 @@ import { InjectRepository } from "@mikro-orm/nestjs";
 import { EntityRepository } from "@mikro-orm/postgresql";
 
 import { PatchEntity } from "./patch-entity";
+import { ReleaseSearchOptions } from "../releases/releases-service";
+import { WriteStream } from "fs";
 
 export interface PatchEntry {
   hash: string;
@@ -15,22 +17,9 @@ export interface PatchEntry {
   notes: string;
 }
 
-export interface FindPatchesOptions {
-  version: string;
+export interface PatchSearchOptions extends ReleaseSearchOptions {
   distributionId: number;
-  channel: string;
 }
-
-export interface GetDiffTargetOptions {
-  distributionId: number;
-  version: string;
-  channel: string;
-}
-
-export type DiffTarget = Pick<
-  PatchEntry,
-  "filename" | "hash" | "size" | "notes" | "version"
->;
 
 @Injectable()
 export class PatchesService {
@@ -39,8 +28,8 @@ export class PatchesService {
     private readonly patchesRepo: EntityRepository<PatchEntity>,
   ) {}
 
-  public async find({ version, distributionId, channel }: FindPatchesOptions) {
-    const patches = await this.patchesRepo
+  private getFindQuery() {
+    return this.patchesRepo
       .createQueryBuilder("patches")
       .select([
         "patches.filename",
@@ -52,46 +41,46 @@ export class PatchesService {
         "releases.version",
         "releases.notes",
       ])
-      .leftJoin("patches.release", "releases")
+      .leftJoin("patches.release", "releases");
+  }
+
+  /**
+   * Returns latest patches
+   */
+  public async find({
+    version,
+    distributionId,
+    channel,
+  }: PatchSearchOptions): Promise<PatchEntry[]> {
+    return await this.getFindQuery()
       .where({
         distribution: distributionId,
         release: { channel, version: { $gt: version } },
       })
       .orderBy({ "releases.version": "DESC" })
       .execute<PatchEntry[]>("all");
-
-    return patches;
   }
 
-  public async getDiffTarget({
+  /**
+   * Returns the patch before a certain release
+   */
+  public async findOneBefore({
     distributionId,
     channel,
-    version: _version,
-  }: GetDiffTargetOptions): Promise<DiffTarget> {
-    const {
-      fullFilename: filename,
-      fullHash: hash,
-      fullSize: size,
-      notes,
-      version,
-    } = await this.patchesRepo
-      .createQueryBuilder("patches")
-      .select([
-        "patches.fullFilename",
-        "patches.fullHash",
-        "patches.fullSize",
-        "releases.version",
-        "releases.notes",
-      ])
-      .leftJoin("patches.release", "releases")
+    version,
+  }: PatchSearchOptions): Promise<PatchEntry> {
+    return await this.getFindQuery()
       .where({
         distribution: distributionId,
-        release: { channel, version: { $lt: _version } },
+        release: { channel, version: { $lt: version } },
       })
       .limit(1)
       .orderBy({ "releases.version": "DESC" })
       .execute<PatchEntry>("get");
-
-    return { filename, hash, size, notes, version };
   }
+
+  /**
+   * Creates a new patch
+   */
+  public async create(patchStream: WriteStream, fullStream: WriteStream) {}
 }
