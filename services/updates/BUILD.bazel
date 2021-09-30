@@ -146,9 +146,7 @@ jest_test(
         ":schema_up",
     ],
     env = ENV_MIKRO_ORM,
-    deps = DEPS + [
-        "@npm//docker-compose",
-    ],
+    deps = DEPS,
 )
 
 DEPS_MIKRO_ORM = [
