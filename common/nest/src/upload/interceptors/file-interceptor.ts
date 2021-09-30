@@ -7,7 +7,8 @@ import {
   Type,
   BadRequestException,
 } from "@nestjs/common";
-import { MultipartFile } from "../multipart-options";
+
+import { MultipartFile } from "../multipart";
 import { transformUploadOptions, UploadOptions } from "../options";
 import { getMultipartRequest } from "../request";
 import { StorageFile } from "../storage";
@@ -42,11 +43,11 @@ export function FileInterceptor(
         if (part.file) {
           if (part.fieldname !== fieldname) {
             throw new BadRequestException(
-              `Field ${part.fieldname} is not allowed to have files`,
+              `Field ${part.fieldname} doesn't allow file`,
             );
           } else if (file != null) {
             throw new BadRequestException(
-              `Field ${fieldname} is allow to have only on file!`,
+              `Field ${fieldname} requires only one file`,
             );
           }
 
@@ -57,7 +58,7 @@ export function FileInterceptor(
       }
 
       if (file == null) {
-        throw new BadRequestException(`No field ${fieldname} found!`);
+        throw new BadRequestException(`Field ${fieldname} is required`);
       }
 
       req.body = body;

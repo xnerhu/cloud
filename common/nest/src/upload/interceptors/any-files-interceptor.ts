@@ -6,7 +6,8 @@ import {
   NestInterceptor,
   Type,
 } from "@nestjs/common";
-import { MultipartFile } from "../multipart-options";
+
+import { MultipartFile } from "../multipart";
 import { transformUploadOptions, UploadOptions } from "../options";
 import { getMultipartRequest } from "../request";
 import { StorageFile } from "../storage";

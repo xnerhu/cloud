@@ -6,16 +6,27 @@ import {
   NestInterceptor,
   Type,
   BadRequestException,
-  SetMetadata,
 } from "@nestjs/common";
-import { MultipartField, MultipartFile } from "../multipart-options";
+
+import { MultipartFile } from "../multipart";
 import { transformUploadOptions, UploadOptions } from "../options";
 import { getMultipartRequest } from "../request";
 import { StorageFile } from "../storage";
 
-type UploadFieldMapEntry = Required<Pick<MultipartField, "maxCount">>;
+export interface UploadField {
+  /**
+   * Field name
+   */
+  name: string;
+  /**
+   * Max number of files in this field
+   */
+  maxCount?: number;
+}
 
-const uploadFieldsToMap = (uploadFields: MultipartField[]) => {
+type UploadFieldMapEntry = Required<Pick<UploadField, "maxCount">>;
+
+const uploadFieldsToMap = (uploadFields: UploadField[]) => {
   const map = new Map<string, UploadFieldMapEntry>();
 
   uploadFields.forEach(({ name, ...opts }) => {
@@ -26,7 +37,7 @@ const uploadFieldsToMap = (uploadFields: MultipartField[]) => {
 };
 
 export function FileFieldsInterceptor(
-  uploadFields: MultipartField[],
+  uploadFields: UploadField[],
   options?: UploadOptions,
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
@@ -60,7 +71,7 @@ export function FileFieldsInterceptor(
 
           if (fieldOptions == null) {
             throw new BadRequestException(
-              `Field ${part.fieldname} is not allowed to have files`,
+              `Field ${part.fieldname} doesn't allow files`,
             );
           }
 
