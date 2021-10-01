@@ -3,11 +3,13 @@ import { MultipartFile } from "fastify-multipart";
 
 export interface StorageFile {
   size: number;
-  file: MultipartFile;
+  fieldname: string;
+  encoding: string;
+  mimetype: string;
 }
 
 export interface Storage<T extends StorageFile = StorageFile, K = any> {
   handleFile: (file: MultipartFile, req: FastifyRequest) => Promise<T>;
-  removeFile: (file: T) => Promise<void> | void;
+  removeFile: (file: T, force?: boolean) => Promise<void> | void;
   options?: K;
 }

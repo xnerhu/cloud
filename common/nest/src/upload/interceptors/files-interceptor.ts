@@ -9,10 +9,11 @@ import {
 
 import { getMultipartRequest } from "../multipart/request";
 import { transformUploadOptions, UploadOptions } from "../multipart/options";
-import { handleMultipartSingleFile } from "../multipart/handlers/single-file";
+import { handleMultipartMultipleFiles } from "../multipart/handlers/multiple-files";
 
-export function FileInterceptor(
+export function FilesInterceptor(
   fieldname: string,
+  maxCount = 1,
   options?: UploadOptions,
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
@@ -29,14 +30,15 @@ export function FileInterceptor(
       const ctx = context.switchToHttp();
       const req = getMultipartRequest(ctx);
 
-      const { file, body, remove } = await handleMultipartSingleFile(
+      const { body, files, remove } = await handleMultipartMultipleFiles(
         req,
         fieldname,
+        maxCount,
         this.options,
       );
 
       req.body = body;
-      req.storageFile = file;
+      req.storageFiles = files;
 
       return next.handle().pipe(tap(remove));
     }

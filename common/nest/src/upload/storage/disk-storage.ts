@@ -6,9 +6,10 @@ import { mkdir, unlink } from "fs/promises";
 import { Server, IncomingMessage } from "http";
 import { join } from "path";
 import { RouteGenericInterface } from "fastify/types/route";
-import { getUniqueFilename, pathExists, pump } from "@common/node";
 
 import { StorageFile, Storage } from "./storage";
+import { getUniqueFilename, pathExists } from "../fs";
+import { pump } from "../stream";
 
 export interface DiskStorageFile extends StorageFile {
   dest: string;
@@ -27,32 +28,18 @@ export interface DiskStorageOptions {
   removeAfter?: boolean;
 }
 
-const getFileDestination = async (
+const excecuteStorageHandler = (
   file: MultipartFile,
   req: FastifyRequest,
   obj?: DiskStorageOptionHandler,
-): Promise<string> => {
+) => {
   if (typeof obj === "function") {
     return obj(file, req);
   }
 
   if (obj != null) return obj;
 
-  return tmpdir();
-};
-
-const getFilename = async (
-  file: MultipartFile,
-  req: FastifyRequest,
-  obj?: DiskStorageOptionHandler,
-): Promise<string> => {
-  if (typeof obj === "function") {
-    return obj(file, req);
-  }
-
-  if (obj != null) return obj;
-
-  return getUniqueFilename(file.filename);
+  return null;
 };
 
 export class DiskStorage
@@ -64,8 +51,8 @@ export class DiskStorage
     file: MultipartFile,
     req: FastifyRequest<RouteGenericInterface, Server, IncomingMessage>,
   ) {
-    const filename = await getFilename(file, req, this.options?.filename);
-    const dest = await getFileDestination(file, req, this.options?.dest);
+    const filename = await this.getFilename(file, req, this.options?.filename);
+    const dest = await this.getFileDestination(file, req, this.options?.dest);
 
     if (!(await pathExists(dest))) {
       await mkdir(dest, { recursive: true });
@@ -76,19 +63,41 @@ export class DiskStorage
 
     await pump(file.file, stream);
 
+    const { encoding, fieldname, mimetype } = file;
+
     return {
       size: stream.bytesWritten,
       dest,
       filename,
       originalFilename: file.filename,
       path,
-      file,
+      mimetype,
+      encoding,
+      fieldname,
     };
   }
 
-  public async removeFile(file: DiskStorageFile) {
-    if (!this.options?.removeAfter) return;
+  public async removeFile(file: DiskStorageFile, force?: boolean) {
+    if (!this.options?.removeAfter && !force) return;
 
     await unlink(file.path);
+  }
+
+  protected async getFilename(
+    file: MultipartFile,
+    req: FastifyRequest,
+    obj?: DiskStorageOptionHandler,
+  ): Promise<string> {
+    return (
+      excecuteStorageHandler(file, req, obj) ?? getUniqueFilename(file.filename)
+    );
+  }
+
+  protected async getFileDestination(
+    file: MultipartFile,
+    req: FastifyRequest,
+    obj?: DiskStorageOptionHandler,
+  ): Promise<string> {
+    return excecuteStorageHandler(file, req, obj) ?? tmpdir();
   }
 }
