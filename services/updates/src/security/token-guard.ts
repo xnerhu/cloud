@@ -1,28 +1,16 @@
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Reflector } from "@nestjs/core";
-import { TOKEN_EXCEPTION_METADATA_KEY } from "./token-exception";
+import { FastifyRequest } from "fastify";
 
 @Injectable()
 export class TokenGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   canActivate(ctx: ExecutionContext): boolean {
-    const allow = this.reflector.get<boolean>(
-      TOKEN_EXCEPTION_METADATA_KEY,
-      ctx.getHandler(),
-    );
-
-    if (allow) return true;
-
     const apiKey = this.configService.get<string>("API_KEY");
 
-    const req = ctx.switchToHttp().getRequest();
-    const token =
-      /*req.body?.token?.value ??*/ req.body?.token ?? req.query?.token;
+    const req = ctx.switchToHttp().getRequest<FastifyRequest>();
+    const token = req.headers.authorization;
 
     return token === apiKey;
   }

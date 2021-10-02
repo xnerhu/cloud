@@ -1,10 +1,5 @@
-import { Injectable, NotFoundException, UseGuards } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { FastifyError, FastifyRequest } from "fastify";
-import { createWriteStream, WriteStream } from "fs";
-import { resolve } from "path";
-import { pump } from "@common/node";
-import { MultipartFile } from "fastify-multipart";
 
 import { DistributionsService } from "../distributions/distributions-service";
 import { PatchesService } from "../patches/patches-service";
@@ -63,56 +58,4 @@ export class AdminService {
 
     return getUpdateDownloadInfo(entry, false, publicPath!);
   }
-
-  public async uploadPatch(parts: AsyncIterableIterator<MultipartFile>) {
-    const updatesPath = this.configService.get<string>("UPDATES_PATH");
-
-    let patchPath: string;
-    let fullPath: string;
-
-    let patchStream: WriteStream;
-    let fullStream: WriteStream;
-
-    try {
-      for await (const part of parts) {
-        if (part.file) {
-          // console.log(part.fieldname, part.filepath);
-          await pump(part.file, createWriteStream(part.filename));
-        }
-        // console.log(part);
-      }
-    } catch (error: any) {}
-  }
-
-  // public uploadPatch(req: FastifyRequest) {
-  //   return new Promise<void>((resolve, reject) => {
-  //     const params = new Map<string, any>();
-
-  //     const onEnd = () => {
-  //       resolve();
-  //     };
-
-  //     const mp = req.multipart(this.handlePatchUpload, onEnd);
-
-  //     mp.on("field", (key: string, value: any) => {
-  //       params.set(key, value);
-  //     });
-  //   });
-  // }
-
-  // private handlePatchUpload = async (
-  //   field: string,
-  //   file: any,
-  //   filename: string,
-  //   encoding: string,
-  //   mimetype: string,
-  // ) => {
-  //   const updatesPath = this.configService.get<string>("UPDATES_PATH");
-
-  //   const filePath = resolve(updatesPath!, filename);
-
-  //   const stream = createWriteStream(filePath);
-
-  //   await pump(file, stream);
-  // };
 }
