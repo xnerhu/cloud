@@ -42,7 +42,7 @@ export default async () => {
   ]);
 
   const releases: (Omit<Release, "id" | "patches" | "createdAt"> & {
-    patches: (Omit<Patch, "id" | "distribution" | "createdAt"> & {
+    patches: (Omit<Patch, "id" | "distribution" | "release" | "createdAt"> & {
       distribution: DistributionEntity;
     })[];
   })[] = [
