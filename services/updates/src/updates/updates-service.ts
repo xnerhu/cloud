@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { omitNull } from "@common/utils";
+import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 import {
@@ -30,14 +31,12 @@ export class UpdatesService {
     version,
     ..._distribution
   }: GetUpdatesDto): Promise<UpdateResponse> {
-    const distribution = await this.distributionsService.findOne({
-      ...DEFAULT_DISTRIBUTION_SEARCH_OPTIONS,
-      ..._distribution,
-    });
-
-    if (!distribution) {
-      throw new NotFoundException("Distribution not found");
-    }
+    const distribution = await this.distributionsService.findOneOrFail(
+      omitNull({
+        ...DEFAULT_DISTRIBUTION_SEARCH_OPTIONS,
+        ..._distribution,
+      }),
+    );
 
     const { id: distributionId } = distribution;
 

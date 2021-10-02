@@ -67,6 +67,7 @@ DEPS = [
     "@npm//@mikro-orm/postgresql",
     "@npm//@mikro-orm/seeder",
     "@npm//joi",
+    "@npm//md5-file",
 ]
 
 ts_project(

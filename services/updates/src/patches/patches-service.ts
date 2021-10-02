@@ -1,10 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { EntityRepository } from "@mikro-orm/postgresql";
+import { omitNull } from "@common/utils";
 
 import { PatchEntity } from "./patch-entity";
-import { ReleaseSearchOptions } from "../releases/releases-service";
-import { WriteStream } from "fs";
+import { Patch } from "../interfaces/patch";
+import { DistributionEntity } from "../distributions/distribution-entity";
+import { ReleaseEntity } from "../releases/release-entity";
 
 export interface PatchEntry {
   hash: string;
@@ -17,9 +19,23 @@ export interface PatchEntry {
   notes: string;
 }
 
-export interface PatchSearchOptions extends ReleaseSearchOptions {
+export interface PatchSearchOptions {
   distributionId: number;
+  version: string;
+  channel: string;
 }
+
+export type PatchFindOneOptions = { distributionId?: number } & {
+  releaseId?: number;
+} & { version?: string; channel?: string };
+
+export type PatchCreateOneOptions = Omit<
+  Patch,
+  "id" | "distribution" | "release" | "createdAt"
+> & {
+  distribution: DistributionEntity;
+  release: ReleaseEntity;
+};
 
 @Injectable()
 export class PatchesService {
@@ -61,6 +77,18 @@ export class PatchesService {
       .execute<PatchEntry[]>("all");
   }
 
+  public async findOne({
+    distributionId,
+    releaseId,
+    channel,
+    version,
+  }: PatchFindOneOptions) {
+    return await this.patchesRepo.findOne({
+      release: omitNull({ id: releaseId, channel, version }),
+      distribution: { id: distributionId },
+    });
+  }
+
   /**
    * Returns the patch before a certain release
    */
@@ -79,8 +107,29 @@ export class PatchesService {
       .execute<PatchEntry>("get");
   }
 
-  /**
-   * Creates a new patch
-   */
-  public async create(patchStream: WriteStream, fullStream: WriteStream) {}
+  public async createOne({
+    distribution,
+    filename,
+    fullFilename,
+    fullHash,
+    fullSize,
+    hash,
+    release,
+    size,
+  }: PatchCreateOneOptions) {
+    const patchEntity = new PatchEntity();
+
+    patchEntity.filename = filename;
+    patchEntity.hash = hash;
+    patchEntity.size = size;
+    patchEntity.fullFilename = fullFilename;
+    patchEntity.fullHash = fullHash;
+    patchEntity.fullSize = fullSize;
+    patchEntity.distribution = distribution;
+    patchEntity.release = release;
+
+    await this.patchesRepo.persistAndFlush(patchEntity);
+
+    return patchEntity;
+  }
 }

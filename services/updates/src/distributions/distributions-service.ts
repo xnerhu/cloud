@@ -1,14 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { EntityRepository } from "@mikro-orm/postgresql";
 
-import { omitNull } from "@common/utils";
 import { Distribution } from "../interfaces";
 import { DistributionEntity } from "../distributions/distribution-entity";
 
-export type DistributionSearchOptions = Record<
-  keyof Pick<Distribution, "os" | "osVersion" | "architecture">,
-  string
+export type DistributionSearchOptions = Partial<
+  Record<
+    keyof Pick<Distribution, "os" | "osVersion" | "architecture">,
+    string
+  > & { id?: number }
 >;
 
 export const DEFAULT_DISTRIBUTION_SEARCH_OPTIONS: DistributionSearchOptions = {
@@ -24,9 +25,19 @@ export class DistributionsService {
     private readonly distributionsRepo: EntityRepository<DistributionEntity>,
   ) {}
 
-  public findOne({ os, architecture, osVersion }: DistributionSearchOptions) {
-    return this.distributionsRepo.findOne(
-      omitNull({ os, architecture, osVersion }),
-    );
+  public async findOne(options: DistributionSearchOptions) {
+    return await this.distributionsRepo.findOne(options);
+  }
+
+  public async findOneOrFail(
+    options: DistributionSearchOptions,
+  ): Promise<DistributionEntity> {
+    const distro = await this.findOne(options);
+
+    if (distro == null) {
+      throw new NotFoundException("Distribution not found");
+    }
+
+    return distro;
   }
 }

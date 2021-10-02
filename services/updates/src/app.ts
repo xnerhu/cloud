@@ -44,22 +44,10 @@ export const runApp = async () => {
   const { httpAdapter } = app.get(HttpAdapterHost);
 
   app.useGlobalFilters(new NestErrorHandler(httpAdapter));
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-  // (adapter.getInstance() as FastifyInstance).register(multipart, {
-  //   addToBody: true,
-  // });
+  app.register(multipart as any, {});
 
-  app.register(
-    multipart as any,
-    {
-      // attachFieldsToBody: true,
-      // limits: { fileSize: 10 },
-      // onFile,
-    } as FastifyMultipartAttactFieldsToBodyOptions,
-  );
-
-  // app.register( as any);
   app.enableCors();
 
   await app.listen(port);

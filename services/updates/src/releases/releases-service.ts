@@ -1,13 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { EntityRepository } from "@mikro-orm/postgresql";
 
 import { ReleaseEntity } from "./release-entity";
 
-export interface ReleaseSearchOptions {
-  version: string;
-  channel: string;
-}
+export type ReleaseSearchOptions =
+  | {
+      version: string;
+      channel: string;
+    }
+  | { id?: number };
 
 export interface ReleaseCreateOptions {
   version: string;
@@ -27,8 +29,20 @@ export class ReleasesService {
     private readonly releasesRepo: EntityRepository<ReleaseEntity>,
   ) {}
 
-  public async findOne({ channel, version }: ReleaseSearchOptions) {
-    return await this.releasesRepo.findOne({ channel, version });
+  public async findOne(options: ReleaseSearchOptions) {
+    return await this.releasesRepo.findOne(options);
+  }
+
+  public async findOneOrFail(
+    options: ReleaseSearchOptions,
+  ): Promise<ReleaseEntity> {
+    const release = await this.findOne(options);
+
+    if (!release) {
+      throw new NotFoundException("Release not found");
+    }
+
+    return release;
   }
 
   public async createOne({ channel, version, notes }: ReleaseCreateOptions) {

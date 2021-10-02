@@ -1,4 +1,16 @@
-import { IsString, IsOptional } from "class-validator";
+import { Type } from "class-transformer";
+import { IsString, IsOptional, IsNumber } from "class-validator";
+
+export class GetDistributionDto {
+  @IsString()
+  os: string;
+
+  @IsString()
+  osVersion: string;
+
+  @IsString()
+  architecture: string;
+}
 
 export class CreateReleaseDto {
   @IsString()
@@ -19,17 +31,23 @@ export class GetDiffInfoDto {
   @IsString()
   channel: string;
 
-  @IsString()
-  os: string;
-
-  @IsString()
-  osVersion: string;
-
-  @IsString()
-  architecture: string;
+  @Type(() => Number)
+  @IsNumber()
+  distributionId: number;
 }
 
-export class UploadTestDto {
+export class UploadPatchDto {
+  @Type(() => Number)
+  @IsNumber()
+  releaseId: number;
+
+  @Type(() => Number)
+  @IsNumber()
+  distributionId: number;
+
   @IsString()
-  aha: string;
+  hash: string;
+
+  @IsString()
+  fullHash: string;
 }

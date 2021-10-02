@@ -1,3 +1,4 @@
+import { Release } from "./release";
 import { Distribution } from "./distribution";
 
 export interface Patch {
@@ -9,5 +10,6 @@ export interface Patch {
   fullHash: string;
   fullSize: number;
   distribution: Distribution;
+  release: Release;
   createdAt: string;
 }
