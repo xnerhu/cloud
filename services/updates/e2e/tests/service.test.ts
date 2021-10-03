@@ -385,7 +385,7 @@ describe("[e2e]: Admin", () => {
           expect(res.statusCode).toEqual(400);
         });
 
-        it("returns patch and full if successful", async () => {
+        it("uploads patch and full, then returns info", async () => {
           const res = await getRequest()
             .field("releaseId", 8)
             .field("distributionId", 1)
@@ -442,6 +442,16 @@ describe("[e2e]: Admin", () => {
               },
             ],
           });
+        });
+
+        it("throws error if patch already exists", async () => {
+          const res = await getRequest()
+            .field("releaseId", 8)
+            .field("distributionId", 1)
+            .field("hash", "67faad59f243eeddadbc18789bc65bf0")
+            .field("fullHash", "36f81a68402b54768cace0bbcceab06a");
+
+          expect(res.statusCode).toEqual(400);
         });
       });
     });
