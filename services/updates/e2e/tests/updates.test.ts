@@ -8,7 +8,7 @@ describe("[e2e]: Updates", () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
-    app = await runApp();
+    app = await runApp(3001);
   });
 
   afterAll(async () => {

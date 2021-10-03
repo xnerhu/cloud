@@ -30,7 +30,7 @@ const onFile = async (part: MultipartFile) => {
   }
 };
 
-export const runApp = async () => {
+export const runApp = async (port?: number) => {
   const adapter = new FastifyAdapter();
 
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -39,7 +39,7 @@ export const runApp = async () => {
   );
 
   const config = app.get(ConfigService);
-  const port = config.get<number>("PORT", { infer: true });
+  const defaultPort = config.get<number>("PORT", { infer: true });
 
   const { httpAdapter } = app.get(HttpAdapterHost);
 
@@ -50,7 +50,7 @@ export const runApp = async () => {
 
   app.enableCors();
 
-  await app.listen(port);
+  await app.listen(port ?? defaultPort);
 
   return app;
 };

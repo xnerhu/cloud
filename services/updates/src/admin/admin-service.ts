@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { DiskStorageFile } from "@common/nest";
 import { rename } from "fs/promises";
@@ -72,6 +76,10 @@ export class AdminService {
       channel,
       version,
     });
+
+    if (!entry) {
+      throw new NotFoundException(`No previous release found`);
+    }
 
     return getUpdateDownloadInfo(entry, false, publicPath!);
   }
