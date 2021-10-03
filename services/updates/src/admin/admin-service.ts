@@ -7,9 +7,10 @@ import { ConfigService } from "@nestjs/config";
 import { DiskStorageFile } from "@common/nest";
 import { rename } from "fs/promises";
 import { join } from "path";
+import { IS_TEST } from "@common/node";
 
 import { DistributionsService } from "../distributions/distributions-service";
-import { PatchesService } from "../patches/patches-service";
+import { PatchEntry, PatchesService } from "../patches/patches-service";
 import { ReleaseEntity } from "../releases/release-entity";
 import { ReleasesService } from "../releases/releases-service";
 import { getUpdateDownloadInfo } from "../updates/updates-utils";
@@ -25,6 +26,7 @@ import {
   getUploadFilename,
   verifyUploadFile,
 } from "./uploads-utils";
+import { TEST_UPDATES_PATH } from "../config/env";
 
 @Injectable()
 export class AdminService {
@@ -84,6 +86,11 @@ export class AdminService {
     return getUpdateDownloadInfo(entry, false, publicPath!);
   }
 
+  private getUpdatesPath() {
+    if (IS_TEST) return TEST_UPDATES_PATH;
+    return this.configService.get<string>("UPDATES_PATH");
+  }
+
   public async uploadPatch(
     { distributionId, releaseId, fullHash, hash }: UploadPatchDto,
     patch: DiskStorageFile,
@@ -106,7 +113,7 @@ export class AdminService {
       verifyUploadFile(full.path, fullHash),
     ]);
 
-    const storagePath = this.configService.get<string>("UPDATES_PATH");
+    const storagePath = this.getUpdatesPath();
 
     const baseFilename = getUploadFilename(release, distribution);
 
@@ -121,7 +128,9 @@ export class AdminService {
       rename(full.path, fullPath),
     ]);
 
-    await this.patchesService.createOne({
+    const publicPath = this.configService.get<string>("UPDATES_PUBLIC_PATH");
+
+    const patchEntity = await this.patchesService.createOne({
       distribution,
       release,
       filename: patchFilename,
@@ -131,5 +140,16 @@ export class AdminService {
       size: patch.size,
       fullSize: full.size,
     });
+
+    const entry: PatchEntry = {
+      ...patchEntity,
+      notes: release.notes,
+      version: release.version,
+    };
+
+    return {
+      patch: getUpdateDownloadInfo(entry, false, publicPath!),
+      full: getUpdateDownloadInfo(entry, true, publicPath!),
+    };
   }
 }

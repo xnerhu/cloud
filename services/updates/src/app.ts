@@ -11,14 +11,14 @@ import multipart, {
   FastifyMultipartOptions,
   MultipartFile,
 } from "fastify-multipart";
+import { createWriteStream } from "fs";
+import { mkdir, unlink } from "fs/promises";
 import { NestErrorHandler } from "@common/nest";
+import { IS_TEST, pump } from "@common/node";
 
 import { AppModule } from "./app-module";
-import { FastifyInstance } from "fastify";
-import { createWriteStream } from "fs";
-import { unlink } from "fs/promises";
-import { pump } from "@common/node";
 import { resolve } from "path";
+import { TEST_UPDATES_PATH } from "./config/env";
 
 const onFile = async (part: MultipartFile) => {
   const path = resolve(part.filename);
@@ -31,6 +31,10 @@ const onFile = async (part: MultipartFile) => {
 };
 
 export const runApp = async (port?: number) => {
+  if (IS_TEST) {
+    await mkdir(TEST_UPDATES_PATH!, { recursive: true });
+  }
+
   const adapter = new FastifyAdapter();
 
   const app = await NestFactory.create<NestFastifyApplication>(
