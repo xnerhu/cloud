@@ -27,6 +27,7 @@ const workspacePath = argMap
   .split(argMap.get(GEN_DIR_TOKEN))[1];
 
 const IS_WEB = process.env.TEST_ENVIRONMENT === "web";
+const IS_E2E_ENABLED = process.env.E2E_ENABLED === "true";
 
 const webConfig = {
   testEnvironment: "jsdom",
@@ -37,8 +38,12 @@ const webConfig = {
 const nodeConfig = {
   testEnvironment: "node",
   testMatch: ["**/*.test.js"],
-  globalSetup: `<rootDir>/${workspacePath}/e2e/setup.js`,
-  globalTeardown: `<rootDir>/${workspacePath}/e2e/teardown.js`,
+  ...(IS_E2E_ENABLED
+    ? {
+        globalSetup: `<rootDir>/${workspacePath}/e2e/setup.js`,
+        globalTeardown: `<rootDir>/${workspacePath}/e2e/teardown.js`,
+      }
+    : {}),
 };
 
 module.exports = {

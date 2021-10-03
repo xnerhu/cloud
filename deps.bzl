@@ -19,3 +19,9 @@ WEBPACK_DEPS = [
     "@npm//react-refresh",
     "@npm//ts-node",
 ]
+
+JEST_DEPS = [
+    "@npm//@types/jest",
+    "@npm//supertest",
+    "@npm//@types/supertest",
+]

@@ -146,6 +146,7 @@ jest_test(
         ":schema_drop",
         ":schema_up",
     ],
+    e2e = True,
     env = ENV_MIKRO_ORM,
     deps = DEPS,
 )

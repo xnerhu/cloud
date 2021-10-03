@@ -1,7 +1,7 @@
-export const omitNull = <T extends Record<any, any>>(obj: T): T => {
+export const omitNull = <T extends Record<any, any>>(obj: T) => {
   return Object.fromEntries(
     Object.entries(obj).filter(([_, v]) => v != null),
-  ) as any;
+  ) as T;
 };
 
 export const isObjectEmpty = (obj: Record<any, any>) => {

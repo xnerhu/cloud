@@ -9,6 +9,7 @@ def jest_test(
         jest_config = "//:jest.config.js",
         coverage = False,
         is_web = False,
+        e2e = False,
         size = "small",
         **kwargs):
     DEPS = deps + [
@@ -54,6 +55,9 @@ def jest_test(
         "TEST_ENVIRONMENT": test_env,
         "NODE_ENV": "test",
     })
+
+    if e2e:
+        env.update({"E2E_ENABLED": "true"})
 
     _jest_test(
         name = name,
