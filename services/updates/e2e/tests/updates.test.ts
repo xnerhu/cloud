@@ -2,9 +2,9 @@ import "jest";
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import request from "supertest";
 
-import { runApp } from "../src/app";
+import { runApp } from "../../src/app";
 
-describe("[e2e]: Patches", () => {
+describe("[e2e]: Updates", () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
@@ -161,6 +161,46 @@ describe("[e2e]: Patches", () => {
         .query({ version: "1.0.0", os: "incorrect" });
 
       expect(res.statusCode).toEqual(400);
+    });
+  });
+
+  describe("/v1", () => {
+    it("returns patches", async () => {
+      const res = await request(app.getHttpServer())
+        .get("/v1")
+        .query({ browserVersion: "1.0.0" });
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual({
+        type: "patches",
+        fullFile: {
+          filename: "2.0.0-windows.packed.7z",
+          url: "/updates/2.0.0-windows.packed.7z",
+        },
+        patches: [
+          {
+            filename: "2.0.0-windows.patch",
+            url: "/updates/2.0.0-windows.patch",
+          },
+          {
+            filename: "1.2.0-windows.patch",
+            url: "/updates/1.2.0-windows.patch",
+          },
+          {
+            filename: "1.1.0-windows.patch",
+            url: "/updates/1.1.0-windows.patch",
+          },
+        ],
+      });
+    });
+
+    it("handles up-to-date browser", async () => {
+      const res = await request(app.getHttpServer())
+        .get("/v1")
+        .query({ browserVersion: "2.0.0" });
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual({ type: "none" });
     });
   });
 });
