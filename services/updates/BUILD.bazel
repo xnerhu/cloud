@@ -139,6 +139,11 @@ ENV_MIKRO_ORM = {
     "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
 }
 
+filegroup(
+    name = "e2e_assets",
+    srcs = glob(["e2e/assets/**/*"]),
+)
+
 jest_test(
     name = "test",
     srcs = [
@@ -148,7 +153,7 @@ jest_test(
     ],
     e2e = True,
     env = ENV_MIKRO_ORM,
-    deps = DEPS,
+    deps = DEPS + [":e2e_assets"],
 )
 
 DEPS_MIKRO_ORM = [

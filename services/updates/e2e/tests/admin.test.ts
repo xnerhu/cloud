@@ -1,11 +1,14 @@
 import "jest";
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import request from "supertest";
+import { resolve } from "path";
 
 import { runApp } from "../../src/app";
 
 const API_KEY = "TEST_TOKEN";
 const API_KEY_HEADER = "authorization";
+
+const PATH_ASSETS = resolve(__dirname, "../assets");
 
 describe("[e2e]: Admin", () => {
   let app: NestFastifyApplication;
@@ -120,19 +123,29 @@ describe("[e2e]: Admin", () => {
       });
     });
 
-    // describe("/diff", () => {
-    //   it("handles first-time releases", async () => {
-    //     const res = await request(app.getHttpServer())
-    //       .get("/admin/diff")
-    //       .set(API_KEY_HEADER, API_KEY)
-    //       .query({
-    //         version: "4.0.0",
-    //         channel: "stable",
-    //         distributionId: 4,
-    //       });
+    describe("/patch", () => {
+      const getRequest = () => {
+        return request(app.getHttpServer())
+          .put("/admin/patch")
+          .set(API_KEY_HEADER, API_KEY)
+          .attach("patch", resolve(PATH_ASSETS, "4.0.0.patch"))
+          .attach("full", resolve(PATH_ASSETS, "4.0.0.packed.7z"));
+      };
 
-    //     expect(res.statusCode).toEqual(404);
-    //   });
-    // });
+      it("validates patch file", async () => {
+        const res = await getRequest()
+          .field("releaseId", 8)
+          .field("distributionId", 1)
+          .field("hash", "d656e422b1b3027329a7128b636b0986")
+          .field("fullHash", "dbbeb775238fad0a93172e3e965d83d7");
+
+        expect(res.statusCode).toEqual(400);
+
+        const message = res.body.message as string;
+
+        expect(message.includes("corrupt")).toBe(true);
+        expect(message.includes("d656e422b1b3027329a7128b636b0986")).toBe(true);
+      });
+    });
   });
 });
