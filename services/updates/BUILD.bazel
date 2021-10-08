@@ -41,7 +41,7 @@ SRC_FILES = glob(
 )
 
 ts_config(
-    name = "tsconfig_app",
+    name = "tsconfig",
     src = "tsconfig.json",
     deps = [
         "//:tsconfig.json",
@@ -60,7 +60,7 @@ ts_project(
     declaration = True,
     incremental = True,
     source_map = True,
-    tsconfig = ":tsconfig_app",
+    tsconfig = ":tsconfig",
     deps = DEPS,
 )
 
