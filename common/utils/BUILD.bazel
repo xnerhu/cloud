@@ -58,5 +58,5 @@ jest_test(
     srcs = [
         ":components_test",
     ],
-    deps = DEPS,
+    deps = DEPS + [":tsconfig"],
 )
