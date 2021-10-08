@@ -1,6 +1,5 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
-load("//:deps.bzl", "JEST_DEPS")
 load("//rules:jest.bzl", "jest_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -14,14 +13,6 @@ exports_files(
 ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
-    deps = [
-        "//:tsconfig.json",
-    ],
-)
-
-ts_config(
-    name = "tsconfig_test",
-    src = "tsconfig.spec.json",
     deps = [
         "//:tsconfig.json",
     ],
@@ -50,24 +41,8 @@ ts_project(
     deps = DEPS,
 )
 
-ts_project(
-    name = "components_test",
-    srcs = glob(
-        TEST_FILES,
-    ),
-    allow_js = True,
-    composite = True,
-    declaration = True,
-    incremental = True,
-    source_map = True,
-    tsconfig = ":tsconfig_test",
-    deps = DEPS + JEST_DEPS + [
-        ":components",
-    ],
-)
-
 filegroup(
-    name = "srcs",
+    name = "components_test",
     srcs = SRC_FILES + glob(TEST_FILES),
 )
 
@@ -82,8 +57,6 @@ jest_test(
     name = "test",
     srcs = [
         ":components_test",
-        # ":srcs",
     ],
-    env = {},
     deps = DEPS,
 )
