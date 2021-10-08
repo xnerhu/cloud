@@ -1,25 +1,33 @@
-const IS_DEV = process.env.NODE_ENV === 'development';
-const IS_TEST = process.env.NODE_ENV === 'test';
+const IS_DEV = process.env.NODE_ENV === "development";
+const IS_TEST = process.env.NODE_ENV === "test";
+const IS_WEB = process.env.TEST_ENVIRONMENT === "web";
 
 const presets = [
   [
-    '@babel/preset-env',
+    "@babel/preset-env",
     {
-      modules: IS_TEST ? 'commonjs' : false,
+      loose: true,
+      targets: {
+        esmodules: true,
+      },
     },
   ],
-  '@babel/preset-typescript',
-  '@babel/preset-react',
+  "@babel/preset-typescript",
+  ...(IS_WEB ? ["@babel/preset-react"] : []),
 ];
 
 const plugins = [
-  '@babel/plugin-transform-runtime',
-  ['@babel/plugin-proposal-decorators', { legacy: true }],
-  '@babel/plugin-syntax-dynamic-import',
+  "babel-plugin-transform-typescript-metadata",
+  ["@babel/plugin-proposal-decorators", { legacy: true }],
+  "@babel/plugin-transform-runtime",
+  ["@babel/plugin-proposal-class-properties", { loose: true }],
+  "@babel/plugin-syntax-dynamic-import",
 ];
 
 if (IS_DEV) {
-  plugins.push(...['react-refresh/babel']);
+  if (IS_WEB) {
+    plugins.push(...["react-refresh/babel"]);
+  }
 }
 
-module.exports = { presets, plugins };
+module.exports = { plugins, presets };

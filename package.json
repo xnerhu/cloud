@@ -20,9 +20,17 @@
     "prisma": "concurrently \"npm run prisma:updates\"",
     "lint": "eslint \"common/**/src/**\" \"services/**/src/**\" --ext \".js,.jsx,.ts,.tsx\"",
     "lint-cache": "npx run lint -- --cache --cache-strategy content",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-decorators": "^7.15.8",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
     "@bazel/bazelisk": "^1.10.1",
     "@bazel/buildifier": "^4.2.1",
     "@bazel/ibazel": "^0.15.10",
@@ -53,6 +61,8 @@
     "@types/webidl-conversions": "^6.1.1",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
+    "babel-plugin-transform-typescript-metadata": "^0.3.2",
+    "c8": "^7.10.0",
     "ci-info": "^3.2.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
@@ -101,6 +111,10 @@
   },
   "workspaces": [],
   "mikro-orm": {
-    "configPaths": []
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts",
+      "./src/mikro-orm.config.js"
+    ]
   }
 }

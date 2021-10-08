@@ -78,11 +78,11 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Pull docker
-        run: docker-compose pull
+      # - name: Pull docker
+      #   run: docker-compose pull
 
-      - name: Start docker
-        run: docker-compose up --build -d
+      # - name: Start docker
+      #   run: docker-compose up --build -d
 
-      - name: Test
-        run: yarn test
+      # - name: Test
+      #   run: yarn test

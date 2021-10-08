@@ -1,5 +1,5 @@
 load("@npm//jest-cli:index.bzl", "jest", _jest_test = "jest_test")
-load("//:deps.bzl", "BABEL_DEPS")
+load("//:deps.bzl", "BABEL_BASE_DEPS", "BABEL_WEB_DEPS")
 
 def jest_test(
         name,
@@ -15,7 +15,7 @@ def jest_test(
     DEPS = deps + [
         "@npm//@types/jest",
         "@npm//jest",
-    ]
+    ] + BABEL_BASE_DEPS
 
     templated_args = [
         "--no-cache",
@@ -44,26 +44,32 @@ def jest_test(
             "@npm//@testing-library/jest-dom",
             "@npm//@testing-library/react",
             "@npm//@testing-library/user-event",
-        ] + BABEL_DEPS)
+        ] + BABEL_WEB_DEPS)
 
     data = [jest_config] + srcs + DEPS + [
         "//:jest-reporter.js",
-        # "@npm//c8",
+        "//:babel.config.js",
+        "@npm//c8",
     ]
 
-    env.update({
+    _env = {}
+    _env.update(env)
+
+    _env.update({
         "TEST_ENVIRONMENT": test_env,
         "NODE_ENV": "test",
     })
 
     if e2e:
-        env.update({"E2E_ENABLED": "true"})
+        _env.update({
+            "E2E_ENABLED": "true",
+        })
 
     _jest_test(
         name = name,
         data = data,
         templated_args = templated_args,
-        env = env,
+        env = _env,
         size = size,
         **kwargs
     )

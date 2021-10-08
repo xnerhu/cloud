@@ -1,4 +1,4 @@
-import { MikroORM } from "@mikro-orm/core";
+import { MikroORM, ReflectMetadataProvider } from "@mikro-orm/core";
 
 import { DistributionEntity } from "../src/distributions/distribution-entity";
 import { Patch, Release } from "../src/interfaces";
@@ -7,7 +7,10 @@ import { PatchEntity } from "../src/patches/patch-entity";
 import { ReleaseEntity } from "../src/releases/release-entity";
 
 export default async () => {
-  const connection = await MikroORM.init(config);
+  const connection = await MikroORM.init({
+    ...config,
+    metadataProvider: ReflectMetadataProvider,
+  });
 
   const windowsDistro = new DistributionEntity();
   const linuxDistro = new DistributionEntity();

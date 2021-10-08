@@ -11,7 +11,7 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "preserveWatchOutput": true,
-    "allowJs": false,
+    "allowJs": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
 

@@ -14,20 +14,20 @@ export class ReleaseEntity implements Release {
   @PrimaryKey()
   id: number;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   @Index()
   version: string;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   @Index()
   channel: string;
 
   @OneToMany(() => PatchEntity, (patch) => patch.release)
   patches: PatchEntity[];
 
-  @Property()
+  @Property({ columnType: "varchar" })
   notes: string;
 
-  @Property({ columnType: "timestamp", default: "now" })
+  @Property({ columnType: "timestamp", default: "now", nullable: true })
   createdAt: string;
 }

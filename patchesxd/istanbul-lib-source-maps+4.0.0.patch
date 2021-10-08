@@ -1,0 +1,29 @@
+diff --git a/node_modules/istanbul-lib-source-maps/lib/map-store.js b/node_modules/istanbul-lib-source-maps/lib/map-store.js
+index a99b79a..35b88fa 100644
+--- a/node_modules/istanbul-lib-source-maps/lib/map-store.js
++++ b/node_modules/istanbul-lib-source-maps/lib/map-store.js
+@@ -27,6 +27,7 @@ class MapStore {
+      * @constructor
+      */
+     constructor(opts) {
++        
+         opts = {
+             baseDir: null,
+             verbose: false,
+@@ -148,6 +149,8 @@ class MapStore {
+     }
+ 
+     sourceFinder(filePath) {
++        
++        console.log(this.sourceStore);
+         const content = this.sourceStore.get(filePath);
+         if (content !== undefined) {
+             return content;
+@@ -170,6 +173,7 @@ class MapStore {
+      * @returns {Promise<CoverageMap>} the transformed coverage map
+      */
+     async transformCoverage(coverageMap) {
++        
+         const hasInputSourceMaps = coverageMap
+             .files()
+             .some(

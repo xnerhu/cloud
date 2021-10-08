@@ -9,22 +9,22 @@ export class PatchEntity implements Patch {
   @PrimaryKey()
   id: number;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   filename: string;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   hash: string;
 
-  @Property()
+  @Property({ columnType: "integer" })
   size: number;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   fullFilename: string;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   fullHash: string;
 
-  @Property()
+  @Property({ columnType: "integer" })
   fullSize: number;
 
   @ManyToOne(() => DistributionEntity)
@@ -33,6 +33,6 @@ export class PatchEntity implements Patch {
   @ManyToOne(() => ReleaseEntity)
   release: ReleaseEntity;
 
-  @Property({ columnType: "timestamp", default: "now" })
+  @Property({ columnType: "timestamp", default: "now", nullable: true })
   createdAt: string;
 }

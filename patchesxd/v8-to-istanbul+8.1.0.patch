@@ -1,0 +1,61 @@
+diff --git a/node_modules/v8-to-istanbul/lib/source.js b/node_modules/v8-to-istanbul/lib/source.js
+index 4d8f1cb..107165f 100644
+--- a/node_modules/v8-to-istanbul/lib/source.js
++++ b/node_modules/v8-to-istanbul/lib/source.js
+@@ -2,8 +2,10 @@ const CovLine = require('./line')
+ const { GREATEST_LOWER_BOUND, LEAST_UPPER_BOUND } = require('source-map').SourceMapConsumer
+ 
+ module.exports = class CovSource {
+-  constructor (sourceRaw, wrapperLength) {
+-    sourceRaw = sourceRaw.trimEnd()
++  constructor (sourceRaw, wrapperLength, fromSourceMap) {
++    if (fromSourceMap) {
++      this.sourceRaw = sourceRaw.trimEnd()
++    }
+     this.lines = []
+     this.eof = sourceRaw.length
+     this.shebangLength = getShebangLength(sourceRaw)
+diff --git a/node_modules/v8-to-istanbul/lib/v8-to-istanbul.js b/node_modules/v8-to-istanbul/lib/v8-to-istanbul.js
+index 2a8dc40..ccfb1f2 100644
+--- a/node_modules/v8-to-istanbul/lib/v8-to-istanbul.js
++++ b/node_modules/v8-to-istanbul/lib/v8-to-istanbul.js
+@@ -55,11 +55,21 @@ module.exports = class V8ToIstanbul {
+         this.sourceTranspiled = new CovSource(rawSource, this.wrapperLength)
+       } else {
+         const candidatePath = this.rawSourceMap.sourcemap.sources.length >= 1 ? this.rawSourceMap.sourcemap.sources[0] : this.rawSourceMap.sourcemap.file
++       
++   
++
+         this.path = this._resolveSource(this.rawSourceMap, candidatePath || this.path)
+         this.sourceMap = await new SourceMapConsumer(this.rawSourceMap.sourcemap)
+ 
+         let originalRawSource
+-        if (this.sources.sourceMap && this.sources.sourceMap.sourcemap && this.sources.sourceMap.sourcemap.sourcesContent && this.sources.sourceMap.sourcemap.sourcesContent.length === 1) {
++        let fromSourceMap
++
++        if (this.sourceMap.sourcesContent && this.sourceMap.sourcesContent[0]) {
++          // perhaps we loaded sourcesContent was populated by an inline source map, or .map file?
++          // TODO: investigate whether there's ever a case where we hit this logic with 1:many sources.
++          originalRawSource = this.sourceMap.sourcesContent[0]
++          fromSourceMap = true
++        } else if (this.sources.sourceMap && this.sources.sourceMap.sourcemap && this.sources.sourceMap.sourcemap.sourcesContent && this.sources.sourceMap.sourcemap.sourcesContent.length === 1) {
+           // If the sourcesContent field has been provided, return it rather than attempting
+           // to load the original source from disk.
+           // TODO: investigate whether there's ever a case where we hit this logic with 1:many sources.
+@@ -67,15 +77,11 @@ module.exports = class V8ToIstanbul {
+         } else if (this.sources.originalSource) {
+           // Original source may be populated on the sources object.
+           originalRawSource = this.sources.originalSource
+-        } else if (this.sourceMap.sourcesContent && this.sourceMap.sourcesContent[0]) {
+-          // perhaps we loaded sourcesContent was populated by an inline source map, or .map file?
+-          // TODO: investigate whether there's ever a case where we hit this logic with 1:many sources.
+-          originalRawSource = this.sourceMap.sourcesContent[0]
+         } else {
+           // We fallback to reading the original source from disk.
+           originalRawSource = await readFile(this.path, 'utf8')
+         }
+-        this.covSources = [{ source: new CovSource(originalRawSource, this.wrapperLength), path: this.path }]
++        this.covSources = [{ source: new CovSource(originalRawSource, this.wrapperLength, fromSourceMap), path: this.path }]
+         this.sourceTranspiled = new CovSource(rawSource, this.wrapperLength)
+       }
+     } else {

@@ -19,18 +19,18 @@ export class DistributionEntity implements Distribution {
   @PrimaryKey()
   id: number;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   os: DistributionOS;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   osVersion: DistributionOSVersion;
 
-  @Property()
+  @Property({ columnType: "varchar" })
   architecture: DistributionArchitecture;
 
   @OneToMany(() => PatchEntity, (patch) => patch.distribution)
   patches: PatchEntity[];
 
-  @Property({ columnType: "timestamp", default: "now" })
+  @Property({ columnType: "timestamp", default: "now", nullable: true })
   createdAt: string;
 }

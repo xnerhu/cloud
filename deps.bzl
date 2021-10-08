@@ -1,11 +1,15 @@
-BABEL_DEPS = [
+BABEL_BASE_DEPS = [
     "@npm//@babel/plugin-proposal-decorators",
     "@npm//@babel/plugin-syntax-dynamic-import",
     "@npm//@babel/plugin-transform-runtime",
     "@npm//@babel/preset-env",
-    "@npm//@babel/preset-react",
     "@npm//@babel/preset-typescript",
-    "@npm//babel-loader",
+    "@npm//@babel/plugin-proposal-class-properties",
+    "@npm//babel-plugin-transform-typescript-metadata",
+]
+
+BABEL_WEB_DEPS = [
+    "@npm//@babel/preset-react",
 ]
 
 WEBPACK_DEPS = [

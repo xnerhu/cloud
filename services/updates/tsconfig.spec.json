@@ -1,8 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "references": [
-    { "path": "./tsconfig.db.json" },
-    { "path": "./tsconfig.json" }
-  ],
-  "include": ["e2e/**/*.ts", "src/**/*.test.ts"]
-}

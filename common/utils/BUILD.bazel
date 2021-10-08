@@ -41,6 +41,7 @@ DEPS = [
 ts_project(
     name = "components",
     srcs = SRC_FILES,
+    allow_js = True,
     composite = True,
     declaration = True,
     incremental = True,
@@ -54,6 +55,7 @@ ts_project(
     srcs = glob(
         TEST_FILES,
     ),
+    allow_js = True,
     composite = True,
     declaration = True,
     incremental = True,
@@ -62,6 +64,11 @@ ts_project(
     deps = DEPS + JEST_DEPS + [
         ":components",
     ],
+)
+
+filegroup(
+    name = "srcs",
+    srcs = SRC_FILES + glob(TEST_FILES),
 )
 
 js_library(
@@ -75,6 +82,7 @@ jest_test(
     name = "test",
     srcs = [
         ":components_test",
+        # ":srcs",
     ],
     env = {},
     deps = DEPS,

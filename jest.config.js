@@ -24,24 +24,25 @@ for (const arg of args) {
 
 const workspacePath = argMap
   .get(RULE_DIR_TOKEN)
-  .split(argMap.get(GEN_DIR_TOKEN))[1];
+  .split(argMap.get(GEN_DIR_TOKEN))[1]
+  .slice(1);
 
 const IS_WEB = process.env.TEST_ENVIRONMENT === "web";
 const IS_E2E_ENABLED = process.env.E2E_ENABLED === "true";
 
-const webConfig = {
-  testEnvironment: "jsdom",
-  testMatch: ["**/*.test.ts", "**/*.test.tsx"],
-  setupFilesAfterEnv: [`<rootDir>/${workspacePath}/src/setup-tests.ts`],
-};
-
 const nodeConfig = {
   testEnvironment: "node",
-  testMatch: ["**/*.test.js"],
+  testMatch: ["**/*.test.ts"],
+  collectCoverage: true,
+  coverageProvider: "v8",
+  rootDir: workspacePath,
+  collectCoverageFrom: ["<rootDir>/src/**/*.ts", "!**/coverage/**"],
+  reporters: ["default"],
+  coverageReporters: ["html", "text"],
   ...(IS_E2E_ENABLED
     ? {
-        globalSetup: `<rootDir>/${workspacePath}/e2e/setup.js`,
-        globalTeardown: `<rootDir>/${workspacePath}/e2e/teardown.js`,
+        globalSetup: `<rootDir>/e2e/setup.ts`,
+        globalTeardown: `<rootDir>/e2e/teardown.ts`,
       }
     : {}),
 };
@@ -54,5 +55,5 @@ module.exports = {
   moduleNameMapper: {
     "^~/(.*)": `<rootDir>/${workspacePath}/src/$1`,
   },
-  ...(IS_WEB ? webConfig : nodeConfig),
+  ...nodeConfig,
 };

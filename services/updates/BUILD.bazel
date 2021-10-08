@@ -6,6 +6,41 @@ load("//rules:node.bzl", "nodejs_app")
 
 package(default_visibility = ["//visibility:public"])
 
+DEPS = [
+    "//common/node",
+    "//common/fastify",
+    "//common/nest",
+    "//common/utils",
+    "@npm//@types/node",
+    "@npm//fastify-helmet",
+    "@npm//fastify-formbody",
+    "@npm//pg",
+    "@npm//reflect-metadata",
+    "@npm//@nestjs/common",
+    "@npm//@nestjs/core",
+    "@npm//@nestjs/platform-fastify",
+    "@npm//@nestjs/config",
+    "@npm//fastify-multipart",
+    "@npm//class-validator",
+    "@npm//class-transformer",
+    "@npm//rxjs",
+    "@npm//@mikro-orm/core",
+    "@npm//@mikro-orm/nestjs",
+    "@npm//@mikro-orm/postgresql",
+    "@npm//@mikro-orm/seeder",
+    "@npm//joi",
+    "@npm//md5-file",
+]
+
+TEST_FILES = ["src/**/*.test.ts"]
+
+SRC_FILES = glob(
+    [
+        "src/**/*.ts",
+    ],
+    exclude = TEST_FILES,
+)
+
 ts_config(
     name = "tsconfig_app",
     src = "tsconfig.json",
@@ -35,86 +70,16 @@ ts_config(
     ],
 )
 
-TEST_FILES = ["src/**/*.test.ts"]
-
-SRC_FILES = glob(
-    [
-        "src/**/*.ts",
-    ],
-    exclude = TEST_FILES,
-)
-
-DEPS = [
-    "//common/node",
-    "//common/fastify",
-    "//common/nest",
-    "//common/utils",
-    "@npm//@types/node",
-    "@npm//fastify-helmet",
-    "@npm//fastify-formbody",
-    "@npm//pg",
-    "@npm//reflect-metadata",
-    "@npm//@nestjs/common",
-    "@npm//@nestjs/core",
-    "@npm//@nestjs/platform-fastify",
-    "@npm//@nestjs/config",
-    "@npm//fastify-multipart",
-    "@npm//class-validator",
-    "@npm//class-transformer",
-    "@npm//rxjs",
-    "@npm//@mikro-orm/core",
-    "@npm//@mikro-orm/nestjs",
-    "@npm//@mikro-orm/postgresql",
-    "@npm//@mikro-orm/seeder",
-    "@npm//joi",
-    "@npm//md5-file",
-]
-
 ts_project(
     name = "components",
     srcs = SRC_FILES,
+    allow_js = True,
     composite = True,
     declaration = True,
     incremental = True,
     source_map = True,
     tsconfig = ":tsconfig_app",
     deps = DEPS,
-)
-
-ts_project(
-    name = "components_db",
-    srcs = glob(
-        ["db/**/*.ts"],
-    ),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    source_map = True,
-    tsconfig = ":tsconfig_db",
-    deps = DEPS + [
-        ":components",
-    ],
-)
-
-ts_project(
-    name = "components_test",
-    srcs = glob(
-        TEST_FILES + ["e2e/**/*.ts"],
-    ),
-    composite = True,
-    declaration = True,
-    incremental = True,
-    source_map = True,
-    tsconfig = ":tsconfig_test",
-    deps = DEPS + [
-        "@npm//@types/jest",
-        "@npm//ci-info",
-        "@npm//execa",
-        "@npm//supertest",
-        "@npm//@types/supertest",
-        ":components",
-        ":components_db",
-    ],
 )
 
 nodejs_app(
@@ -126,22 +91,21 @@ nodejs_app(
     entry_point = "src/index.ts",
 )
 
-nodejs_binary(
-    name = "seed",
-    data = [
-        ":components_db",
-        "@npm//execa",
-    ],
-    entry_point = "db/index.ts",
-)
-
 ENV_MIKRO_ORM = {
-    "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.js",
+    "MIKRO_ORM_CLI": package_name() + "/src/mikro-orm-config.ts",
 }
 
 filegroup(
-    name = "e2e_assets",
+    name = "assets_e2e",
     srcs = glob(["e2e/assets/**/*"]),
+)
+
+filegroup(
+    name = "components_test",
+    srcs = SRC_FILES + glob(TEST_FILES) + glob([
+        "e2e/**/*.ts",
+        "db/**/*.ts",
+    ]),
 )
 
 jest_test(
@@ -152,12 +116,13 @@ jest_test(
         ":schema_up",
     ],
     e2e = True,
-    env = ENV_MIKRO_ORM,
-    deps = DEPS + [":e2e_assets"],
+    deps = DEPS + [
+        ":assets_e2e",
+        "//:tsconfig.json",
+    ],
 )
 
 DEPS_MIKRO_ORM = [
-    ":components_db",
     "//:package.json",
 ]
 
