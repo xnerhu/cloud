@@ -28,4 +28,6 @@ JEST_DEPS = [
     "@npm//@types/jest",
     "@npm//supertest",
     "@npm//@types/supertest",
+    "@npm//c8",
+    "@npm//babel-jest",
 ]

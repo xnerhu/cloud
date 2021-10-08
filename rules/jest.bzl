@@ -1,5 +1,5 @@
 load("@npm//jest-cli:index.bzl", "jest", _jest_test = "jest_test")
-load("//:deps.bzl", "BABEL_BASE_DEPS", "BABEL_WEB_DEPS")
+load("//:deps.bzl", "BABEL_BASE_DEPS", "BABEL_WEB_DEPS", "JEST_DEPS")
 
 def jest_test(
         name,
@@ -40,16 +40,14 @@ def jest_test(
         test_env = "web"
 
         DEPS.extend([
-            "@npm//babel-jest",
             "@npm//@testing-library/jest-dom",
             "@npm//@testing-library/react",
             "@npm//@testing-library/user-event",
-        ] + BABEL_WEB_DEPS)
+        ] + JEST_DEPS + BABEL_WEB_DEPS)
 
     data = [jest_config] + srcs + DEPS + [
         "//:jest-reporter.js",
         "//:babel.config.js",
-        "@npm//c8",
     ]
 
     _env = {}
