@@ -53,10 +53,10 @@ js_library(
     deps = [":components"],
 )
 
-jest_test(
-    name = "test",
-    srcs = [
-        ":components_test",
-    ],
-    deps = DEPS + [":tsconfig"],
-)
+# jest_test(
+#     name = "test",
+#     srcs = [
+#         ":components_test",
+#     ],
+#     deps = DEPS + [":tsconfig"],
+# )
