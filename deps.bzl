@@ -25,6 +25,7 @@ WEBPACK_DEPS = [
 ]
 
 JEST_DEPS = [
+    "@npm//jest",
     "@npm//@types/jest",
     "@npm//supertest",
     "@npm//@types/supertest",

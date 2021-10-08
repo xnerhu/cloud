@@ -100,7 +100,6 @@ jest_test(
     e2e = True,
     deps = DEPS + [
         ":assets_e2e",
-        "//:tsconfig.json",
     ],
 )
 

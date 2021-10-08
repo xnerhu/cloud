@@ -12,10 +12,7 @@ def jest_test(
         e2e = False,
         size = "small",
         **kwargs):
-    DEPS = deps + [
-        "@npm//@types/jest",
-        "@npm//jest",
-    ] + BABEL_BASE_DEPS
+    DEPS = deps + JEST_DEPS + BABEL_BASE_DEPS
 
     templated_args = [
         "--no-cache",
@@ -43,11 +40,12 @@ def jest_test(
             "@npm//@testing-library/jest-dom",
             "@npm//@testing-library/react",
             "@npm//@testing-library/user-event",
-        ] + JEST_DEPS + BABEL_WEB_DEPS)
+        ] + BABEL_WEB_DEPS)
 
     data = [jest_config] + srcs + DEPS + [
         "//:jest-reporter.js",
         "//:babel.config.js",
+        "//:tsconfig.json",
     ]
 
     _env = {}
