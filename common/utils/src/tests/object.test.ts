@@ -12,7 +12,7 @@ describe("@common/utils object", () => {
           c: 1024,
           d: null,
           e: undefined,
-          f: "test", // test
+          f: "test", // testdddddd
         }),
       ).toEqual({
         a: true,
