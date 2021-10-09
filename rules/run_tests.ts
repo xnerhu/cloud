@@ -20,7 +20,14 @@ const main = async () => {
     process.stdout.write(res.stdout);
     process.stderr.write(res.stderr);
 
-    process.stderr.write("test" + isCI + "   " + process.env.CI);
+    process.stderr.write(
+      "test" +
+        isCI +
+        "   " +
+        process.env.CI +
+        ",      " +
+        process.env.GITHUB_HEAD_REF,
+    );
     process.exit(1);
 
     if (isCI) {
