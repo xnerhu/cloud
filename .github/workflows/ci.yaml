@@ -87,9 +87,9 @@ jobs:
       - name: Test
         # run: yarn test
         run: |
-          yarn cross-env GIT_BRANCH=${{ github.ref }} GIT_SHA=${{ github.sha }} GIT_SLUG=wexond/cloud CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }} bazel run //common/utils:run_tests
+          yarn CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }} bazel run //common/utils:run_tests
 
-      # - name: xx
+      # - name: xx cross-env GIT_BRANCH=${{ github.ref }} GIT_SHA=${{ github.sha }} GIT_SLUG=wexond/cloud CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }}
       #   run: |
       #     ls bazel-out/k8-fastbuild/bin/common/utils/test.sh.runfiles/init/common/utils
 
