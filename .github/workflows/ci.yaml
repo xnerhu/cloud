@@ -87,6 +87,6 @@ jobs:
 
       - name: Test
         run: |
-          yarn bazel run --test_env=CI //common/utils:test
+          yarn bazel run //common/utils:test
 
 # --test_env=CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }} --test_env=GITHUB_REF=${{ github.ref }} --test_env=GITHUB_RUN_ID=${{ github.run_id }} --test_env=GITHUB_SHA=${{ github.sha }} --test_env=GITHUB_REPOSITORY=${{ github.repository }}

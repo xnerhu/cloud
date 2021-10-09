@@ -31,8 +31,10 @@ const main = async () => {
       pr: "",
     };
 
+    console.log("xdd");
+
     process.stdout.write(
-      __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
+      "xdd" + __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
     );
 
     // if (isCI) {
