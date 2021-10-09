@@ -10,7 +10,7 @@ const main = async () => {
   try {
     const res = await execa(testPath, []);
 
-    const params = {
+    const params: Record<string, any> = {
       branch:
         process.env.GITHUB_HEAD_REF ||
         process.env.GITHUB_REF.replace("refs/heads/", ""),
