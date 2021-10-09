@@ -36,18 +36,18 @@ const main = async () => {
     throw new Error("No package name provided");
   }
 
-  // const workingDir = resolve(__dirname, "../", packageName);
+  const workingDir = resolve(__dirname, "../", packageName);
 
-  // const statusPath = resolve(workingDir, "git-status.txt");
-  // const testPath = resolve(workingDir, "test_jest.sh");
-  // const covPath = resolve(workingDir, "test_codecov.sh");
+  const statusPath = resolve(workingDir, "git-status.txt");
+  const testPath = resolve(workingDir, "test_jest.sh");
+  const covPath = resolve(workingDir, "test_codecov.sh");
 
-  // const gitStatus = await readFile(statusPath, "utf8");
-  // const gitInfo = parseGitStatus(gitStatus);
+  const gitStatus = await readFile(statusPath, "utf8");
+  const gitInfo = parseGitStatus(gitStatus);
 
-  // const params = getCodeCovParams(gitInfo);
+  const params = getCodeCovParams(gitInfo);
 
-  // process.stdout.write(JSON.stringify(params));
+  process.stdout.write(JSON.stringify(params));
 
   return;
 
