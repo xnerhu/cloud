@@ -86,6 +86,7 @@ jobs:
       # test xd
 
       - name: Test
+        env: CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }}
         run: |
           yarn bazel run --workspace_status_command=rules/get_workspace_status.sh //common/utils:test
 
