@@ -1,3 +1,5 @@
+const { isCI } = require("ci-info");
+
 const args = process.argv;
 let genDir = null;
 let ruleDir = null;
@@ -38,7 +40,7 @@ const nodeConfig = {
   rootDir: workspacePath,
   collectCoverageFrom: ["<rootDir>/src/**/*.ts", "!**/coverage/**"],
   reporters: ["default"],
-  coverageReporters: ["html", "text"],
+  coverageReporters: ["lcov", ...(!isCI ? ["text"] : [])],
   ...(IS_E2E_ENABLED
     ? {
         globalSetup: `<rootDir>/e2e/setup.ts`,

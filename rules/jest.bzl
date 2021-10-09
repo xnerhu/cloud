@@ -1,5 +1,6 @@
 load("@npm//jest-cli:index.bzl", "jest", _jest_test = "jest_test")
 load("//:deps.bzl", "BABEL_BASE_DEPS", "BABEL_WEB_DEPS", "JEST_DEPS")
+load("@npm//codecov:index.bzl", "codecov")
 
 def jest_test(
         name,
@@ -68,6 +69,13 @@ def jest_test(
         env = _env,
         size = size,
         **kwargs
+    )
+
+    codecov(
+        name = name + "xd",
+        data = [name],
+        testonly = True,
+        templated_args = [],
     )
 
     # This rule is used specifically to update snapshots via `bazel run`
