@@ -1,5 +1,4 @@
 import execa from "execa";
-import { readdirSync } from "fs";
 import { resolve } from "path";
 import { isCI } from "ci-info";
 
@@ -10,7 +9,7 @@ const main = async () => {
   try {
     const res = await execa(testPath, []);
 
-    const params: Record<string, any> = {
+    const params = {
       branch:
         process.env.GITHUB_HEAD_REF ||
         process.env.GITHUB_REF?.replace("refs/heads/", ""),
@@ -18,6 +17,7 @@ const main = async () => {
       commit: process.env.GITHUB_SHA,
       service: "github-actions",
       slug: process.env.GITHUB_REPOSITORY,
+      pr: null,
     };
 
     if (process.env.GITHUB_HEAD_REF) {
@@ -27,15 +27,16 @@ const main = async () => {
 
     process.stdout.write(res.stdout);
 
-    process.stdout.write("XDDD" + JSON.stringify(params));
+    process.stdout.write("XDDD" + isCI);
 
     // const covRes = await execa(
     //   covPath,
     //   [
-    //     "--token=a6196374-3614-4054-94f8-4d0503ee66f4",
-    //     "--commit=1a2ad05cc6be3e4814309a3d662b61a242dd2088",
-    //     "--slug=wexond/cloud",
-    //     "--branch=updates-v2",
+    //     `--token=${process.env.CODECOV_TOKEN}`,
+    //     `--commit=${params.commit}`,
+    //     `--slug=${params.slug}`,
+    //     `--branch=${params.slug}`,
+    //     `--build=${params.build}`,
     //     "--disable=detect",
     //   ],
     //   { env: { CI: "true" } },
