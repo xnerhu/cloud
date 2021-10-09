@@ -21,6 +21,8 @@ const main = async () => {
     process.stderr.write(res.stderr);
 
     if (isCI) {
+      process.stderr.write("test");
+      process.exit(1);
       const params = {
         branch:
           process.env.GITHUB_HEAD_REF ||
