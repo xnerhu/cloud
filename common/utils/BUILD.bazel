@@ -100,11 +100,9 @@ codecov(
 nodejs_test(
     name = "run_tests",
     data = [
+        ":codecov",
         ":components_tests",
         ":test",
-        ":codecov",
-        # ":components_tests",
-        # ":test",
     ],
     entry_point = "run_tests.ts",
 )

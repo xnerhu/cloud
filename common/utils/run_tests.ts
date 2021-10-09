@@ -12,7 +12,7 @@ const main = async () => {
 
     process.stdout.write(res.stdout);
 
-    process.stdout.write("XDDD" + isCI);
+    process.stdout.write("XDDD" + process.env.CI);
 
     // const covRes = await execa(
     //   covPath,
