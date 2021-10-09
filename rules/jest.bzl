@@ -88,7 +88,7 @@ def jest_test(
             tags = ["manual"],
         )
 
-        components = srcs + [
+        components = [
             jest_name,
             "//rules:components_test_runner",
             codecov_name,
@@ -106,7 +106,7 @@ def jest_test(
         nodejs_test(
             name = "test",
             templated_args = [native.package_name()],
-            data = components + [":git_status"],
+            data = components,  #  + [":git_status"]
             entry_point = "//rules:run_tests.ts",
         )
 

@@ -36,47 +36,51 @@ const main = async () => {
     throw new Error("No package name provided");
   }
 
-  const workingDir = resolve(__dirname, "../", packageName);
+  // const workingDir = resolve(__dirname, "../", packageName);
 
-  const statusPath = resolve(workingDir, "git-status.txt");
-  const testPath = resolve(workingDir, "test_jest.sh");
-  const covPath = resolve(workingDir, "test_codecov.sh");
+  // const statusPath = resolve(workingDir, "git-status.txt");
+  // const testPath = resolve(workingDir, "test_jest.sh");
+  // const covPath = resolve(workingDir, "test_codecov.sh");
 
-  const gitStatus = await readFile(statusPath, "utf8");
-  const gitInfo = parseGitStatus(gitStatus);
+  // const gitStatus = await readFile(statusPath, "utf8");
+  // const gitInfo = parseGitStatus(gitStatus);
 
-  const params = getCodeCovParams(gitInfo);
+  // const params = getCodeCovParams(gitInfo);
 
-  try {
-    const res = await execa(testPath, []);
+  // process.stdout.write(JSON.stringify(params));
 
-    process.stdout.write(res.stdout);
-    process.stderr.write(res.stderr);
+  return;
 
-    // console.log("xdd");
+  // try {
+  //   const res = await execa(testPath, []);
 
-    // process.stdout.write(
-    //   "xdd" + __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
-    // );
+  //   process.stdout.write(res.stdout);
+  //   process.stderr.write(res.stderr);
 
-    if (params.isCI) {
-      const covRes = await execa(covPath, [
-        `--token=${params.codeCovToken}`,
-        `--commit=${params.commit}`,
-        `--slug=${params.slug}`,
-        `--branch=${params.branch}`,
-        `--build=${params.build}`,
-        "--disable=detect",
-      ]);
+  //   // console.log("xdd");
 
-      process.stdout.write(covRes.stdout);
-      process.stderr.write(covRes.stderr);
-    }
-  } catch (error) {
-    process.stderr.write(error.stderr);
-    process.stdout.write(error.stdout);
-    process.exit(1);
-  }
+  //   // process.stdout.write(
+  //   //   "xdd" + __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
+  //   // );
+
+  //   if (params.isCI) {
+  //     const covRes = await execa(covPath, [
+  //       `--token=${params.codeCovToken}`,
+  //       `--commit=${params.commit}`,
+  //       `--slug=${params.slug}`,
+  //       `--branch=${params.branch}`,
+  //       `--build=${params.build}`,
+  //       "--disable=detect",
+  //     ]);
+
+  //     process.stdout.write(covRes.stdout);
+  //     process.stderr.write(covRes.stderr);
+  //   }
+  // } catch (error) {
+  //   process.stderr.write(error.stderr);
+  //   process.stdout.write(error.stdout);
+  //   process.exit(1);
+  // }
 };
 
 main();
