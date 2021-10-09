@@ -12,6 +12,7 @@ exports_files(
         "node.bzl",
         "tsconfig.tests.json",
         "run_tests.ts",
+        "get_workspace_status.sh",
     ],
 )
 
@@ -38,3 +39,12 @@ ts_project(
         "@npm//execa",
     ],
 )
+
+# genrule(
+#     name = "git_status",
+#     # testonly = True,
+#     srcs = ["//rules:get_workspace_status.sh"],
+#     outs = ["git-status.txt"],
+#     cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
+#     stamp = 1,
+# )
