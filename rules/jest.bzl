@@ -1,9 +1,10 @@
 load("@npm//jest-cli:index.bzl", "jest", _jest_test = "jest_test")
 load("//:deps.bzl", "BABEL_BASE_DEPS", "BABEL_WEB_DEPS", "JEST_DEPS")
 load("@npm//codecov:index.bzl", "codecov")
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_library", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "nodejs_test")
 
 def jest_test(
-        name,
         srcs,
         deps = [],
         env = {},
@@ -62,25 +63,45 @@ def jest_test(
             "E2E_ENABLED": "true",
         })
 
+    jest_name = "test"
+    jest_tags = []
+
+    if coverage:
+        jest_name = "test_jest"
+        jest_tags.extend(["manual"])
+
     _jest_test(
-        name = name,
+        name = jest_name,
         data = data,
         templated_args = templated_args,
         env = _env,
         size = size,
+        tags = jest_tags,
         **kwargs
     )
 
-    codecov(
-        name = name + "xd",
-        data = [name],
-        testonly = True,
-        templated_args = [],
-    )
+    if coverage:
+        codecov_name = "test_codecov"
+
+        codecov(
+            name = codecov_name,
+            args = [],
+        )
+
+        nodejs_test(
+            name = "test",
+            templated_args = [native.package_name()],
+            data = [
+                jest_name,
+                "//rules:components_test_runner",
+                codecov_name,
+            ],
+            entry_point = "//rules:run_tests.ts",
+        )
 
     # This rule is used specifically to update snapshots via `bazel run`
     jest(
-        name = "%s.update" % name,
+        name = "test_update",
         data = data,
         templated_args = templated_args + ["-u"],
         **kwargs

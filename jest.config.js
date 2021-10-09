@@ -35,7 +35,6 @@ const IS_E2E_ENABLED = process.env.E2E_ENABLED === "true";
 const nodeConfig = {
   testEnvironment: "node",
   testMatch: ["**/*.test.ts"],
-  collectCoverage: true,
   coverageProvider: "v8",
   rootDir: workspacePath,
   collectCoverageFrom: ["<rootDir>/src/**/*.ts", "!**/coverage/**"],

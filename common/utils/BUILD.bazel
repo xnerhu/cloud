@@ -1,8 +1,6 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("//rules:jest.bzl", "jest_test")
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "nodejs_test")
-load("@npm//codecov:index.bzl", "codecov")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -56,53 +54,9 @@ js_library(
 )
 
 jest_test(
-    name = "test",
     srcs = [
         ":components_test",
     ],
-    tags = ["manual"],
+    coverage = True,
     deps = DEPS,
-)
-
-ts_config(
-    name = "tsconfig_tests",
-    src = "tsconfig.tests.json",
-    deps = [
-        "//:tsconfig.json",
-    ],
-)
-
-ts_project(
-    name = "components_tests",
-    srcs = ["run_tests.ts"],
-    allow_js = True,
-    composite = True,
-    declaration = True,
-    incremental = True,
-    source_map = True,
-    tsconfig = ":tsconfig_tests",
-    deps = [
-        "@npm//@types/node",
-        "@npm//ci-info",
-        "@npm//execa",
-    ],
-)
-
-codecov(
-    name = "codecov",
-    args = [
-    ],
-    env = {
-        "CI": "true",
-    },
-)
-
-nodejs_test(
-    name = "run_tests",
-    data = [
-        ":codecov",
-        ":components_tests",
-        ":test",
-    ],
-    entry_point = "run_tests.ts",
 )
