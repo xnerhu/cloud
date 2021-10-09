@@ -86,3 +86,15 @@ jobs:
 
       - name: Test
         run: yarn test
+
+      - name: xx
+        run: |
+          ls bazel-out/k8-fastbuild/bin
+
+      # - name: Code coverage
+      #   uses: codecov/codecov-action@v2
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+      #     files: ./coverage1.xml,./coverage2.xml # optional
+      #     fail_ci_if_error: true # optional (default = false)
+      #     verbose: true # optional (default = false)
