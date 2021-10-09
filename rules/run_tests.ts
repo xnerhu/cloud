@@ -31,11 +31,11 @@ const main = async () => {
       pr: "",
     };
 
-    console.log("xdd");
+    // console.log("xdd");
 
-    process.stdout.write(
-      "xdd" + __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
-    );
+    // process.stdout.write(
+    //   "xdd" + __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
+    // );
 
     // if (isCI) {
     //   if (process.env.GITHUB_HEAD_REF) {
