@@ -96,7 +96,7 @@ def jest_test(
 
         native.genrule(
             name = "git_status",
-            srcs = components + srcs + ["//rules:get_workspace_status.sh"],
+            srcs = srcs,
             outs = ["git-status.txt"],
             cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
             stamp = 1,
