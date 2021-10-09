@@ -17,6 +17,7 @@ const parseGitStatus = (data: string) => {
 
 const getCodeCovParams = (info: Map<string, string>) => {
   return {
+    isCI: info.get("CI") || process.env.CI === "true",
     branch:
       info.get("GITHUB_HEAD_REF") ||
       process.env.GITHUB_HEAD_REF ||
@@ -24,6 +25,7 @@ const getCodeCovParams = (info: Map<string, string>) => {
     build: info.get("GITHUB_RUN_ID") || process.env.GITHUB_RUN_ID,
     commit: info.get("GITHUB_SHA") || process.env.GITHUB_SHA,
     slug: info.get("GITHUB_REPOSITORY") || process.env.GITHUB_REPOSITORY,
+    codeCovToken: info.get("CODECOV_TOKEN") || process.env.CODECOV_TOKEN,
   };
 };
 
@@ -45,8 +47,6 @@ const main = async () => {
 
   const params = getCodeCovParams(gitInfo);
 
-  console.log(params);
-
   try {
     const res = await execa(testPath, []);
 
@@ -59,24 +59,19 @@ const main = async () => {
     //   "xdd" + __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
     // );
 
-    // if (isCI) {
-    //   if (process.env.GITHUB_HEAD_REF) {
-    //     // PR refs are in the format: refs/pull/7/merge for pull_request events
-    //     params["pr"] = process.env.GITHUB_REF?.split("/")[2] as any;
-    //   }
+    if (params.isCI) {
+      const covRes = await execa(covPath, [
+        `--token=${params.codeCovToken}`,
+        `--commit=${params.commit}`,
+        `--slug=${params.slug}`,
+        `--branch=${params.branch}`,
+        `--build=${params.build}`,
+        "--disable=detect",
+      ]);
 
-    //   const covRes = await execa(covPath, [
-    //     `--token=${process.env.CODECOV_TOKEN}`,
-    //     `--commit=${params.commit}`,
-    //     `--slug=${params.slug}`,
-    //     `--branch=${params.branch}`,
-    //     `--build=${params.build}`,
-    //     "--disable=detect",
-    //   ]);
-
-    //   process.stdout.write(covRes.stdout);
-    //   process.stderr.write(covRes.stderr);
-    // }
+      process.stdout.write(covRes.stdout);
+      process.stderr.write(covRes.stderr);
+    }
   } catch (error) {
     process.stderr.write(error.stderr);
     process.stdout.write(error.stdout);
