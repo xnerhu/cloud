@@ -1,8 +1,7 @@
 load("@npm//jest-cli:index.bzl", "jest", _jest_test = "jest_test")
 load("//:deps.bzl", "BABEL_BASE_DEPS", "BABEL_WEB_DEPS", "JEST_DEPS")
 load("@npm//codecov:index.bzl", "codecov")
-load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_library", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "nodejs_test")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
 
 def jest_test(
         srcs,
@@ -89,15 +88,25 @@ def jest_test(
             tags = ["manual"],
         )
 
+        components = srcs + [
+            jest_name,
+            "//rules:components_test_runner",
+            codecov_name,
+        ]
+
+        native.genrule(
+            name = "git_status",
+            srcs = components + ["//rules:get_workspace_status.sh"],
+            outs = ["git-status.txt"],
+            cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
+            stamp = 1,
+            testonly = True,
+        )
+
         nodejs_test(
             name = "test",
             templated_args = [native.package_name()],
-            data = [
-                jest_name,
-                "//rules:components_test_runner",
-                "//rules:git_status",
-                codecov_name,
-            ],
+            data = components + [":git_status"],
             entry_point = "//rules:run_tests.ts",
         )
 

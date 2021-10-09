@@ -38,11 +38,3 @@ ts_project(
         "@npm//execa",
     ],
 )
-
-genrule(
-    name = "git_status",
-    srcs = ["get_workspace_status.sh"],
-    outs = ["git-status.txt"],
-    cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
-    stamp = 1,
-)

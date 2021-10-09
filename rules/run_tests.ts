@@ -1,19 +1,11 @@
 import execa from "execa";
 import { resolve } from "path";
 import { isCI } from "ci-info";
-import { readdirSync, readFileSync } from "fs";
+import { readFile } from "fs/promises";
 
 // console.log();
 
 const main = async () => {
-  // test
-  process.stdout.write(
-    readFileSync(resolve(__dirname, "git-status.txt"), "utf8"),
-  );
-
-  // process.exit(1);
-
-  return;
   const packageName = process.argv[2];
 
   if (packageName == null) {
@@ -22,8 +14,15 @@ const main = async () => {
 
   const workingDir = resolve(__dirname, "../", packageName);
 
+  const statusPath = resolve(workingDir, "git-status.txt");
   const testPath = resolve(workingDir, "test_jest.sh");
   const covPath = resolve(workingDir, "test_codecov.sh");
+
+  const gitStatus = await readFile(statusPath, "utf8");
+
+  process.stdout.write(gitStatus);
+
+  return;
 
   try {
     const res = await execa(testPath, []);

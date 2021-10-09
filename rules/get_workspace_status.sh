@@ -30,10 +30,10 @@
 
 # echo "xd"
 
-git_branch=$(git rev-parse --abbrev-ref HEAD || hg branch)
-git_head=$(git log -1 --pretty=%H || hg id -i --debug | tr -d '+')
+# git_branch=$(git rev-parse --abbrev-ref HEAD || hg branch)
+# git_head=$(git log -1 --pretty=%H || hg id -i --debug | tr -d '+')
 
-echo "GIT_BRANCH ${git_branch}"
-echo "GIT_HEAD ${git_head}"
+# echo "GIT_BRANCH ${git_branch}"
+# echo "GIT_HEAD ${git_head}"
 
 echo "XD ${lmao}"
