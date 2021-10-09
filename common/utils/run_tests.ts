@@ -31,7 +31,7 @@ const main = async () => {
       `--token=${process.env.CODECOV_TOKEN}`,
       `--commit=${params.commit}`,
       `--slug=${params.slug}`,
-      `--branch=${params.slug}`,
+      `--branch=${params.branch}`,
       `--build=${params.build}`,
       "--disable=detect",
     ]);
