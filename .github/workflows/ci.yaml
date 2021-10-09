@@ -83,8 +83,10 @@ jobs:
 
       # - name: Start docker
       #   run: docker-compose up --build -d
-      # xddd
+      # test
 
       - name: Test
         run: |
-          yarn bazel test --test_env=CI=true --test_env=CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }} --test_env=GITHUB_REF=${{ github.ref }} --test_env=GITHUB_RUN_ID=${{ github.run_id }} --test_env=GITHUB_SHA=${{ github.sha }} --test_env=GITHUB_REPOSITORY=${{ github.repository }} //common/utils:test
+          yarn bazel test --action-env=CI=true //common/utils:test
+
+# --test_env=CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }} --test_env=GITHUB_REF=${{ github.ref }} --test_env=GITHUB_RUN_ID=${{ github.run_id }} --test_env=GITHUB_SHA=${{ github.sha }} --test_env=GITHUB_REPOSITORY=${{ github.repository }}
