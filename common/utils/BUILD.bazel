@@ -57,6 +57,6 @@ jest_test(
     srcs = [
         ":components_test",
     ],
-    coverage = True,
+    # coverage = F,
     deps = DEPS,
 )

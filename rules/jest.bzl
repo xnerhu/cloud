@@ -86,6 +86,7 @@ def jest_test(
         codecov(
             name = codecov_name,
             args = [],
+            tags = ["manual"],
         )
 
         nodejs_test(
