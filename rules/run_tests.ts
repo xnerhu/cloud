@@ -6,6 +6,7 @@ import { readdirSync, readFileSync } from "fs";
 // console.log();
 
 const main = async () => {
+  // test
   process.stdout.write(
     readFileSync(resolve(__dirname, "git-status.txt"), "utf8"),
   );
