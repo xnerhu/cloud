@@ -60,8 +60,6 @@ const main = async () => {
     process.stdout.write(error.stdout);
     process.exit(1);
   }
-
-  process.exit(1);
 };
 
 main();
