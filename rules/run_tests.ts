@@ -31,24 +31,26 @@ const main = async () => {
       pr: "",
     };
 
-    if (isCI) {
-      if (process.env.GITHUB_HEAD_REF) {
-        // PR refs are in the format: refs/pull/7/merge for pull_request events
-        params["pr"] = process.env.GITHUB_REF?.split("/")[2] as any;
-      }
+    process.stdout.write(isCI + "xddd" + JSON.stringify(params));
 
-      const covRes = await execa(covPath, [
-        `--token=${process.env.CODECOV_TOKEN}`,
-        `--commit=${params.commit}`,
-        `--slug=${params.slug}`,
-        `--branch=${params.branch}`,
-        `--build=${params.build}`,
-        "--disable=detect",
-      ]);
+    // if (isCI) {
+    //   if (process.env.GITHUB_HEAD_REF) {
+    //     // PR refs are in the format: refs/pull/7/merge for pull_request events
+    //     params["pr"] = process.env.GITHUB_REF?.split("/")[2] as any;
+    //   }
 
-      process.stdout.write(covRes.stdout);
-      process.stderr.write(covRes.stderr);
-    }
+    //   const covRes = await execa(covPath, [
+    //     `--token=${process.env.CODECOV_TOKEN}`,
+    //     `--commit=${params.commit}`,
+    //     `--slug=${params.slug}`,
+    //     `--branch=${params.branch}`,
+    //     `--build=${params.build}`,
+    //     "--disable=detect",
+    //   ]);
+
+    //   process.stdout.write(covRes.stdout);
+    //   process.stderr.write(covRes.stderr);
+    // }
   } catch (error) {
     process.stderr.write(error.stderr);
     process.stdout.write(error.stdout);
