@@ -60,7 +60,7 @@ jest_test(
     srcs = [
         ":components_test",
     ],
-    tags = ["manual"]
+    tags = ["manual"],
     deps = DEPS,
 )
 
