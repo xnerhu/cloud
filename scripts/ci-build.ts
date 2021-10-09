@@ -1,15 +1,15 @@
-import { resolve } from 'path';
-import { readdir, readFile } from 'fs/promises';
-import execa from 'execa';
+import { resolve } from "path";
+import { readdir, readFile } from "fs/promises";
+import execa from "execa";
 
-const getPackage = async (basePath = '') => {
-  const data = await readFile(resolve(basePath, 'package.json'), 'utf8');
+const getPackage = async (basePath = "") => {
+  const data = await readFile(resolve(basePath, "package.json"), "utf8");
   return JSON.parse(data);
 };
-
+// test
 const runBuild = async (path: string) => {
   try {
-    await execa('yarn', ['build'], {
+    await execa("yarn", ["build"], {
       cwd: path,
       stdout: process.stdout,
       stderr: process.stderr,
@@ -28,7 +28,7 @@ const getAllPackages = async () => {
 
   await Promise.all(
     workspaces.map(async (workspace: string) => {
-      const path = workspace.split('/*')[0];
+      const path = workspace.split("/*")[0];
       const subdirs = await readdir(path);
 
       paths.push(...subdirs.map((r) => resolve(path, r)));
