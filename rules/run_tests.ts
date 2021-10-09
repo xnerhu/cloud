@@ -1,8 +1,18 @@
 import execa from "execa";
 import { resolve } from "path";
 import { isCI } from "ci-info";
+import { readdirSync, readFileSync } from "fs";
+
+// console.log();
 
 const main = async () => {
+  process.stdout.write(
+    readFileSync(resolve(__dirname, "git-status.txt"), "utf8"),
+  );
+
+  // process.exit(1);
+
+  return;
   const packageName = process.argv[2];
 
   if (packageName == null) {
@@ -60,8 +70,6 @@ const main = async () => {
     process.stdout.write(error.stdout);
     process.exit(1);
   }
-
-  // process.exit(1);
 };
 
 main();

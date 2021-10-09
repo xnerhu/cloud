@@ -95,6 +95,7 @@ def jest_test(
             data = [
                 jest_name,
                 "//rules:components_test_runner",
+                "//rules:git_status",
                 codecov_name,
             ],
             entry_point = "//rules:run_tests.ts",
