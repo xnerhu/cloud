@@ -2,6 +2,7 @@ import execa from "execa";
 import { resolve } from "path";
 import { isCI } from "ci-info";
 import { readFile } from "fs/promises";
+import { readdirSync } from "fs";
 
 const parseGitStatus = (data: string) => {
   const lines = data.split("\n");
@@ -38,16 +39,20 @@ const main = async () => {
 
   const workingDir = resolve(__dirname, "../", packageName);
 
-  const statusPath = resolve(workingDir, "git-status.txt");
-  const testPath = resolve(workingDir, "test_jest.sh");
-  const covPath = resolve(workingDir, "test_codecov.sh");
+  // process.stdout(resolve(__
 
-  const gitStatus = await readFile(statusPath, "utf8");
-  const gitInfo = parseGitStatus(gitStatus);
+  // process.exit(1);
 
-  const params = getCodeCovParams(gitInfo);
+  // const statusPath = resolve(workingDir, "git-status.txt");
+  // const testPath = resolve(workingDir, "test_jest.sh");
+  // const covPath = resolve(workingDir, "test_codecov.sh");
 
-  process.stdout.write(JSON.stringify(params));
+  // const gitStatus = await readFile(statusPath, "utf8");
+  // const gitInfo = parseGitStatus(gitStatus);
+
+  // const params = getCodeCovParams(gitInfo);
+
+  // process.stdout.write(JSON.stringify(params));
 
   return;
 

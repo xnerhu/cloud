@@ -94,19 +94,27 @@ def jest_test(
             codecov_name,
         ]
 
+        # native.genrule(
+        #     name = "git_status",
+        #     srcs = srcs,
+        #     outs = ["git-status.txt"],
+        #     cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
+        #     stamp = 1,
+        #     testonly = True,
+        # )
+
         native.genrule(
             name = "git_status",
             srcs = srcs,
             outs = ["git-status.txt"],
             cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
             stamp = 1,
-            testonly = True,
         )
 
         nodejs_test(
             name = "test",
             templated_args = [native.package_name()],
-            data = components + [":git_status"],
+            data = components + ["git-status.txt"],
             entry_point = "//rules:run_tests.ts",
         )
 
