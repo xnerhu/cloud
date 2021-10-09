@@ -20,7 +20,7 @@ const main = async () => {
     process.stdout.write(res.stdout);
     process.stderr.write(res.stderr);
 
-    process.stderr.write("test" + isCI);
+    process.stderr.write("test" + isCI + "   " + process.env.CI);
     process.exit(1);
 
     if (isCI) {
