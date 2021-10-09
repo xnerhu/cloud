@@ -12,7 +12,7 @@ describe("@common/utils object", () => {
           b: false,
           c: 1024,
           d: null,
-          e: undefined,
+          e: undefined, // xdd
           f: "test",
         }),
       ).toEqual({
@@ -22,5 +22,7 @@ describe("@common/utils object", () => {
         f: "test",
       });
     });
+
+    const xd = 1;
   });
 });

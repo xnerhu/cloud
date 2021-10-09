@@ -87,7 +87,7 @@ jobs:
 
       - name: Test
         run: |
-          yarn bazel run //common/utils:test
+          yarn bazel run --workspace_status_command=rules/get_workspace_status.sh //common/utils:test
 
       # - name: Find coverages
       #   run: |
