@@ -87,7 +87,7 @@ jobs:
       - name: Test
         # run: yarn test
         run: |
-          yarn bazel run //common/utils:run_tests
+          yarn cross-env GIT_BRANCH=${{ github.ref }} GIT_SHA=${{ github.sha }} GIT_SLUG=wexond/cloud CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }} bazel run //common/utils:run_tests
 
       # - name: xx
       #   run: |

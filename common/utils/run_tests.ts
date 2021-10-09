@@ -12,7 +12,7 @@ const main = async () => {
 
     process.stdout.write(res.stdout);
 
-    process.stdout.write("XDDD" + process.env.CI);
+    process.stdout.write("XDDD" + process.env.GIT_BRANCH + process.env.GIT_SHA);
 
     // const covRes = await execa(
     //   covPath,
