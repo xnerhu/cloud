@@ -89,7 +89,7 @@ jobs:
 
       - name: xx
         run: |
-          ls bazel-out/k8-fastbuild/bin/common/utils/test.sh.runfiles
+          ls bazel-out/k8-fastbuild/bin/common/utils/test.sh.runfiles/init/common/utils
 
       # - name: Code coverage
       #   uses: codecov/codecov-action@v2
