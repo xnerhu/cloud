@@ -31,16 +31,6 @@ const main = async () => {
       pr: "",
     };
 
-    process.stderr.write(
-      "test" +
-        isCI +
-        "   " +
-        process.env.CI +
-        ",      " +
-        JSON.stringify(params),
-    );
-    process.exit(1);
-
     if (isCI) {
       if (process.env.GITHUB_HEAD_REF) {
         // PR refs are in the format: refs/pull/7/merge for pull_request events
