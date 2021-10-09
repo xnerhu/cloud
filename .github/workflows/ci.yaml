@@ -75,21 +75,23 @@ jobs:
         run: |
           cat .bazelrc.ci >> .bazelrc
 
-      - name: Build
-        run: yarn build
+      # - name: Build
+      #   run: yarn build
 
-      - name: Pull docker
-        run: docker-compose pull
+      # - name: Pull docker
+      #   run: docker-compose pull
 
-      - name: Start docker
-        run: docker-compose up --build -d
+      # - name: Start docker
+      #   run: docker-compose up --build -d
 
       - name: Test
-        run: yarn test
-
-      - name: xx
+        # run: yarn test
         run: |
-          ls bazel-out/k8-fastbuild/bin/common/utils/test.sh.runfiles/init/common/utils
+          yarn bazel test //common/utils:run_tests
+
+      # - name: xx
+      #   run: |
+      #     ls bazel-out/k8-fastbuild/bin/common/utils/test.sh.runfiles/init/common/utils
 
       # - name: Code coverage
       #   uses: codecov/codecov-action@v2

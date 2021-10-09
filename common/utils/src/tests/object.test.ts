@@ -5,6 +5,7 @@ import { omitNull } from "../object";
 describe("@common/utils object", () => {
   describe("omitNull", () => {
     it("removes null properties from object", () => {
+      expect(false).toBe(false);
       expect(
         omitNull({
           a: true,
@@ -12,7 +13,7 @@ describe("@common/utils object", () => {
           c: 1024,
           d: null,
           e: undefined,
-          f: "test", // testdddddd
+          f: "test", // xd
         }),
       ).toEqual({
         a: true,
