@@ -17,7 +17,7 @@ const main = async () => {
       commit: process.env.GITHUB_SHA,
       service: "github-actions",
       slug: process.env.GITHUB_REPOSITORY,
-      pr: null,
+      pr: "",
     };
 
     if (process.env.GITHUB_HEAD_REF) {
