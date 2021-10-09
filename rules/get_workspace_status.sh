@@ -36,4 +36,4 @@
 # echo "GIT_BRANCH ${git_branch}"
 # echo "GIT_HEAD ${git_head}"
 
-echo "XD test"
+echo "XD ${GITHUB_HEAD_REF}"
