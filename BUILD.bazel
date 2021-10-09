@@ -9,3 +9,12 @@ exports_files(
     ],
     visibility = ["//visibility:public"],
 )
+
+genrule(
+    name = "git_status",
+    srcs = ["//common/utils:components_test"],
+    outs = ["git-status.txt"],
+    cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
+    stamp = 1,
+    visibility = ["//visibility:public"],
+)

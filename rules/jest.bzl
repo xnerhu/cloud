@@ -103,18 +103,18 @@ def jest_test(
         #     testonly = True,
         # )
 
-        native.genrule(
-            name = "git_status",
-            srcs = srcs,
-            outs = ["git-status.txt"],
-            cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
-            stamp = 1,
-        )
+        # native.genrule(
+        #     name = "git_status",
+        #     srcs = srcs,
+        #     outs = ["git-status.txt"],
+        #     cmd = "cp bazel-out/volatile-status.txt $(location git-status.txt)",
+        #     stamp = 1,
+        # )
 
         nodejs_test(
             name = "test",
             templated_args = [native.package_name()],
-            data = components + ["git-status.txt"],
+            data = components + ["//:git-status.txt"],
             entry_point = "//rules:run_tests.ts",
         )
 
