@@ -13,7 +13,7 @@ const main = async () => {
     const params: Record<string, any> = {
       branch:
         process.env.GITHUB_HEAD_REF ||
-        process.env.GITHUB_REF.replace("refs/heads/", ""),
+        process.env.GITHUB_REF?.replace("refs/heads/", ""),
       build: process.env.GITHUB_RUN_ID,
       commit: process.env.GITHUB_SHA,
       service: "github-actions",
@@ -22,7 +22,7 @@ const main = async () => {
 
     if (process.env.GITHUB_HEAD_REF) {
       // PR refs are in the format: refs/pull/7/merge for pull_request events
-      params["pr"] = process.env.GITHUB_REF.split("/")[2];
+      params["pr"] = process.env.GITHUB_REF?.split("/")[2];
     }
 
     process.stdout.write(res.stdout);
