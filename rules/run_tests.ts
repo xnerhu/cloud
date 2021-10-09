@@ -37,8 +37,6 @@ const main = async () => {
         params["pr"] = process.env.GITHUB_REF?.split("/")[2] as any;
       }
 
-      process.stdout.write(res.stdout);
-
       const covRes = await execa(covPath, [
         `--token=${process.env.CODECOV_TOKEN}`,
         `--commit=${params.commit}`,
@@ -49,6 +47,7 @@ const main = async () => {
       ]);
 
       process.stdout.write(covRes.stdout);
+      process.stderr.write(covRes.stderr);
     }
   } catch (error) {
     process.stderr.write(error.stderr);
