@@ -83,7 +83,6 @@ jobs:
 
       # - name: Start docker
       #   run: docker-compose up --build -d
-      # test xd
 
       - name: Test
         env:
