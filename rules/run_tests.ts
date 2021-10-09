@@ -16,7 +16,7 @@ const parseGitStatus = (data: string) => {
 };
 
 const getCodeCovParams = (info: Map<string, string>) => {
-  const params = {
+  return {
     branch:
       info.get("GITHUB_HEAD_REF") ||
       process.env.GITHUB_HEAD_REF ||
