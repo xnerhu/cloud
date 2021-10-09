@@ -20,28 +20,28 @@ const main = async () => {
     process.stdout.write(res.stdout);
     process.stderr.write(res.stderr);
 
+    const params = {
+      branch:
+        process.env.GITHUB_HEAD_REF ||
+        process.env.GITHUB_REF?.replace("refs/heads/", ""),
+      build: process.env.GITHUB_RUN_ID,
+      commit: process.env.GITHUB_SHA,
+      service: "github-actions",
+      slug: process.env.GITHUB_REPOSITORY,
+      pr: "",
+    };
+
     process.stderr.write(
       "test" +
         isCI +
         "   " +
         process.env.CI +
         ",      " +
-        process.env.GITHUB_HEAD_REF,
+        JSON.stringify(params),
     );
     process.exit(1);
 
     if (isCI) {
-      const params = {
-        branch:
-          process.env.GITHUB_HEAD_REF ||
-          process.env.GITHUB_REF?.replace("refs/heads/", ""),
-        build: process.env.GITHUB_RUN_ID,
-        commit: process.env.GITHUB_SHA,
-        service: "github-actions",
-        slug: process.env.GITHUB_REPOSITORY,
-        pr: "",
-      };
-
       if (process.env.GITHUB_HEAD_REF) {
         // PR refs are in the format: refs/pull/7/merge for pull_request events
         params["pr"] = process.env.GITHUB_REF?.split("/")[2] as any;
