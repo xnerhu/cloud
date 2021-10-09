@@ -90,7 +90,8 @@ ts_project(
 
 codecov(
     name = "codecov",
-    args = [],
+    args = [
+    ],
     env = {
         "CI": "true",
     },
