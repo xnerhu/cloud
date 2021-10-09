@@ -31,7 +31,9 @@ const main = async () => {
       pr: "",
     };
 
-    process.stdout.write(isCI + "xddd" + JSON.stringify(params));
+    process.stdout.write(
+      __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
+    );
 
     // if (isCI) {
     //   if (process.env.GITHUB_HEAD_REF) {
