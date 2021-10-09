@@ -88,4 +88,4 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          yarn bazel test //common/utils:test
+          yarn bazel run //common/utils:test
