@@ -85,7 +85,8 @@ jobs:
       #   run: docker-compose up --build -d
 
       - name: Test
-        # run: yarn test
+        env: |
+          CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }}
         run: |
           yarn bazel run //common/utils:run_tests
 

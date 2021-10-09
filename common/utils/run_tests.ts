@@ -27,22 +27,16 @@ const main = async () => {
 
     process.stdout.write(res.stdout);
 
-    process.stdout.write("XDDD" + isCI);
+    const covRes = await execa(covPath, [
+      `--token=${process.env.CODECOV_TOKEN}`,
+      `--commit=${params.commit}`,
+      `--slug=${params.slug}`,
+      `--branch=${params.slug}`,
+      `--build=${params.build}`,
+      "--disable=detect",
+    ]);
 
-    // const covRes = await execa(
-    //   covPath,
-    //   [
-    //     `--token=${process.env.CODECOV_TOKEN}`,
-    //     `--commit=${params.commit}`,
-    //     `--slug=${params.slug}`,
-    //     `--branch=${params.slug}`,
-    //     `--build=${params.build}`,
-    //     "--disable=detect",
-    //   ],
-    //   { env: { CI: "true" } },
-    // );
-
-    // process.stdout.write(covRes.stdout);
+    process.stdout.write(covRes.stdout);
   } catch (error) {
     process.stderr.write(error.stderr);
     process.stdout.write(error.stdout);
