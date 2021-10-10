@@ -7,4 +7,3 @@ export const omitNull = <T extends Record<any, any>>(obj: T) => {
 export const isObjectEmpty = (obj: Record<any, any>) => {
   return Object.keys(obj).length === 0;
 };
-// xdwrw
