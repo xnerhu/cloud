@@ -1,8 +1,5 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
-
-# load("//rules:jest.bzl", "jest_test")
-load("//tools/jest:index.bzl", "jest_test")
 load("//tools/tests:index.bzl", "test_suite")
 
 package(default_visibility = ["//visibility:public"])
