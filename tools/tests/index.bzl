@@ -14,6 +14,10 @@ def test_suite(
         size = "small",
         **kwargs):
     jest_test_name = name + "_jest"
+    jest_tags = []
+
+    if coverage:
+        jest_tags.extend(["manual"])
 
     jest_test(
         name = jest_test_name,
@@ -24,12 +28,14 @@ def test_suite(
         size = size,
         deps = deps,
         env = env,
+        tags = jest_tags,
     )
 
     if coverage:
         build_stamp(
             name = "build_stamp",
             deps = srcs + ["//tools/tests:components"],
+            tags = ["manual"],
         )
 
         codecov(

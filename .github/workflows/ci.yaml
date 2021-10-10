@@ -89,10 +89,3 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           bazel test --workspace_status_command=tools/buildstamp/get_workspace_status.sh //...
-
-      # - name: Find coverages
-      #   run: |
-      #     ls ~/.cache/bazel/_bazel_runner/*/sandbox/linux-sandbox/*/execroot/init/bazel-out/k8-fastbuild/bin/common/utils/test.sh.runfiles/init/common/utils
-
-# test.sh.runfiles/init/common/utils
-# --test_env=CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }} --test_env=GITHUB_REF=${{ github.ref }} --test_env=GITHUB_RUN_ID=${{ github.run_id }} --test_env=GITHUB_SHA=${{ github.sha }} --test_env=GITHUB_REPOSITORY=${{ github.repository }}
