@@ -1,9 +1,29 @@
 package(default_visibility = ["//visibility:public"])
 
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+
+exports_files(
+    ["defs.bzl"],
+)
+
 genrule(
     name = "gen_buildstamp",
     srcs = ["//:cloud-srcs"],  # Force a rebuild on source change
     outs = ["buildstamp.txt"],
     cmd = "cp bazel-out/volatile-status.txt $(location buildstamp.txt)",
     stamp = 1,
+)
+
+ts_project(
+    name = "components_stamper",
+    srcs = ["stamper.ts"],
+    tsconfig = {},
+    deps = ["@npm//@types/node"],
+)
+
+nodejs_binary(
+    name = "stamper",
+    data = ["components_stamper"],
+    entry_point = "stamper.ts",
 )

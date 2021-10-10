@@ -2,7 +2,7 @@ import execa from "execa";
 import { resolve } from "path";
 import { isCI } from "ci-info";
 import { readFile } from "fs/promises";
-import { readdirSync } from "fs";
+import { readdirSync, readFileSync } from "fs";
 
 const parseGitStatus = (data: string) => {
   const lines = data.split("\n");
@@ -39,12 +39,25 @@ const main = async () => {
 
   const workingDir = resolve(__dirname, "../", packageName);
 
-  await new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 5000);
-  });
-  console.log(workingDir);
+  // await new Promise<void>((resolve) => {
+  //   setTimeout(() => {
+  //     resolve();
+  //   }, 5000);
+  // });wrwrwaraw
+  // console.log(workingDir);
+
+  process.stderr.write(
+    "aha" +
+      JSON.stringify(
+        readFileSync(
+          resolve(__dirname, "../../common/utils", "STAMP_GITHUB_HEAD_REF"),
+          "utf8",
+        ),
+      ),
+  );
+  // xd xd
+
+  // process.exit(1);
 
   // process.stdout(resolve(__
 

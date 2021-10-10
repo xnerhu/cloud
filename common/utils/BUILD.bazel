@@ -51,7 +51,7 @@ ts_project(
 
 filegroup(
     name = "components_test",
-    srcs = SRC_FILES + glob(TEST_FILES),
+    srcs = SRC_FILES,  #  + glob(TEST_FILES)
 )
 
 js_library(
@@ -61,7 +61,18 @@ js_library(
     deps = [":components"],
 )
 
-jest_test(
+# jest_test(
+#     name = "test",
+#     srcs = [
+#         ":components_test",
+#         ":stamp",
+#         # ":gen_image_hash",
+#     ],
+#     coverage = True,
+#     deps = DEPS,
+# )
+
+test_suite(
     name = "test",
     srcs = [
         ":components_test",
@@ -69,12 +80,3 @@ jest_test(
     coverage = True,
     deps = DEPS,
 )
-
-# test_suite(
-#     name = "test",
-#     srcs = [
-#         ":components_test",
-#     ],
-#     coverage = True,
-#     deps = DEPS,
-# )

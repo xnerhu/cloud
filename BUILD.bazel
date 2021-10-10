@@ -1,7 +1,5 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
-
 exports_files(
     [
         "tsconfig.json",
@@ -11,23 +9,4 @@ exports_files(
         "babel.config.js",
         "docker-compose.yaml",
     ],
-)
-
-filegroup(
-    name = "srcs",
-    srcs = [
-        "//common/node:srcs",
-        "//common/utils:srcs",
-    ],
-    visibility = ["//:__subpackages__"],
-)
-
-pkg_tar(
-    name = "cloud-srcs",
-    srcs = [
-        ":srcs",
-    ],
-    strip_prefix = ".",
-    # Public but bazel-only visibility.
-    visibility = ["//:__subpackages__"],
 )

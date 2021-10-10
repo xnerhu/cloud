@@ -5,7 +5,7 @@ import { omitNull } from "../object";
 describe("@common/utils object", () => {
   describe("omitNull", () => {
     it("removes null properties from object", () => {
-      expect(false).toBe(false);
+      expect(true).toBe(true);
       expect(
         omitNull({
           a: true,
