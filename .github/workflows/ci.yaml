@@ -78,18 +78,17 @@ jobs:
       # - name: Build
       #   run: yarn build
 
-      # - name: Pull docker
-      #   run: docker-compose pull t
+      - name: Pull docker
+        run: docker-compose pull t
 
-      # - name: Start docker
-      #   run: docker-compose up --build -d
-      #
+      - name: Start docker
+        run: docker-compose up --build -d
 
       - name: Test
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          yarn bazel test --workspace_status_command=tools/buildstamp/get_workspace_status.sh //common/utils:test
+          yarn bazel run --workspace_status_command=tools/buildstamp/get_workspace_status.sh //services/updates:test
 
       # - name: Find coverages
       #   run: |

@@ -1,6 +1,6 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
-load("//rules:jest.bzl", "jest_test")
+load("//tools/jest:index.bzl", "jest_test")
 load("//tools/nodejs:index.bzl", "nodejs_app")
 
 package(default_visibility = ["//visibility:public"])
@@ -90,19 +90,6 @@ filegroup(
     ]),
 )
 
-jest_test(
-    name = "test",
-    srcs = [
-        ":components_test",
-        ":schema_drop",
-        ":schema_up",
-    ],
-    e2e = True,
-    deps = DEPS + [
-        ":assets_e2e",
-    ],
-)
-
 DEPS_MIKRO_ORM = [
     "//:package.json",
 ]
@@ -135,5 +122,18 @@ mikro_orm(
     tags = [
         "manual",
         "schema_drop",
+    ],
+)
+
+jest_test(
+    name = "test",
+    srcs = [
+        ":components_test",
+        ":schema_drop",
+        ":schema_up",
+    ],
+    e2e = True,
+    deps = DEPS + [
+        ":assets_e2e",
     ],
 )
