@@ -61,16 +61,7 @@ js_library(
     deps = [":components"],
 )
 
-# jest_test(
-#     name = "test",
-#     srcs = [
-#         ":components_test",
-#     ],
-#     coverage = True,
-#     deps = DEPS,
-# )
-
-test_suite(
+jest_test(
     name = "test",
     srcs = [
         ":components_test",
@@ -78,3 +69,12 @@ test_suite(
     coverage = True,
     deps = DEPS,
 )
+
+# test_suite(
+#     name = "test",
+#     srcs = [
+#         ":components_test",
+#     ],
+#     coverage = True,
+#     deps = DEPS,
+# )
