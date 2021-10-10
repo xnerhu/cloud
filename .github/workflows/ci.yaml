@@ -79,7 +79,7 @@ jobs:
       #   run: yarn build
 
       - name: Pull docker
-        run: docker-compose pull t
+        run: docker-compose pull
 
       - name: Start docker
         run: docker-compose up --build -d
