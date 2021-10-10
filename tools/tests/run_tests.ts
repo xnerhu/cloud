@@ -32,6 +32,7 @@ const main = async () => {
         `--branch=${status["GITHUB_HEAD_REF"]}`,
         `--build=${status["GITHUB_RUN_ID"]}`,
         "--disable=detect",
+        "--disable=gcov",
       ]);
 
       process.stdout.write(covRes.stdout);
