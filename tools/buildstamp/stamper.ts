@@ -1,18 +1,56 @@
-import { readdirSync, readFileSync, writeFileSync } from "fs";
-import { resolve } from "path";
+import { readFileSync, writeFileSync } from "fs";
 
-console.log(process.argv, JSON.stringify(readdirSync(resolve(__dirname))));
+const TOKEN_OUTPUT = "--output=";
+const TOKEN_STAMP = "--stamp=";
 
-const xdd = readFileSync("bazel-out/volatile-status.txt", "utf8");
+const getArgs = () => {
+  const argv = process.argv;
+  const stampFiles: string[] = [];
+  let outputPath: string | undefined;
 
-// console.log(xdd);
+  for (const arg of argv) {
+    if (arg.startsWith(TOKEN_OUTPUT)) {
+      outputPath = arg.split(TOKEN_OUTPUT)[1];
+    } else if (arg.startsWith(TOKEN_STAMP)) {
+      const data = arg.split(TOKEN_STAMP)[1];
 
-const args = process.argv;
+      stampFiles.push(data);
+    }
+  }
 
-const outs = args
-  .filter((r) => r.startsWith("--output="))
-  .map((r) => r.split("--output=")[1]);
+  return { stampFiles, outputPath };
+};
 
-// console.log(outs);
+const parseStatusFile = (data: string) => {
+  const lines = data.split("\n");
+  const obj: Record<string, string> = {};
 
-writeFileSync(outs[0], new Date().toTimeString());
+  for (const line of lines) {
+    const [key, value] = line.split(" ");
+
+    if (key != null && value != null) {
+      obj[key] = value;
+    }
+  }
+
+  return obj;
+};
+
+const args = getArgs();
+
+if (args.outputPath == null) {
+  throw new Error("No output path provided");
+}
+
+if (args.stampFiles.length === 0) {
+  throw new Error("No stamp files provided");
+}
+
+const statusFiles = args.stampFiles.map((path) => readFileSync(path, "utf8"));
+
+const maps = statusFiles.map((r) => parseStatusFile(r));
+const map = maps.reduce((obj, r) => ({ ...obj, ...r }), {});
+
+writeFileSync(args.outputPath, JSON.stringify(map), "utf8");
+
+console.log("XD", args.outputPath);

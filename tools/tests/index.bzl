@@ -10,21 +10,24 @@ def test_suite(
         coverage = False,
         is_web = False,
         e2e = False,
-        size = "small",
+        size = "medium",
         **kwargs):
     jest_test_name = name + "_jest"
 
     jest_test(
         name = jest_test_name,
         srcs = srcs,
-        coverage = True,
+        coverage = coverage,
+        is_web = is_web,
+        e2e = e2e,
+        size = size,
         deps = deps,
+        env = env,
     )
 
     if coverage:
         build_stamp(
             name = "build_stamp",
-            stamp_keys = ["GITHUB_HEAD_REF"],
             deps = srcs + ["//tools/tests:components"],
         )
 

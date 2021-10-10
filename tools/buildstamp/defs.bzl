@@ -1,36 +1,33 @@
-def _resolve_stamp(ctx, output):
+def _stamp_impl(ctx):
     stamps = [ctx.version_file]
-    stamp_args = [
-        "--stamp-info-file=%s" % sf.path
+
+    args = [
+        "--stamp=%s" % sf.path
         for sf in stamps
     ]
+
+    output_file = "stamp.json"
+
+    file = ctx.actions.declare_file(output_file)
 
     ctx.actions.run(
         executable = ctx.executable._stamper,
         arguments = [
-            "--output=%s" % output.path,
-        ] + stamp_args,
+            "--output=%s" % file.path,
+        ] + args,
         inputs = stamps + ctx.files.deps,
         tools = [ctx.executable._stamper],
-        outputs = [output],
+        outputs = [file],
         mnemonic = "Stamp",
     )
 
-def _stamp_impl(ctx):
-    stamp_files = []
-
-    for key in ctx.attr.stamp_keys:
-        file_name = "STAMP_" + key
-
-        stamp_file = ctx.actions.declare_file(file_name)
-        stamp_files.append(stamp_file)
-        _resolve_stamp(ctx, stamp_file)
+    outs = [file]
 
     return [
         DefaultInfo(
-            files = depset(stamp_files),
+            files = depset(outs),
             runfiles = ctx.runfiles(
-                files = stamp_files,
+                files = outs,
             ),
         ),
     ]
@@ -38,7 +35,6 @@ def _stamp_impl(ctx):
 build_stamp = rule(
     implementation = _stamp_impl,
     attrs = {
-        "stamp_keys": attr.string_list(),
         "_stamper": attr.label(
             default = Label("//tools/buildstamp:stamper"),
             cfg = "host",

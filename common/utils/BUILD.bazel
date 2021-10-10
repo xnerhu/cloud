@@ -28,11 +28,6 @@ SRC_FILES = glob(
     exclude = TEST_FILES,
 ) + ["index.ts"]
 
-filegroup(
-    name = "srcs",
-    srcs = glob(["src/**/*.ts"]),
-)
-
 DEPS = [
     "@npm//@types/node",
 ]
@@ -51,7 +46,7 @@ ts_project(
 
 filegroup(
     name = "components_test",
-    srcs = SRC_FILES,  #  + glob(TEST_FILES)
+    srcs = SRC_FILES + glob(TEST_FILES),
 )
 
 js_library(
@@ -60,17 +55,6 @@ js_library(
     srcs = ["package.json"],
     deps = [":components"],
 )
-
-# jest_test(
-#     name = "test",
-#     srcs = [
-#         ":components_test",
-#         ":stamp",
-#         # ":gen_image_hash",
-#     ],
-#     coverage = True,
-#     deps = DEPS,
-# )
 
 test_suite(
     name = "test",
