@@ -1,6 +1,7 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
 load("//tools/jest:index.bzl", "jest_test")
 load("//tools/buildstamp:defs.bzl", "build_stamp")
+load("@npm//codecov:index.bzl", "codecov")
 
 def test_suite(
         name,
@@ -10,7 +11,7 @@ def test_suite(
         coverage = False,
         is_web = False,
         e2e = False,
-        size = "medium",
+        size = "small",
         **kwargs):
     jest_test_name = name + "_jest"
 
@@ -31,12 +32,18 @@ def test_suite(
             deps = srcs + ["//tools/tests:components"],
         )
 
+        codecov(
+            name = "test_codecov",
+            args = [],
+            tags = ["manual"],
+        )
+
         nodejs_test(
             name = name,
             templated_args = [native.package_name()],
             data = [
                 jest_test_name,
-                "//tools/tests:codecov_bin",
+                ":test_codecov",
                 "//tools/tests:components",
                 ":build_stamp",
             ],
