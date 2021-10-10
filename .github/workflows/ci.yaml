@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BAZELISK_CACHE_VERSION: 1
-      BAZEL_CACHE_VERSION: 2
+      BAZEL_CACHE_VERSION: 4
 
     steps:
       - name: Cancel Previous Runs
