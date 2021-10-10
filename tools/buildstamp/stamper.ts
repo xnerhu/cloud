@@ -52,5 +52,3 @@ const maps = statusFiles.map((r) => parseStatusFile(r));
 const map = maps.reduce((obj, r) => ({ ...obj, ...r }), {});
 
 writeFileSync(args.outputPath, JSON.stringify(map), "utf8");
-
-console.log("XD", args.outputPath);

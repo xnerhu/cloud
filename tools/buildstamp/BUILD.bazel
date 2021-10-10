@@ -14,6 +14,9 @@ ts_project(
 
 nodejs_binary(
     name = "stamper",
-    data = ["components"],
+    data = [
+        "components",
+        "get_workspace_status.sh",
+    ],
     entry_point = "stamper.ts",
 )
