@@ -6,7 +6,7 @@ const main = async () => {
   const packageName = process.argv[2];
 
   if (packageName == null) {
-    throw new Error("No package name provided");
+    process.stderr.write("No package name provided");
     process.exit(1);
   }
 
@@ -24,47 +24,24 @@ const main = async () => {
     process.stdout.write(res.stdout);
     process.stderr.write(res.stderr);
 
-    // console.log("xdd");
-
-    // process.stdout.write(
-    //   "xdd" + __dirname + "         " + isCI + "xddd" + JSON.stringify(params),
-    // );
-
     if (status.CI === "true") {
-      throw "tset";
-      // const covRes = await execa(covPath, [
-      //   `--token=${params.codeCovToken}`,
-      //   `--commit=${params.commit}`,
-      //   `--slug=${params.slug}`,
-      //   `--branch=${params.branch}`,
-      //   `--build=${params.build}`,
-      //   "--disable=detect",
-      // ]);
+      const covRes = await execa(covPath, [
+        `--token=${status["CODECOV_TOKEN"]}`,
+        `--commit=${status["GITHUB_SHA"]}`,
+        `--slug=${status["GITHUB_REPOSITORY"]}`,
+        `--branch=${status["GITHUB_HEAD_REF"]}`,
+        `--build=${status["GITHUB_RUN_ID"]}`,
+        "--disable=detect",
+      ]);
 
-      // process.stdout.write(covRes.stdout);
-      // process.stderr.write(covRes.stderr);
+      process.stdout.write(covRes.stdout);
+      process.stderr.write(covRes.stderr);
     }
   } catch (error) {
     process.stderr.write(error.stderr);
     process.stdout.write(error.stdout);
     process.exit(1);
   }
-
-  // console.log(status);
-
-  // spawnSync(covPath, [
-  //   `--token=${status.}`,
-  //   `--commit=${params.commit}`,
-  //   `--slug=${params.slug}`,
-  //   `--branch=${params.branch}`,
-  //   `--build=${params.build}`,
-  //   "--disable=detect",
-  // ];
-
-  // process.stdout.write(JSON.stringify(dir));
-
-  // throw new Error("xdd");
-  // process.exit(1);
 };
 
 main();
