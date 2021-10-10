@@ -1,6 +1,9 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
-load("//rules:jest.bzl", "jest_test")
+
+# load("//rules:jest.bzl", "jest_test")
+load("//tools/jest:index.bzl", "jest_test")
+load("//tools/tests:index.bzl", "test_suite")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -24,6 +27,11 @@ SRC_FILES = glob(
     ["src/**/*.ts"],
     exclude = TEST_FILES,
 ) + ["index.ts"]
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["src/**/*.ts"]),
+)
 
 DEPS = [
     "@npm//@types/node",
@@ -53,7 +61,17 @@ js_library(
     deps = [":components"],
 )
 
-jest_test(
+# jest_test(
+#     name = "test",
+#     srcs = [
+#         ":components_test",
+#     ],
+#     coverage = True,
+#     deps = DEPS,
+# )
+
+test_suite(
+    name = "test",
     srcs = [
         ":components_test",
     ],

@@ -89,7 +89,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          yarn bazel test --workspace_status_command=rules/get_workspace_status.sh //common/utils:test
+          yarn bazel test --workspace_status_command=tools/buildstamp/get_workspace_status.sh //common/utils:test
 
       # - name: Find coverages
       #   run: |

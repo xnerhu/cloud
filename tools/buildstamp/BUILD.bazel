@@ -1,0 +1,9 @@
+package(default_visibility = ["//visibility:public"])
+
+genrule(
+    name = "gen_buildstamp",
+    srcs = ["//:cloud-srcs"],  # Force a rebuild on source change
+    outs = ["buildstamp.txt"],
+    cmd = "cp bazel-out/volatile-status.txt $(location buildstamp.txt)",
+    stamp = 1,
+)

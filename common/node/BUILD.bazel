@@ -31,6 +31,11 @@ DEPS = [
     "//common/utils",
 ]
 
+filegroup(
+    name = "srcs",
+    srcs = glob(["src/**/*.ts"]),
+)
+
 ts_project(
     name = "components",
     srcs = SRC_FILES,
