@@ -89,3 +89,5 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           bazel test --workspace_status_command=tools/buildstamp/get_workspace_status.sh //...
+
+      # - name: Find coverages
