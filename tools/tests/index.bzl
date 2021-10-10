@@ -47,5 +47,6 @@ def test_suite(
                 "//tools/tests:components",
                 ":build_stamp",
             ],
+            size = size,
             entry_point = "//tools/tests:run_tests.ts",
         )
