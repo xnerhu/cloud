@@ -25,6 +25,9 @@ const main = async () => {
     process.stderr.write(res.stderr);
 
     if (status.CI === "true") {
+      process.stdout.write("XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", status.CI);
+      process.exit(1);
+
       const covRes = await execa(covPath, [
         `--token=${status["CODECOV_TOKEN"]}`,
         `--commit=${status["GITHUB_SHA"]}`,
