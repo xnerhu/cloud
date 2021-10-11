@@ -26,7 +26,7 @@ describe("@common/utils object", () => {
   describe("isObjectEmpty", () => {
     it("returns true if object has no keys", () => {
       expect(isObjectEmpty({})).toEqual(true);
-    }); // t
+    });
 
     it("returns false if object has keys", () => {
       expect(isObjectEmpty({ a: "b" })).toEqual(false);
