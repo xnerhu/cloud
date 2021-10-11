@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryKey,
-  Property,
-  OneToMany,
-  DateType,
-} from "@mikro-orm/core";
+import { Entity, PrimaryKey, Property, OneToMany } from "@mikro-orm/core";
 
 import {
   DistributionArchitecture,
@@ -31,6 +25,6 @@ export class DistributionEntity implements Distribution {
   @OneToMany(() => PatchEntity, (patch) => patch.distribution)
   patches: PatchEntity[];
 
-  @Property({ columnType: "timestamp", default: "now", nullable: true })
-  createdAt: string;
+  @Property({ columnType: "timestamp" })
+  createdAt: Date = new Date();
 }

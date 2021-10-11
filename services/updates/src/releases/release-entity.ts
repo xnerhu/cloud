@@ -28,6 +28,6 @@ export class ReleaseEntity implements Release {
   @Property({ columnType: "varchar" })
   notes: string;
 
-  @Property({ columnType: "timestamp", default: "now", nullable: true })
-  createdAt: string;
+  @Property({ columnType: "timestamp" })
+  createdAt: Date = new Date();
 }

@@ -9,7 +9,7 @@ export interface Release {
   channel: string;
   patches: Patch[];
   notes: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export type ReleaseChannel = "stable" | "alpha";

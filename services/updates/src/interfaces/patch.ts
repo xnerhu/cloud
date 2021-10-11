@@ -11,5 +11,5 @@ export interface Patch {
   fullSize: number;
   distribution: Distribution;
   release: Release;
-  createdAt: string;
+  createdAt: Date;
 }
