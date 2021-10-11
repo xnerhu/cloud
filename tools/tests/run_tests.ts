@@ -24,18 +24,12 @@ const main = async () => {
     process.stdout.write(res.stdout);
     process.stderr.write(res.stderr);
 
-    process.stdout.write(
-      "XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" +
-        JSON.stringify(status) +
-        "    AHA  " +
-        status["CI"] +
-        "   " +
-        "; " +
-        status["CODECOV_TOKEN"].length +
-        "|||||||||||||||||||||||||||||||||||||",
-    );
-    process.exit(1);
     if (status.CI === "true") {
+      if (status["CODECOV_TOKEN"].length === 0) {
+        process.stdout.write("No codecov token provided");
+        process.exit(1);
+      }
+
       const covRes = await execa(covPath, [
         `--token=${status["CODECOV_TOKEN"]}`,
         `--commit=${status["GITHUB_SHA"]}`,
