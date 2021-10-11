@@ -76,7 +76,7 @@ jobs:
           cat .bazelrc.ci >> .bazelrc
 
       - name: Build
-        run: bazel build --workspace_status_command=tools/buildstamp/get_workspace_status.sh //...
+        run: yarn build
 
       - name: Pull docker
         run: docker-compose pull
@@ -87,5 +87,4 @@ jobs:
       - name: Test
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: |
-          bazel test --workspace_status_command=tools/buildstamp/get_workspace_status.sh //...
+        run: yarn test
