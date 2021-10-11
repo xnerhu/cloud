@@ -20,5 +20,6 @@ def nodejs_app(
         env = {
             "NODE_ENV": "development",
         },
+        tags = ["manual"],
         **kwargs
     )
