@@ -37,10 +37,6 @@ const main = async () => {
       process.stdout.write(covRes.stdout);
       process.stderr.write(covRes.stderr);
     }
-
-    process.stdout.write("XDD" + JSON.stringify(status));
-
-    process.exit(1);
   } catch (error) {
     process.stderr.write(error.stderr);
     process.stdout.write(error.stdout);
