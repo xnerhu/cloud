@@ -87,4 +87,4 @@ jobs:
       - name: Test
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: bazel test //... --build_tests_only
+        run: bazel test //...
