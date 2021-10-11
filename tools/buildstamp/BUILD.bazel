@@ -1,0 +1,22 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["defs.bzl"])
+
+ts_project(
+    name = "components",
+    srcs = ["stamper.ts"],
+    tsconfig = {},
+    deps = ["@npm//@types/node"],
+)
+
+nodejs_binary(
+    name = "stamper",
+    data = [
+        "components",
+        "get_workspace_status.sh",
+    ],
+    entry_point = "stamper.ts",
+)

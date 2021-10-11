@@ -3,9 +3,7 @@
   "extends": [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
-    "prettier/react",
     "plugin:react-hooks/recommended"
   ],
   "plugins": ["@typescript-eslint", "prettier"],
@@ -32,7 +30,8 @@
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }]
   },
   "settings": {
     "react": {

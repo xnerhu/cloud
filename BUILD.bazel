@@ -1,0 +1,12 @@
+package(default_visibility = ["//visibility:public"])
+
+exports_files(
+    [
+        "tsconfig.json",
+        "package.json",
+        "jest.config.js",
+        "jest-reporter.js",
+        "babel.config.js",
+        "docker-compose.yaml",
+    ],
+)

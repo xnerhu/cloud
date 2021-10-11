@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/common/utils"
+  },
+  "include": ["src/**/*.ts", "index.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

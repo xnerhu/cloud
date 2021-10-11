@@ -1,0 +1,36 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(
+    [
+        "index.bzl",
+        "tsconfig.json",
+        "run_tests.ts",
+        "get_workspace_status.sh",
+    ],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+    ],
+)
+
+ts_project(
+    name = "components",
+    srcs = ["run_tests.ts"],
+    allow_js = True,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig",
+    deps = [
+        "@npm//@types/node",
+        "@npm//ci-info",
+        "@npm//execa",
+    ],
+)

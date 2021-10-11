@@ -1,0 +1,138 @@
+name: CI/CD
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        env:
+          ADBLOCK: true
+
+      - name: Link deps
+        run: yarn deps
+
+      - uses: actions/cache@v2
+        with:
+          path: web/**/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**.[jt]sx?') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test
+
+      - name: Build apps
+        run: yarn ci-build
+
+  release_check:
+    if: ${{ (github.event_name == 'push' || github.event_name == 'pull_request' && github.event.pull_request.merged == true) && github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    needs: [build]
+    outputs:
+      release: ${{ steps.filter.outputs.release }}
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            release:
+              - 'backend/**/release.yaml'
+              - 'frontend/**/release.yaml'
+
+  release:
+    needs: [release_check]
+    runs-on: ubuntu-latest
+    if: ${{ needs.release_check.outputs.release == 'true' }}
+    steps:
+      - name: Log into registry
+        run: docker login registry.gitlab.com/wexond/cloud -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        env:
+          ADBLOCK: true
+
+      - name: Build and push
+        env:
+          CONTAINER_REGISTRY: registry.gitlab.com/wexond/cloud
+        run: |
+          parseYaml () {
+            echo `grep -Po "(?<=$1:\s).*" $2`
+          }
+
+          for RELEASE_FILE_PATH in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "release.yaml");
+          do
+            DIRNAME="`dirname ${RELEASE_FILE_PATH}`"
+
+            IMAGE_NAME="`parseYaml "image" ${RELEASE_FILE_PATH}`"
+            IMAGE_VERSION="`parseYaml "version" ${RELEASE_FILE_PATH}`"
+            BUILD_COMMAND="`parseYaml "build" ${RELEASE_FILE_PATH}`"
+            
+            IMAGE_FULL_NAME="${CONTAINER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}"
+
+            echo "Building with ${BUILD_COMMAND}"
+
+            eval $BUILD_COMMAND
+
+            echo "Publishing ${IMAGE_FULL_NAME}"
+
+            docker build -f $DIRNAME/.dockerfile -t $IMAGE_FULL_NAME -t ${IMAGE_NAME}:${IMAGE_VERSION} .
+            docker push $IMAGE_FULL_NAME
+          done;

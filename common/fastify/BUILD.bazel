@@ -1,0 +1,51 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(
+    [
+        "tsconfig.json",
+    ],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+        "//common/node:tsconfig",
+    ],
+)
+
+TEST_FILES = ["src/**/*.test.ts"]
+
+SRC_FILES = glob(
+    ["src/**/*.ts"],
+    exclude = TEST_FILES,
+) + ["index.ts"]
+
+DEPS = [
+    "//common/node",
+    "@npm//@types/node",
+    "@npm//fastify",
+]
+
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    allow_js = True,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig",
+    deps = DEPS,
+)
+
+js_library(
+    name = "fastify",
+    package_name = "@common/fastify",
+    srcs = ["package.json"],
+    deps = [":components"],
+)

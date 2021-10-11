@@ -1,0 +1,63 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+load("//tools/tests:index.bzl", "test_suite")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(
+    [
+        "tsconfig.json",
+    ],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+    ],
+)
+
+TEST_FILES = ["src/**/*.test.ts"]
+
+SRC_FILES = glob(
+    ["src/**/*.ts"],
+    exclude = TEST_FILES,
+) + ["index.ts"]
+
+DEPS = [
+    "@npm//@types/node",
+]
+
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    allow_js = True,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig",
+    deps = DEPS,
+)
+
+filegroup(
+    name = "components_test",
+    srcs = SRC_FILES + glob(TEST_FILES),
+)
+
+js_library(
+    name = "utils",
+    package_name = "@common/utils",
+    srcs = ["package.json"],
+    deps = [":components"],
+)
+
+test_suite(
+    name = "test",
+    srcs = [
+        ":components_test",
+    ],
+    coverage = True,
+    deps = DEPS,
+)

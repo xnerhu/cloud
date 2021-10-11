@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates"
+  },
+  "references": [
+    { "path": "../../common/node" },
+    { "path": "../../common/fastify" },
+    { "path": "../../common/nest" },
+    { "path": "../../common/utils" }
+  ],
+  "include": ["src/**/*.ts"]
+}
