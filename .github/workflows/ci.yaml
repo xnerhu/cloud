@@ -76,7 +76,7 @@ jobs:
           cat .bazelrc.ci >> .bazelrc
 
       - name: Build
-        run: yarn build
+        run: bazel build --workspace_status_command=tools/buildstamp/get_workspace_status.sh //...
 
       - name: Pull docker
         run: docker-compose pull
