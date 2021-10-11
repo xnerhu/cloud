@@ -24,7 +24,9 @@ const main = async () => {
     process.stdout.write(res.stdout);
     process.stderr.write(res.stderr);
 
-    process.stdout.write("XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD", status.CI);
+    process.stdout.write(
+      "XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" + JSON.stringify(status),
+    );
     process.exit(1);
     if (status.CI === "true") {
       const covRes = await execa(covPath, [
