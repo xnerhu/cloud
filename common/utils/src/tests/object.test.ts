@@ -29,7 +29,7 @@ describe("@common/utils object", () => {
     });
 
     it("returns false if object has keys", () => {
-      expect(isObjectEmpty({ a: "b" })).toEqual(true);
+      expect(isObjectEmpty({ a: "b" })).toEqual(false);
     });
   });
 });
