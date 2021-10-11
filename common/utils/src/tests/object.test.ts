@@ -1,11 +1,10 @@
 import "jest";
 
-import { omitNull } from "../object";
+import { omitNull, isObjectEmpty } from "../object";
 
 describe("@common/utils object", () => {
   describe("omitNull", () => {
     it("removes null properties from object", () => {
-      expect(true).toBe(true);
       expect(
         omitNull({
           a: true,
@@ -22,7 +21,15 @@ describe("@common/utils object", () => {
         f: "test",
       });
     });
+  });
 
-    const xd = 1;
+  describe("isObjectEmpty", () => {
+    it("returns true if object has no keys", () => {
+      expect(isObjectEmpty({})).toEqual(true);
+    });
+
+    it("returns false if object has keys", () => {
+      expect(isObjectEmpty({ a: "b" })).toEqual(true);
+    });
   });
 });
