@@ -318,6 +318,7 @@ describe("[e2e]: Admin", () => {
       describe("/patch", () => {
         const PATH_PATCH = resolve(PATH_ASSETS, "4.0.0.patch");
         const PATH_FULL = resolve(PATH_ASSETS, "4.0.0.packed.7z");
+        const PATH_FORMAT_TEST = resolve(PATH_ASSETS, "format-test.png");
 
         const getRequest = () => {
           return request(app.getHttpServer())
@@ -331,6 +332,20 @@ describe("[e2e]: Admin", () => {
           const res = await request(app.getHttpServer()).put("/admin/patch");
 
           expect(res.statusCode).toEqual(403);
+        });
+
+        it("throws error if file format is incorrect", async () => {
+          const res = await request(app.getHttpServer())
+            .put("/admin/patch")
+            .set(API_KEY_HEADER, API_KEY)
+            .attach("patch", PATH_FORMAT_TEST)
+            .attach("full", PATH_FORMAT_TEST)
+            .field("releaseId", 8)
+            .field("distributionId", 1)
+            .field("hash", "d656e422b1b3027329a7128b636b0986")
+            .field("fullHash", "dbbeb775238fad0a93172e3e965d83d7");
+
+          expect(res.statusCode).toEqual(400);
         });
 
         it("throws error if patch is corrupt", async () => {

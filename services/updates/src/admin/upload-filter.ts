@@ -1,8 +1,13 @@
-import { UploadFilterHandler } from "@common/nest";
+import { DiskStorageFile, UploadFilterHandler } from "@common/nest";
 
-export const uploadFilter: UploadFilterHandler = (req, file) => {
-  if (file.encoding !== "7bit") {
-    return "File encoding must be 7bit";
+const MIMETYPES = ["application/octet-stream", "application/x-7z-compressed"];
+
+export const uploadFilter: UploadFilterHandler = (
+  req,
+  file: DiskStorageFile,
+) => {
+  if (!MIMETYPES.includes(file.mimetype)) {
+    return "Incorrect file format";
   }
 
   return true;
