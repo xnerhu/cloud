@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
 import execa from "execa";
 
@@ -25,7 +25,14 @@ const main = async () => {
     process.stderr.write(res.stderr);
 
     process.stdout.write(
-      "XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" + JSON.stringify(status),
+      "XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" +
+        JSON.stringify(status) +
+        "    AHA  " +
+        status["CI"] +
+        "   " +
+        "; " +
+        status["CODECOV_TOKEN"].length +
+        "|||||||||||||||||||||||||||||||||||||",
     );
     process.exit(1);
     if (status.CI === "true") {
