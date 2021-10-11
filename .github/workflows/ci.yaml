@@ -76,7 +76,7 @@ jobs:
           cat .bazelrc.ci >> .bazelrc
 
       - name: Build
-        run: yarn build
+        run: bazel build //...
 
       - name: Pull docker
         run: docker-compose pull
@@ -87,4 +87,4 @@ jobs:
       - name: Test
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: yarn test
+        run: bazel test //... --build_tests_only
