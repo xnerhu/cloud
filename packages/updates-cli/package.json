@@ -1,4 +1,14 @@
 {
   "name": "@wexond/updates-cli",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "7zip-bin": "^5.1.1",
+    "axios": "^0.22.0",
+    "chalk": "^4.1.2",
+    "execa": "^5.1.1",
+    "form-data": "^4.0.0",
+    "md5-file": "^5.0.0",
+    "node-7z": "^3.0.0",
+    "progress": "^2.0.3"
+  }
 }

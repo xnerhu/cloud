@@ -64,12 +64,13 @@ nodejs_app(
     entry_point = "src/index.ts",
 )
 
-# pkg_npm(
-#     name = "@wexond/updates-cli",
-#     srcs = ["package.json"],
-#     substitutions = {"//internal/": "//"},
-#     deps = [
-#         ":components",
-#         ":static",
-#     ],
-# )
+pkg_npm(
+    name = "npm",
+    package_name = "@wexond/updates-cli",
+    srcs = ["package.json"],
+    substitutions = {"//internal/": "//"},
+    deps = [
+        ":components",
+        ":static",
+    ],
+)
