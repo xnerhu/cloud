@@ -4,6 +4,7 @@ load("//tools/nodejs:index.bzl", "nodejs_app")
 package(default_visibility = ["//visibility:public"])
 
 DEPS = [
+    "//common/node",
     "@npm//@types/node",
     "@npm//axios",
     "@npm//execa",
