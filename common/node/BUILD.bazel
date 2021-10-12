@@ -28,6 +28,7 @@ SRC_FILES = glob(
 DEPS = [
     "@npm//@types/node",
     "@npm//winston",
+    "@npm//axios",
     "//common/utils",
 ]
 

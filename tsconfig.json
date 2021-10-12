@@ -45,18 +45,18 @@
       "./bazel-out/k8-dbg/bin/common",
       "./bazel-out/x64_windows-dbg/bin/common",
 
-      "./db",
-      "./bazel-out/darwin-fastbuild/bin/db",
-      "./bazel-out/k8-fastbuild/bin/db",
-      "./bazel-out/x64_windows-fastbuild/bin/db",
-      "./bazel-out/darwin-dbg/bin/db",
-      "./bazel-out/k8-dbg/bin/db",
-      "./bazel-out/x64_windows-dbg/bin/db"
+      "./core",
+      "./bazel-out/darwin-fastbuild/bin/core",
+      "./bazel-out/k8-fastbuild/bin/core",
+      "./bazel-out/x64_windows-fastbuild/bin/core",
+      "./bazel-out/darwin-dbg/bin/core",
+      "./bazel-out/k8-dbg/bin/core",
+      "./bazel-out/x64_windows-dbg/bin/core"
     ],
 
     "paths": {
       "@common/*": ["./common/*"],
-      "@db/*": ["./db/*"]
+      "@core/*": ["./core/*"]
     }
   },
   "exclude": [

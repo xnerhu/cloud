@@ -53,6 +53,8 @@ export class AdminService {
       version,
     });
 
+    const created = !release;
+
     if (!release) {
       release = await this.releasesService.createOne({
         channel,
@@ -61,7 +63,7 @@ export class AdminService {
       });
     }
 
-    return { releaseId: release.id };
+    return { releaseId: release.id, created };
   }
 
   public async getDiffInfo({
