@@ -1,5 +1,6 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("//tools/nodejs:index.bzl", "nodejs_app")
+load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -16,6 +17,7 @@ DEPS = [
     "@npm//7zip-bin",
     "@npm//@types/node-7z",
     "@npm//node-7z",
+    "@npm//form-data",
 ]
 
 TEST_FILES = ["src/**/*.test.ts"]
@@ -60,4 +62,14 @@ nodejs_app(
         ":static",
     ],
     entry_point = "src/index.ts",
+)
+
+pkg_npm(
+    name = "@wexond/updates-cli",
+    srcs = ["package.json"],
+    substitutions = {"//internal/": "//"},
+    deps = [
+        ":components",
+        ":static",
+    ],
 )
