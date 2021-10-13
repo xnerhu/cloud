@@ -2,7 +2,6 @@ import "jest";
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import request from "supertest";
 import { resolve } from "path";
-import hashFile from "md5-file";
 
 import { runApp } from "../../src/app";
 import { statSync } from "fs";
@@ -322,8 +321,8 @@ describe("[e2e]: Admin", () => {
         const PATH_FULL = resolve(PATH_ASSETS, "4.0.0.packed.7z");
         const PATH_FORMAT_TEST = resolve(PATH_ASSETS, "format-test.png");
 
-        const HASH_PATCH = hashFile.sync(PATH_PATCH);
-        const HASH_FULL = hashFile.sync(PATH_FULL);
+        const HASH_PATCH = "67faad59f243eeddadbc18789bc65bf0";
+        const HASH_FULL = "36f81a68402b54768cace0bbcceab06a";
 
         const getRequest = () => {
           return request(app.getHttpServer())
@@ -427,7 +426,7 @@ describe("[e2e]: Admin", () => {
               version: "4.0.0",
               notes: "new_release_notes",
               hash: HASH_PATCH,
-              size: 10,
+              size: 9,
               filename: "4.0.0_stable_windows-x64-any.patch",
               url: "/updates/4.0.0_stable_windows-x64-any.patch",
             },
@@ -456,7 +455,7 @@ describe("[e2e]: Admin", () => {
                 version: "4.0.0",
                 notes: "new_release_notes",
                 hash: HASH_PATCH,
-                size: 10,
+                size: 9,
                 filename: "4.0.0_stable_windows-x64-any.patch",
                 url: "/updates/4.0.0_stable_windows-x64-any.patch",
               },
