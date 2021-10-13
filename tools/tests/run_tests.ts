@@ -32,9 +32,6 @@ const main = async () => {
 
       const pr = status["GITHUB_REF"].split("/")[2];
 
-      process.stdout.write("XDDDD" + JSON.stringify(status) + ", " + pr);
-      process.exit(1);
-
       const covRes = await execa(covPath, [
         `--token=${status["CODECOV_TOKEN"]}`,
         `--commit=${status["GITHUB_SHA"]}`,
