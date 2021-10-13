@@ -52,6 +52,7 @@ def test_suite(
                 ":test_codecov",
                 "//tools/tests:components",
                 ":build_stamp",
+                "//:codecov.yml",
             ],
             size = size,
             entry_point = "//tools/tests:run_tests.ts",
