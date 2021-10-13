@@ -2,6 +2,7 @@ import "jest";
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import request from "supertest";
 import { resolve } from "path";
+import hashFile from "md5-file";
 
 import { runApp } from "../../src/app";
 
@@ -376,7 +377,9 @@ describe("[e2e]: Admin", () => {
 
           const message = res.body.message as string;
 
-          console.log("XDD" + JSON.stringify(message));
+          console.log(
+            "XDD" + JSON.stringify(message) + hashFile.sync(PATH_FORMAT_TEST),
+          );
 
           expect(message.includes("corrupt")).toBe(true);
           expect(message.includes("dbbeb775238fad0a93172e3e965d83d7")).toBe(
