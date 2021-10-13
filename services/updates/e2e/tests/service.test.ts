@@ -376,6 +376,8 @@ describe("[e2e]: Admin", () => {
 
           const message = res.body.message as string;
 
+          console.log("XDD" + JSON.stringify(message));
+
           expect(message.includes("corrupt")).toBe(true);
           expect(message.includes("dbbeb775238fad0a93172e3e965d83d7")).toBe(
             true,
