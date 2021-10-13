@@ -22,6 +22,10 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
+      - name: xd
+        run: |
+          echo ${{ github.event.pull_request.head.sha }}
+
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
