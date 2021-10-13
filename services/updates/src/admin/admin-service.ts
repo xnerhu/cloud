@@ -111,8 +111,8 @@ export class AdminService {
     }
 
     await Promise.all([
-      verifyUploadFile(patch.path, hash),
-      verifyUploadFile(full.path, fullHash),
+      verifyUploadFile(patch.path, hash, true),
+      verifyUploadFile(full.path, fullHash, false),
     ]);
 
     const storagePath = this.getUpdatesPath();

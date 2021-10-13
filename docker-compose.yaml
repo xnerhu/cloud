@@ -14,9 +14,9 @@ services:
 
   updates_files:
     image: nginx
-    volumes:
-      - ./.dev/updates-files:/usr/share/nginx/html
     ports:
-      - "3090:80"
+      - 3090:80
     environment:
       - NGINX_PORT=80
+    volumes:
+      - ./.dev/updates-files:/usr/share/nginx/html

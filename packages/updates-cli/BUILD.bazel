@@ -1,6 +1,6 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("//tools/nodejs:index.bzl", "nodejs_app")
-load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library", "pkg_npm")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -52,7 +52,10 @@ ts_project(
 
 filegroup(
     name = "static",
-    srcs = glob(["static/**/*"]),
+    srcs = glob([
+        "static/**/*",
+        "bin/**/*",
+    ]),
 )
 
 nodejs_app(
@@ -68,7 +71,9 @@ pkg_npm(
     name = "npm",
     package_name = "@wexond/updates-cli",
     srcs = ["package.json"],
-    substitutions = {"//internal/": "//"},
+    substitutions = {
+        "@common/node": "@wexond/common-node",
+    },
     deps = [
         ":components",
         ":static",

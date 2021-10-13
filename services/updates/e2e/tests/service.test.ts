@@ -369,7 +369,7 @@ describe("[e2e]: Admin", () => {
           const res = await getRequest()
             .field("releaseId", 8)
             .field("distributionId", 1)
-            .field("hash", "67faad59f243eeddadbc18789bc65bf0")
+            .field("hash", "8846339d03923b5dc92e32b758e38e10")
             .field("fullHash", "dbbeb775238fad0a93172e3e965d83d7");
 
           expect(res.statusCode).toEqual(400);
@@ -404,7 +404,7 @@ describe("[e2e]: Admin", () => {
           const res = await getRequest()
             .field("releaseId", 8)
             .field("distributionId", 1)
-            .field("hash", "67faad59f243eeddadbc18789bc65bf0")
+            .field("hash", "8846339d03923b5dc92e32b758e38e10")
             .field("fullHash", "36f81a68402b54768cace0bbcceab06a");
 
           expect(res.statusCode).toEqual(200);
@@ -421,8 +421,8 @@ describe("[e2e]: Admin", () => {
             full: {
               version: "4.0.0",
               notes: "new_release_notes",
-              hash: "67faad59f243eeddadbc18789bc65bf0",
-              size: 9,
+              hash: "8846339d03923b5dc92e32b758e38e10",
+              size: 10,
               filename: "4.0.0_stable_windows-x64-any.patch",
               url: "/updates/4.0.0_stable_windows-x64-any.patch",
             },
@@ -450,8 +450,8 @@ describe("[e2e]: Admin", () => {
               {
                 version: "4.0.0",
                 notes: "new_release_notes",
-                hash: "67faad59f243eeddadbc18789bc65bf0",
-                size: 9,
+                hash: "8846339d03923b5dc92e32b758e38e10",
+                size: 10,
                 filename: "4.0.0_stable_windows-x64-any.patch",
                 url: "/updates/4.0.0_stable_windows-x64-any.patch",
               },
@@ -463,7 +463,7 @@ describe("[e2e]: Admin", () => {
           const res = await getRequest()
             .field("releaseId", 8)
             .field("distributionId", 1)
-            .field("hash", "67faad59f243eeddadbc18789bc65bf0")
+            .field("hash", "8846339d03923b5dc92e32b758e38e10")
             .field("fullHash", "36f81a68402b54768cace0bbcceab06a");
 
           expect(res.statusCode).toEqual(400);
