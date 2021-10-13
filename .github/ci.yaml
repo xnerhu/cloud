@@ -17,6 +17,10 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
+      - name: xd
+        run: |
+          echo ${{ GITHUB.HEAD_REF }}
+
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
