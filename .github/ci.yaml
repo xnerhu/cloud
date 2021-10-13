@@ -19,7 +19,9 @@ jobs:
 
       - name: xd
         run: |
-          echo ${{ GITHUB.HEAD_REF }}
+          echo ${{ github.head_ref }}
+          echo xdd
+          echo ${{ github.ref }}
 
       - name: Install Node.js
         uses: actions/setup-node@v1
