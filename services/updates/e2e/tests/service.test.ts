@@ -322,6 +322,9 @@ describe("[e2e]: Admin", () => {
         const PATH_FULL = resolve(PATH_ASSETS, "4.0.0.packed.7z");
         const PATH_FORMAT_TEST = resolve(PATH_ASSETS, "format-test.png");
 
+        const HASH_PATCH = hashFile.sync(PATH_PATCH);
+        const HASH_FULL = hashFile.sync(PATH_FULL);
+
         const getRequest = () => {
           return request(app.getHttpServer())
             .put("/admin/patch")
@@ -371,20 +374,12 @@ describe("[e2e]: Admin", () => {
           const res = await getRequest()
             .field("releaseId", 8)
             .field("distributionId", 1)
-            .field("hash", "8846339d03923b5dc92e32b758e38e10")
+            .field("hash", HASH_PATCH)
             .field("fullHash", "dbbeb775238fad0a93172e3e965d83d7");
 
           expect(res.statusCode).toEqual(400);
 
           const message = res.body.message as string;
-
-          console.log(
-            "XDD" +
-              JSON.stringify(message) +
-              hashFile.sync(PATH_FORMAT_TEST) +
-              "    ||||  " +
-              JSON.stringify(statSync(PATH_FORMAT_TEST)),
-          );
 
           expect(message.includes("corrupt")).toBe(true);
           expect(message.includes("dbbeb775238fad0a93172e3e965d83d7")).toBe(
@@ -414,8 +409,8 @@ describe("[e2e]: Admin", () => {
           const res = await getRequest()
             .field("releaseId", 8)
             .field("distributionId", 1)
-            .field("hash", "8846339d03923b5dc92e32b758e38e10")
-            .field("fullHash", "36f81a68402b54768cace0bbcceab06a");
+            .field("hash", HASH_PATCH)
+            .field("fullHash", HASH_FULL);
 
           expect(res.statusCode).toEqual(200);
 
@@ -423,7 +418,7 @@ describe("[e2e]: Admin", () => {
             patch: {
               version: "4.0.0",
               notes: "new_release_notes",
-              hash: "36f81a68402b54768cace0bbcceab06a",
+              hash: HASH_FULL,
               size: 151,
               filename: "4.0.0_stable_windows-x64-any.7z",
               url: "/updates/4.0.0_stable_windows-x64-any.7z",
@@ -431,7 +426,7 @@ describe("[e2e]: Admin", () => {
             full: {
               version: "4.0.0",
               notes: "new_release_notes",
-              hash: "8846339d03923b5dc92e32b758e38e10",
+              hash: HASH_PATCH,
               size: 10,
               filename: "4.0.0_stable_windows-x64-any.patch",
               url: "/updates/4.0.0_stable_windows-x64-any.patch",
@@ -451,7 +446,7 @@ describe("[e2e]: Admin", () => {
             full: {
               version: "4.0.0",
               notes: "new_release_notes",
-              hash: "36f81a68402b54768cace0bbcceab06a",
+              hash: HASH_FULL,
               size: 151,
               filename: "4.0.0_stable_windows-x64-any.7z",
               url: "/updates/4.0.0_stable_windows-x64-any.7z",
@@ -460,7 +455,7 @@ describe("[e2e]: Admin", () => {
               {
                 version: "4.0.0",
                 notes: "new_release_notes",
-                hash: "8846339d03923b5dc92e32b758e38e10",
+                hash: HASH_PATCH,
                 size: 10,
                 filename: "4.0.0_stable_windows-x64-any.patch",
                 url: "/updates/4.0.0_stable_windows-x64-any.patch",
@@ -473,8 +468,8 @@ describe("[e2e]: Admin", () => {
           const res = await getRequest()
             .field("releaseId", 8)
             .field("distributionId", 1)
-            .field("hash", "8846339d03923b5dc92e32b758e38e10")
-            .field("fullHash", "36f81a68402b54768cace0bbcceab06a");
+            .field("hash", HASH_PATCH)
+            .field("fullHash", HASH_FULL);
 
           expect(res.statusCode).toEqual(400);
         });
