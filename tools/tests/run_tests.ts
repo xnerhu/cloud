@@ -30,6 +30,9 @@ const main = async () => {
         process.exit(1);
       }
 
+      process.stdout.write("XDDD" + status["GITHUB_HEAD_REF"]);
+      process.exit(1);
+
       const covRes = await execa(covPath, [
         `--token=${status["CODECOV_TOKEN"]}`,
         `--commit=${status["GITHUB_SHA"]}`,
