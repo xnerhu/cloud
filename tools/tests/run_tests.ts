@@ -37,11 +37,6 @@ const main = async () => {
           ? status["GITHUB_PR_SHA"]
           : status["GITHUB_SHA"];
 
-      process.stdout.write(
-        "XDDDDDD" + JSON.stringify(status) + "     +______" + sha,
-      );
-      process.exit(1);
-
       const covRes = await execa(covPath, [
         `--token=${status["CODECOV_TOKEN"]}`,
         `--commit=${sha}`,
