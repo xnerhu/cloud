@@ -22,12 +22,6 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: xd
-        run: |
-          echo ${{ github.head_ref }}
-          echo xdd
-          echo ${{ github.ref }}
-
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:

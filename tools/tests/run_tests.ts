@@ -30,7 +30,9 @@ const main = async () => {
         process.exit(1);
       }
 
-      process.stdout.write("XDDD" + status["GITHUB_HEAD_REF"]);
+      const pr = status["GITHUB_REF"].split("/")[2];
+
+      process.stdout.write("XDDD" + JSON.stringify(pr));
       process.exit(1);
 
       const covRes = await execa(covPath, [
