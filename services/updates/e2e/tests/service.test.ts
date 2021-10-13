@@ -5,6 +5,7 @@ import { resolve } from "path";
 import hashFile from "md5-file";
 
 import { runApp } from "../../src/app";
+import { statSync } from "fs";
 
 const API_KEY = "TEST_TOKEN";
 const API_KEY_HEADER = "authorization";
@@ -378,7 +379,11 @@ describe("[e2e]: Admin", () => {
           const message = res.body.message as string;
 
           console.log(
-            "XDD" + JSON.stringify(message) + hashFile.sync(PATH_FORMAT_TEST),
+            "XDD" +
+              JSON.stringify(message) +
+              hashFile.sync(PATH_FORMAT_TEST) +
+              "    ||||  " +
+              JSON.stringify(statSync(PATH_FORMAT_TEST)),
           );
 
           expect(message.includes("corrupt")).toBe(true);
