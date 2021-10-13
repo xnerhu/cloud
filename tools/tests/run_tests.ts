@@ -32,15 +32,13 @@ const main = async () => {
 
       const pr = status["GITHUB_REF"].split("/")[2];
 
-      process.stdout.write("XDDD" + JSON.stringify(pr));
-      process.exit(1);
-
       const covRes = await execa(covPath, [
         `--token=${status["CODECOV_TOKEN"]}`,
         `--commit=${status["GITHUB_SHA"]}`,
         `--slug=${status["GITHUB_REPOSITORY"]}`,
         `--branch=${status["GITHUB_HEAD_REF"]}`,
         `--build=${status["GITHUB_RUN_ID"]}`,
+        `--pr=${pr}`,
         "--disable=detect,gcov",
       ]);
 
