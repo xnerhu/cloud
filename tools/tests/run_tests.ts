@@ -30,12 +30,11 @@ const main = async () => {
         process.exit(1);
       }
 
-      const pr = status["GITHUB_REF"].split("/")[2];
+      const isPR = status["GITHUB_EVENT_NAME"] === "pull_request";
+
       const branch = status["GITHUB_HEAD_REF"];
-      const sha =
-        status["GITHUB_EVENT_NAME"] === "pull_request"
-          ? status["GITHUB_PR_SHA"]
-          : status["GITHUB_SHA"];
+      const sha = isPR ? status["GITHUB_PR_SHA"] : status["GITHUB_SHA"];
+      const pr = isPR ? status["GITHUB_REF"].split("/")[2] : "";
 
       const covRes = await execa(covPath, [
         `--token=${status["CODECOV_TOKEN"]}`,
@@ -43,7 +42,7 @@ const main = async () => {
         `--slug=${status["GITHUB_REPOSITORY"]}`,
         `--branch=${branch}`,
         `--build=${status["GITHUB_RUN_ID"]}`,
-        `--pr=${pr}`,
+        ...(isPR ? [`--pr=${pr}`] : []),
         "--disable=detect,gcov",
       ]);
 
