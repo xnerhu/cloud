@@ -5,6 +5,7 @@ package(default_visibility = ["//visibility:public"])
 
 DEPS = [
     "@npm//@types/node",
+    "@npm//discord.js",
 ]
 
 TEST_FILES = ["src/**/*.test.ts"]
