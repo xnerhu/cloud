@@ -2,7 +2,7 @@ diff --git a/node_modules/codecov/bin/codecov b/node_modules/codecov/bin/codecov
 index 9297d2c..fc97f77 100644
 --- a/node_modules/codecov/bin/codecov
 +++ b/node_modules/codecov/bin/codecov
-@@ -16,6 +16,7 @@ var args = argv.option([
+@@ -16,6 +16,7 @@ var args = argv.option([w
    {name: 'commit', short: 'c', type: 'string', description: "Commit sha, set automatically"},
    {name: 'clear', short: 'C', type: 'boolean', description: "Remove all discovered reports after uploading"},
    {name: 'branch', short: 'b', type: 'string', description: "Branch name"},
