@@ -8,5 +8,6 @@ exports_files(
         "jest-reporter.js",
         "babel.config.js",
         "docker-compose.yaml",
+        "codecov.yml",
     ],
 )

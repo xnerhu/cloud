@@ -1,4 +1,11 @@
 {
   "name": "@common/node",
-  "private": true
+  "version": "1.0.1",
+  "publishConfig": {
+    "registry": "https://npm.wexond.net"
+  },
+  "dependencies": {
+    "axios": "^0.22.0",
+    "winston": "^3.3.3"
+  }
 }

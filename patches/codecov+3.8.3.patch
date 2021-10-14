@@ -1,0 +1,27 @@
+diff --git a/node_modules/codecov/bin/codecov b/node_modules/codecov/bin/codecov
+index 9297d2c..fc97f77 100644
+--- a/node_modules/codecov/bin/codecov
++++ b/node_modules/codecov/bin/codecov
+@@ -16,6 +16,7 @@ var args = argv.option([
+   {name: 'commit', short: 'c', type: 'string', description: "Commit sha, set automatically"},
+   {name: 'clear', short: 'C', type: 'boolean', description: "Remove all discovered reports after uploading"},
+   {name: 'branch', short: 'b', type: 'string', description: "Branch name"},
++  {name: 'pr', type: 'string', description: "Pull request id"},
+   {name: 'build', short: 'B', type: 'string', description: "Specify a custom build number to distinguish ci jobs, provided automatically for supported ci companies"},
+   {name: 'slug', short: 'r', type: 'string', description: "Specify repository slug for Enterprise ex. owner/repo"},
+   {name: 'url', short: 'u', type: 'string', description: "Your Codecov endpoint"},
+diff --git a/node_modules/codecov/lib/codecov.js b/node_modules/codecov/lib/codecov.js
+index 37c64b3..9fe1d49 100644
+--- a/node_modules/codecov/lib/codecov.js
++++ b/node_modules/codecov/lib/codecov.js
+@@ -302,6 +302,10 @@ var upload = function (args, on_success, on_failure) {
+     query.slug = args.options.slug
+   }
+ 
++  if (args.options.pr) {
++    query.pr = args.options.pr
++  }
++
+   var flags =
+     args.options.flags || process.env.codecov_flags || process.env.CODECOV_FLAGS
+   if (flags) {

@@ -11,3 +11,12 @@ services:
       - 5432:5432
     volumes:
       - ./.dev/updates:/var/lib/postgresql/data
+
+  updates_files:
+    image: nginx
+    ports:
+      - 3090:80
+    environment:
+      - NGINX_PORT=80
+    volumes:
+      - ./.dev/updates-files:/usr/share/nginx/html

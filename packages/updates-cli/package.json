@@ -1,0 +1,22 @@
+{
+  "name": "@wexond/updates-cli",
+  "version": "1.0.0",
+  "publishConfig": {
+    "registry": "https://npm.wexond.net"
+  },
+  "bin": {
+    "wexond-updates": "./bin/run"
+  },
+  "dependencies": {
+    "@wexond/common-node": "^1.0.1",
+    "7zip-bin": "^5.1.1",
+    "axios": "^0.22.0",
+    "chalk": "^4.1.2",
+    "commander": "^8.2.0",
+    "execa": "^5.1.1",
+    "form-data": "^4.0.0",
+    "md5-file": "^5.0.0",
+    "node-7z": "^3.0.0",
+    "progress": "^2.0.3"
+  }
+}

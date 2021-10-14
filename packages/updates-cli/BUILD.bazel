@@ -1,0 +1,81 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("//tools/nodejs:index.bzl", "nodejs_app")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library", "pkg_npm")
+
+package(default_visibility = ["//visibility:public"])
+
+DEPS = [
+    "//common/node",
+    "@npm//@types/node",
+    "@npm//axios",
+    "@npm//execa",
+    "@npm//chalk",
+    "@npm//commander",
+    "@npm//md5-file",
+    "@npm//@types/progress",
+    "@npm//progress",
+    "@npm//7zip-bin",
+    "@npm//@types/node-7z",
+    "@npm//node-7z",
+    "@npm//form-data",
+]
+
+TEST_FILES = ["src/**/*.test.ts"]
+
+SRC_FILES = glob(
+    [
+        "src/**/*.ts",
+    ],
+    exclude = TEST_FILES,
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+        "//common/node:tsconfig",
+    ],
+)
+
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    allow_js = True,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig",
+    deps = DEPS,
+)
+
+filegroup(
+    name = "static",
+    srcs = glob([
+        "static/**/*",
+        "bin/**/*",
+    ]),
+)
+
+nodejs_app(
+    name = "updates-cli",
+    data = [
+        ":components",
+        ":static",
+    ],
+    entry_point = "src/index.ts",
+)
+
+pkg_npm(
+    name = "npm",
+    package_name = "@wexond/updates-cli",
+    srcs = ["package.json"],
+    substitutions = {
+        "@common/node": "@wexond/common-node",
+    },
+    deps = [
+        ":components",
+        ":static",
+    ],
+)

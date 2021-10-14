@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
-import { dirname, extname, join } from "path";
-import { makeId } from "@common/utils";
+import { extname } from "path";
 import { randomBytes } from "../crypto";
+import { stat } from "fs/promises";
 
 export const pathExists = async (path: string) => {
   try {
@@ -31,4 +31,8 @@ export const getUniqueFilename = async (filename: string) => {
   const ext = extname(filename);
 
   return buffer.toString("hex") + ext;
+};
+
+export const getFileSize = (path: string) => {
+  return stat(path).then((r) => r.size);
 };

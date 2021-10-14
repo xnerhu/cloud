@@ -12,6 +12,8 @@ jobs:
     env:
       BAZELISK_CACHE_VERSION: 1
       BAZEL_CACHE_VERSION: 4
+      GITHUB_PR_SHA: ${{ github.event.pull_request.head.sha }}
+      GITHUB_EVENT_NAME: ${{ github.event_name }}
 
     steps:
       - name: Cancel Previous Runs

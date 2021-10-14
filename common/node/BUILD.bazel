@@ -1,5 +1,5 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library", "pkg_npm")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -14,7 +14,6 @@ ts_config(
     src = "tsconfig.json",
     deps = [
         "//:tsconfig.json",
-        "//common/utils:tsconfig",
     ],
 )
 
@@ -28,7 +27,7 @@ SRC_FILES = glob(
 DEPS = [
     "@npm//@types/node",
     "@npm//winston",
-    "//common/utils",
+    "@npm//axios",
 ]
 
 filegroup(
@@ -53,4 +52,20 @@ js_library(
     package_name = "@common/node",
     srcs = ["package.json"],
     deps = [":components"],
+)
+
+pkg_npm(
+    name = "npm",
+    package_name = "@wexond/common-node",
+    srcs = [
+        "README.md",
+        "package.json",
+    ],
+    substitutions = {
+        "@common/node": "@wexond/common-node",
+    },
+    validate = False,
+    deps = [
+        ":components",
+    ],
 )

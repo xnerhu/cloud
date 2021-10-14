@@ -44,11 +44,11 @@ $ yarn build
 $ yarn test
 ```
 
-## Start frontend dev server
+<!-- ## Start frontend dev server
 
 ```
 $ yarn dev:ui
-```
+``` -->
 
 ## Build individual components
 

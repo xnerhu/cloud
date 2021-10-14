@@ -14,12 +14,18 @@ export const formatUploadFilename = (filename: string, filePath: string) => {
   return filename + ext;
 };
 
-export const verifyUploadFile = async (path: string, controlSum: string) => {
+export const verifyUploadFile = async (
+  path: string,
+  controlSum: string,
+  patch: boolean,
+) => {
   const localHash = await hashFile(path);
 
   if (localHash !== controlSum) {
     throw new BadRequestException(
-      `File is corrupt. Expected ${controlSum}, got: ${localHash}`,
+      `${
+        patch ? "Patch" : "Full"
+      } is corrupt. Expected ${controlSum}, got: ${localHash}`,
     );
   }
 };
