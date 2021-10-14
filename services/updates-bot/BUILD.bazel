@@ -1,0 +1,46 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("//tools/nodejs:index.bzl", "nodejs_app")
+
+package(default_visibility = ["//visibility:public"])
+
+DEPS = [
+    "@npm//@types/node",
+]
+
+TEST_FILES = ["src/**/*.test.ts"]
+
+SRC_FILES = glob(
+    [
+        "src/**/*.ts",
+    ],
+    exclude = TEST_FILES,
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+    ],
+)
+
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    allow_js = True,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig",
+    deps = DEPS,
+)
+
+nodejs_app(
+    name = "updates-bot",
+    data = [
+        ":components",
+    ],
+    dev_data = [".env"],
+    entry_point = "src/index.ts",
+)

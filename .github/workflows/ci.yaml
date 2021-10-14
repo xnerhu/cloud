@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BAZELISK_CACHE_VERSION: 1
-      BAZEL_CACHE_VERSION: 4
+      BAZEL_CACHE_VERSION: 5
       GITHUB_PR_SHA: ${{ github.event.pull_request.head.sha }}
       GITHUB_EVENT_NAME: ${{ github.event_name }}
 
@@ -27,7 +27,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
 
       - uses: actions/cache@v2.1.6
         id: yarn-cache

@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev:updates": "ibazel run //services/updates:updates_dev",
+    "dev:updates-bot": "ibazel run //services/updates:updates_dev",
     "seed:updates": "bazel run //services/updates:schema_up && bazel run //services/updates:seed",
     "drop:updates": "bazel run //services/updates:schema_drop",
     "build:updates": "lerna exec yarn build --scope=@backend/{common,updates}",
@@ -75,6 +76,7 @@
     "commander": "^8.2.0",
     "concurrently": "^6.2.1",
     "cross-env": "^7.0.3",
+    "discord.js": "^13.2.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-prettier": "^3.2.0",
