@@ -154,10 +154,12 @@ export class AdminService {
       version: release.version,
     };
 
-    this.rmq.emit(PATTERN_NEW_UPDATE, {
-      release,
-      distribution,
-    } as NewUpdateEvent);
+    if (this.configService.get<boolean>("RMQ_ENABLED", { infer: true })) {
+      this.rmq.emit(PATTERN_NEW_UPDATE, {
+        release,
+        distribution,
+      } as NewUpdateEvent);
+    }
 
     return {
       patch: getUpdateDownloadInfo(entry, false, publicPath!),
