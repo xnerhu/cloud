@@ -6,6 +6,8 @@ package(default_visibility = ["//visibility:public"])
 DEPS = [
     "//common/node",
     "//common/utils",
+    "//core/updates",
+    "//network/updates-queue",
     "@npm//@types/node",
     "@npm//reflect-metadata",
     "@npm//discord.js",
@@ -36,6 +38,8 @@ ts_config(
         "//:tsconfig.json",
         "//common/node:tsconfig",
         "//common/utils:tsconfig",
+        "//core/updates:tsconfig",
+        "//network/updates-queue:tsconfig",
     ],
 )
 
