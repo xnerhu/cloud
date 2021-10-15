@@ -1,6 +1,6 @@
 {
   "name": "@wexond/updates-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publishConfig": {
     "registry": "https://npm.wexond.net"
   },
@@ -8,7 +8,7 @@
     "wexond-updates": "./bin/run"
   },
   "dependencies": {
-    "@wexond/common-node": "^1.0.1",
+    "@wexond/common-node": "^1.1.0",
     "@wexond/updates-api": "^1.0.0",
     "7zip-bin": "^5.1.1",
     "axios": "^0.22.0",
