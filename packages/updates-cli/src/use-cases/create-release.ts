@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CreateReleaseDto } from "@network/updates-api";
 
 import { getAdminUrl, getAuthHeaders } from "../utils";
 import { info, infoRes, warn } from "../utils/logger";
@@ -25,7 +26,7 @@ export const createRelease = async ({
       version: tag,
       notes,
       channel,
-    },
+    } as CreateReleaseDto,
     { headers: getAuthHeaders(token) },
   );
 

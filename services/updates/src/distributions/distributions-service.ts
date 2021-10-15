@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { EntityRepository } from "@mikro-orm/postgresql";
+import { Distribution } from "@core/updates";
 
-import { Distribution } from "../interfaces";
 import { DistributionEntity } from "../distributions/distribution-entity";
 
 export type DistributionSearchOptions = Partial<

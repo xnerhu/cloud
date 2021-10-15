@@ -1,11 +1,12 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("//tools/nodejs:index.bzl", "nodejs_app")
-load("@build_bazel_rules_nodejs//:index.bzl", "js_library", "pkg_npm")
+load("@build_bazel_rules_nodejs//:index.bzl", "pkg_npm")
 
 package(default_visibility = ["//visibility:public"])
 
 DEPS = [
     "//common/node",
+    "//network/updates-api",
     "@npm//@types/node",
     "@npm//axios",
     "@npm//execa",
@@ -35,6 +36,7 @@ ts_config(
     deps = [
         "//:tsconfig.json",
         "//common/node:tsconfig",
+        "//network/updates-api:tsconfig",
     ],
 )
 
@@ -73,6 +75,7 @@ pkg_npm(
     srcs = ["package.json"],
     substitutions = {
         "@common/node": "@wexond/common-node",
+        "@network/updates-api": "@wexond/updates-api",
     },
     deps = [
         ":components",

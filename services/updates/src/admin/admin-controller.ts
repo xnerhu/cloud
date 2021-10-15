@@ -13,13 +13,13 @@ import {
   FileFieldsInterceptor,
   UploadedFiles,
 } from "@common/nest";
-
 import {
   CreateReleaseDto,
   GetDiffInfoDto,
   GetDistributionDto,
   UploadPatchDto,
-} from "./admin-dto";
+} from "@network/updates-api";
+
 import { AdminService } from "./admin-service";
 import { TokenGuard } from "../security/token-guard";
 import { uploadFilter } from "./upload-filter";

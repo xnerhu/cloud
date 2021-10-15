@@ -2,9 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { omitNull } from "@common/utils";
+import { Patch } from "@core/updates";
 
 import { PatchEntity } from "./patch-entity";
-import { Patch } from "../interfaces/patch";
 import { DistributionEntity } from "../distributions/distribution-entity";
 import { ReleaseEntity } from "../releases/release-entity";
 

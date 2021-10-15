@@ -1,8 +1,7 @@
 import { extname } from "path";
 import hashFile from "md5-file";
-
-import { Release, Distribution } from "../interfaces";
 import { BadRequestException } from "@nestjs/common";
+import { Distribution, Release } from "@core/updates";
 
 export const getUploadFilename = (release: Release, distro: Distribution) => {
   return `${release.version}_${release.channel}_${distro.os}-${distro.architecture}-${distro.osVersion}`;

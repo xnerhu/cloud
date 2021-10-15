@@ -1,4 +1,4 @@
-import { readFileSync, statSync } from "fs";
+import { readdirSync, readFileSync, statSync } from "fs";
 import { resolve } from "path";
 import execa from "execa";
 
@@ -19,6 +19,9 @@ const main = async () => {
   );
 
   try {
+    // process.stdout.write("XDD" + __dirname);
+    // process.exit(1);
+
     const res = await execa(testPath, []);
 
     process.stdout.write(res.stdout);

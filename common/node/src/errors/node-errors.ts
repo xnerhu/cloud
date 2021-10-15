@@ -1,11 +1,9 @@
-import { ServiceLogger } from "../logger";
+export const handleNodeErrors = () => {
+  const onError = (err: Error) => {
+    console.error(`Uncaught Exception: ${err.message}`);
+    process.exit(1);
+  };
 
-export const handleNodeErrors = (logger: ServiceLogger) => {
-  process.on("uncaughtException", (err) => {
-    logger.warn(`Uncaught Exception: ${err.message}`);
-  });
-
-  process.on("unhandledRejection", (err) => {
-    logger.warn(`Unhandled Rejection: ${err}`);
-  });
+  process.on("uncaughtException", onError);
+  process.on("unhandledRejection", onError);
 };

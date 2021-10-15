@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from "@nestjs/common";
+import { GetUpdatesDto, GetUpdatesV1Dto } from "@network/updates-api";
 
-import { GetUpdatesDto, GetUpdatesV1Dto } from "./updates-dto";
 import { UpdatesService } from "./updates-service";
 
 @Controller()

@@ -6,29 +6,13 @@ import {
 } from "@nestjs/platform-fastify";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import multipart, {
-  FastifyMultipartAttactFieldsToBodyOptions,
-  FastifyMultipartOptions,
-  MultipartFile,
-} from "fastify-multipart";
-import { createWriteStream } from "fs";
-import { mkdir, unlink } from "fs/promises";
-import { NestErrorHandler } from "@common/nest";
-import { IS_TEST, pump } from "@common/node";
+import multipart from "fastify-multipart";
+import { mkdir } from "fs/promises";
+import { NestHttpExceptionHandler } from "@common/nest";
+import { IS_TEST } from "@common/node";
 
 import { AppModule } from "./app-module";
-import { resolve } from "path";
 import { TEST_UPDATES_PATH } from "./config/env";
-
-const onFile = async (part: MultipartFile) => {
-  const path = resolve(part.filename);
-
-  await pump(part.file, createWriteStream(path));
-
-  if ((part.file as any).truncated) {
-    await unlink(path);
-  }
-};
 
 export const runApp = async (port?: number) => {
   if (IS_TEST) {
@@ -43,11 +27,12 @@ export const runApp = async (port?: number) => {
   );
 
   const config = app.get(ConfigService);
+
   const defaultPort = config.get<number>("PORT", { infer: true });
 
   const { httpAdapter } = app.get(HttpAdapterHost);
 
-  app.useGlobalFilters(new NestErrorHandler(httpAdapter));
+  app.useGlobalFilters(new NestHttpExceptionHandler(httpAdapter));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   app.register(multipart as any, {});

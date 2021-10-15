@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates-bot"
+  },
+  "references": [
+    { "path": "../../common/node" },
+    { "path": "../../common/utils" },
+    { "path": "../../core/updates" },
+    { "path": "../../network/updates-queue" }
+  ],
+  "include": ["src/**/*.ts"]
+}

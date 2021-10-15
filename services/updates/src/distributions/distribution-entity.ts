@@ -5,7 +5,7 @@ import {
   DistributionOSVersion,
   DistributionOS,
   Distribution,
-} from "../interfaces";
+} from "@core/updates";
 import { PatchEntity } from "../patches/patch-entity";
 
 @Entity({ tableName: "distributions" })

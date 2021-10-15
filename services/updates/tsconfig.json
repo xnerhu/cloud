@@ -4,8 +4,10 @@
     "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates"
   },
   "references": [
+    { "path": "../../core/updates" },
+    { "path": "../../network/updates-api" },
+    { "path": "../../network/updates-queue" },
     { "path": "../../common/node" },
-    { "path": "../../common/fastify" },
     { "path": "../../common/nest" },
     { "path": "../../common/utils" }
   ],

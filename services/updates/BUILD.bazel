@@ -2,12 +2,15 @@ load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
 load("//tools/nodejs:index.bzl", "nodejs_app")
 load("//tools/tests:index.bzl", "test_suite")
+load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin")
 
 package(default_visibility = ["//visibility:public"])
 
 DEPS = [
+    "//core/updates",
+    "//network/updates-api",
+    "//network/updates-queue",
     "//common/node",
-    "//common/fastify",
     "//common/nest",
     "//common/utils",
     "@npm//@types/node",
@@ -45,10 +48,12 @@ ts_config(
     src = "tsconfig.json",
     deps = [
         "//:tsconfig.json",
-        "//common/fastify:tsconfig",
         "//common/nest:tsconfig",
         "//common/node:tsconfig",
         "//common/utils:tsconfig",
+        "//core/updates:tsconfig",
+        "//network/updates-api:tsconfig",
+        "//network/updates-queue:tsconfig",
     ],
 )
 
@@ -125,10 +130,16 @@ mikro_orm(
     ],
 )
 
+copy_to_bin(
+    name = "copy_test_env",
+    srcs = [".test.env"],
+)
+
 test_suite(
     name = "test",
     srcs = [
         ":components_test",
+        ":copy_test_env",
         ":schema_drop",
         ":schema_up",
     ],

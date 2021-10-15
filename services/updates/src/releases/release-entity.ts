@@ -5,8 +5,8 @@ import {
   OneToMany,
   Index,
 } from "@mikro-orm/core";
+import { Release } from "@core/updates";
 
-import { Release } from "../interfaces";
 import { PatchEntity } from "../patches/patch-entity";
 
 @Entity({ tableName: "releases" })

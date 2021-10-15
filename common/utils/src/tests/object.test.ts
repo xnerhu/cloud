@@ -1,6 +1,6 @@
 import "jest";
 
-import { omitNull, isObjectEmpty } from "../object";
+import { omitNull, isObjectEmpty } from "../";
 
 describe("@common/utils object", () => {
   describe("omitNull", () => {

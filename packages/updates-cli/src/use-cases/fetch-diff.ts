@@ -5,6 +5,7 @@ import { createWriteStream } from "fs";
 import { resolve } from "path";
 import Progressbar from "progress";
 import { downloadFile } from "@common/node";
+import { GetDiffInfoDto } from "@network/updates-api";
 
 import { getAdminUrl, getAuthHeaders } from "../utils";
 import { info, infoRes, warn } from "../utils/logger";
@@ -54,7 +55,11 @@ export const fetchDiff = async ({
   info(`Getting diff info for ${version}-${channel}_${distributionId}`);
 
   const res = await axios.get<any>(getAdminUrl(api, "diff"), {
-    params: { channel, distributionId, version },
+    params: {
+      channel,
+      distributionId,
+      version,
+    } as GetDiffInfoDto,
     headers: getAuthHeaders(token),
   });
 
