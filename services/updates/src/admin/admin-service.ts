@@ -4,11 +4,9 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { rename } from "fs/promises";
 import { join } from "path";
 import { ClientProxy } from "@nestjs/microservices";
-import { IS_TEST } from "@common/node";
 import { DiskStorageFile } from "@common/nest";
 import {
   CreateReleaseDto,
@@ -29,8 +27,8 @@ import {
   getUploadFilename,
   verifyUploadFile,
 } from "./uploads-utils";
-import { TEST_UPDATES_PATH } from "../config/env";
 import { RMQ_PROXY_TOKEN } from "../rmq/rmq-proxy";
+import { ConfigService } from "../config/config-service";
 
 @Injectable()
 export class AdminService {
@@ -78,7 +76,7 @@ export class AdminService {
   }: GetDiffInfoDto) {
     await this.distributionsService.findOneOrFail({ id: distributionId });
 
-    const publicPath = this.configService.get<string>("UPDATES_PUBLIC_PATH");
+    const publicPath = this.configService.updatesPublicPath;
 
     const entry = await this.patchesService.findOneBefore({
       distributionId,
@@ -91,11 +89,6 @@ export class AdminService {
     }
 
     return getUpdateDownloadInfo(entry, false, publicPath!);
-  }
-
-  private getUpdatesPath() {
-    if (IS_TEST) return TEST_UPDATES_PATH;
-    return this.configService.get<string>("UPDATES_PATH");
   }
 
   public async uploadPatch(
@@ -120,22 +113,18 @@ export class AdminService {
       verifyUploadFile(full.path, fullHash, false),
     ]);
 
-    const storagePath = this.getUpdatesPath();
-
     const baseFilename = getUploadFilename(release, distribution);
 
     const patchFilename = formatUploadFilename(baseFilename, patch.path);
-    const patchPath = join(storagePath!, patchFilename);
+    const patchPath = join(this.configService.updatesPath, patchFilename);
 
     const fullFilename = formatUploadFilename(baseFilename, full.path);
-    const fullPath = join(storagePath!, fullFilename);
+    const fullPath = join(this.configService.updatesPath, fullFilename);
 
     await Promise.all([
       rename(patch.path, patchPath),
       rename(full.path, fullPath),
     ]);
-
-    const publicPath = this.configService.get<string>("UPDATES_PUBLIC_PATH");
 
     const patchEntity = await this.patchesService.createOne({
       distribution,
@@ -154,7 +143,7 @@ export class AdminService {
       version: release.version,
     };
 
-    if (this.configService.get<boolean>("RMQ_ENABLED", { infer: true })) {
+    if (this.configService.isRMQEnabled) {
       this.rmq.emit(PATTERN_NEW_UPDATE, {
         release,
         distribution,
@@ -162,8 +151,16 @@ export class AdminService {
     }
 
     return {
-      patch: getUpdateDownloadInfo(entry, false, publicPath!),
-      full: getUpdateDownloadInfo(entry, true, publicPath!),
+      patch: getUpdateDownloadInfo(
+        entry,
+        false,
+        this.configService.updatesPublicPath,
+      ),
+      full: getUpdateDownloadInfo(
+        entry,
+        true,
+        this.configService.updatesPublicPath,
+      ),
     };
   }
 }

@@ -1,5 +1,4 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { Client, TextChannel } from "discord.js";
 import { NewUpdateEvent } from "@network/updates-queue";
 
@@ -14,6 +13,7 @@ import {
   decodeMessageMetadata,
   MessageMetadataDistribution,
 } from "../messages/message-metadata";
+import { ConfigService } from "../config/config-service";
 @Injectable()
 export class UpdatesService {
   constructor(
@@ -22,7 +22,7 @@ export class UpdatesService {
   ) {}
 
   private getChannel() {
-    const id = this.configService.get("DISCORD_CHANNEL") as string;
+    const id = this.configService.discordChannel;
 
     return <TextChannel>this.clientService.channels.resolve(id);
   }

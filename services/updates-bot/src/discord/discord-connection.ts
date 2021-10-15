@@ -1,5 +1,6 @@
-import { ConfigService } from "@nestjs/config";
 import { Client, Intents } from "discord.js";
+
+import { ConfigService } from "../config/config-service";
 
 export const DISCORD_CONNECTION = "DISCORD_CONNECTION";
 
@@ -10,7 +11,7 @@ export const discordConnectionFactory = {
       intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
     });
 
-    await client.login(config.get<string>("DISCORD_TOKEN"));
+    await client.login(config.discordToken);
 
     return client;
   },

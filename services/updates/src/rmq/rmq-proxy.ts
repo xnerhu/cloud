@@ -1,9 +1,10 @@
-import { ConfigService } from "@nestjs/config";
 import {
   ClientProxyFactory,
   RmqOptions,
   Transport,
 } from "@nestjs/microservices";
+
+import { ConfigService } from "../config/config-service";
 
 export const RMQ_PROXY_TOKEN = "RMQ_PROXY_PROVIDER";
 
@@ -13,8 +14,8 @@ export const rmqProxyFactory = {
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: [config.get<string>("RMQ_URL") as string],
-        queue: config.get<string>("RMQ_QUEUE"),
+        urls: [config.rmqUrl],
+        queue: config.rmqQueue,
         queueOptions: {
           durable: false,
         } as RmqOptions["options"],

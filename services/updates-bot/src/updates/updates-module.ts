@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 
 import { UpdatesController } from "./updates-controller";
 import { UpdatesService } from "./updates-service";
 import { DiscordModule } from "../discord/discord-module";
+import { ConfigModule } from "../config/config-module";
 
 @Module({
   imports: [DiscordModule, ConfigModule],

@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 
+import { ConfigModule } from "../config/config-module";
 import { rmqProxyFactory } from "./rmq-proxy";
 
 @Module({
