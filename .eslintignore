@@ -6,3 +6,4 @@ frontend/**/node_modules
 bazel-out
 dist
 frontend/**/*.svg
+**/tests/assets/*
