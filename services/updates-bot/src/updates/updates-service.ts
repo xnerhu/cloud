@@ -5,8 +5,15 @@ import { NewUpdateEvent } from "@network/updates-queue";
 
 import { DISCORD_CONNECTION } from "../discord/discord-connection";
 import { messageTemplate } from "../messages/message-template";
-import { findMessage, MessageSearchQuery } from "../messages/message-utils";
-import { decodeMessageMetadata } from "../messages/message-metadata";
+import {
+  findMessage,
+  getMessageEmbedUrl,
+  MessageSearchQuery,
+} from "../messages/message-utils";
+import {
+  decodeMessageMetadata,
+  MessageMetadataDistribution,
+} from "../messages/message-metadata";
 @Injectable()
 export class UpdatesService {
   constructor(
@@ -20,18 +27,25 @@ export class UpdatesService {
     return <TextChannel>this.clientService.channels.resolve(id);
   }
 
-  public async sendDiscordMessage(data: NewUpdateEvent) {
+  public async sendDiscordMessage(e: NewUpdateEvent) {
     const channel = this.getChannel();
 
     const message = await this.findMessage({
-      releaseId: data.release.id,
-      distributionId: data.distribution.id,
+      releaseId: e.release.id,
     });
 
-    if (!message) {
-      const embed = messageTemplate({
-        release: data.release,
-        distributions: [data.distribution],
+    const distribution: MessageMetadataDistribution = {
+      id: e.distribution.id,
+      os: e.distribution.os,
+      architecture: e.distribution.architecture,
+    };
+
+    const url = message && getMessageEmbedUrl(message);
+
+    if (!message || !url) {
+      const embed = messageTemplate(e, {
+        releaseId: e.release.id,
+        distributions: [distribution],
       });
 
       await channel.send({ embeds: [embed] });
@@ -39,14 +53,18 @@ export class UpdatesService {
       return;
     }
 
-    const metadata = decodeMessageMetadata(message.url)!;
+    const metadata = decodeMessageMetadata(url);
 
-    const embed = messageTemplate({
-      release: data.release,
-      distributions: [...metadata.distributions, data.distribution],
+    if (!metadata) {
+      throw new Error("Metadata is empty");
+    }
+
+    const embed = messageTemplate(e, {
+      releaseId: e.release.id,
+      distributions: [...metadata.distributions, distribution],
     });
 
-    message.edit({ embeds: [embed] });
+    await message.edit({ embeds: [embed] });
   }
 
   private async findMessage(data: MessageSearchQuery) {

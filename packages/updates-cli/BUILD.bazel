@@ -36,6 +36,7 @@ ts_config(
     deps = [
         "//:tsconfig.json",
         "//common/node:tsconfig",
+        "//network/updates-api:tsconfig",
     ],
 )
 

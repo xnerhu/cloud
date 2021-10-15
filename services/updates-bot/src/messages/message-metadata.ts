@@ -1,23 +1,18 @@
 import { parseURL } from "whatwg-url";
 import { parse } from "query-string";
-import { Distribution, Release } from "@core/updates";
+import { Distribution } from "@core/updates";
 
 export interface MessageMetadata {
-  release: MessageMetadataRelease;
+  releaseId: number;
   distributions: MessageMetadataDistribution[];
 }
-
-export type MessageMetadataRelease = Pick<
-  Release,
-  "id" | "channel" | "version" | "notes"
->;
 
 export type MessageMetadataDistribution = Pick<
   Distribution,
   "id" | "architecture" | "os"
 >;
 
-const TOKEN_MESSAGE_METADATA = "metadata";
+export const TOKEN_MESSAGE_METADATA = "metadata";
 
 export const encodeMessageMetadata = (data: MessageMetadata) => {
   return encodeURIComponent(JSON.stringify(data));
@@ -34,7 +29,7 @@ export const decodeMessageMetadata = (url: string) => {
         decodeURIComponent(fragments[TOKEN_MESSAGE_METADATA] as string),
       ) as Partial<MessageMetadata>;
 
-      if (data.release?.id == null || !data.distributions?.length) {
+      if (data.releaseId == null || !data.distributions?.length) {
         return null;
       }
 

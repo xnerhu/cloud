@@ -4,31 +4,29 @@ import {
   decodeMessageMetadata,
   encodeMessageMetadata,
   MessageMetadata,
+  TOKEN_MESSAGE_METADATA,
 } from "./message-metadata";
-
-export const TOKEN_MESSAGE_DATA = "msg_data";
 
 export interface MessageSearchQuery {
   releaseId: number;
-  distributionId: number;
 }
 
 export const matchMessageUrl = (query: MessageSearchQuery, url: string) => {
   const data = decodeMessageMetadata(url);
 
-  if (data?.release.id !== query.releaseId || !data.distributions.length) {
-    return false;
-  }
-
-  return data.distributions.some((r) => r.id === query.distributionId);
+  return data?.releaseId === query.releaseId;
 };
 
-export const findMessage = <T>(
+export const getMessageEmbedUrl = (message: Message) => {
+  return message.embeds?.[0]?.url;
+};
+
+export const findMessage = (
   query: MessageSearchQuery,
   list: Collection<string, Message>,
 ): Message | undefined => {
   return list.find((message) => {
-    const url = message.embeds?.[0]?.url;
+    const url = getMessageEmbedUrl(message);
 
     if (url == null) return false;
 
@@ -37,5 +35,5 @@ export const findMessage = <T>(
 };
 
 export const getMessageUrl = (url: string, data: MessageMetadata) => {
-  return `${url}#${TOKEN_MESSAGE_DATA}=${encodeMessageMetadata(data)}`;
+  return `${url}#${TOKEN_MESSAGE_METADATA}=${encodeMessageMetadata(data)}`;
 };

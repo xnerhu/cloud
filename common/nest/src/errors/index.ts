@@ -1,1 +1,1 @@
-export * from "./nest-error-handler";
+export * from "./http-handler";

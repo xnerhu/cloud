@@ -8,7 +8,7 @@ import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import multipart from "fastify-multipart";
 import { mkdir } from "fs/promises";
-import { NestErrorHandler } from "@common/nest";
+import { NestHttpExceptionHandler } from "@common/nest";
 import { IS_TEST } from "@common/node";
 
 import { AppModule } from "./app-module";
@@ -32,7 +32,7 @@ export const runApp = async (port?: number) => {
 
   const { httpAdapter } = app.get(HttpAdapterHost);
 
-  app.useGlobalFilters(new NestErrorHandler(httpAdapter));
+  app.useGlobalFilters(new NestHttpExceptionHandler(httpAdapter));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   app.register(multipart as any, {});

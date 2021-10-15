@@ -1,5 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { capitalizeFirstLetter } from "@common/utils";
+import { NewUpdateEvent } from "@network/updates-queue";
 
 import {
   MessageMetadata,
@@ -16,9 +17,18 @@ export const getMessageFooter = (osList: string[]) => {
   return osList.map(getOSEmoji).join(" ");
 };
 
+export const formatPlatform = (os: string) => {
+  switch (os) {
+    case "macos":
+      return "macOS";
+    default:
+      return os;
+  }
+};
+
 export const formatMessagePlatforms = (list: MessageMetadataDistribution[]) => {
   return list
-    .map((r) => `- ${capitalizeFirstLetter(r.os)} ${r.architecture}`)
+    .map((r) => `- ${formatPlatform(r.os)} ${r.architecture}`)
     .join("\n");
 };
 
@@ -26,7 +36,7 @@ export const getOSEmoji = (os: string) => {
   switch (os) {
     case "windows":
       return "🪟";
-    case "apple":
+    case "macos":
       return "🍏";
     case "linux":
       return "🐧";
@@ -35,14 +45,14 @@ export const getOSEmoji = (os: string) => {
   return "";
 };
 
-export const messageTemplate = (data: MessageMetadata) => {
+export const messageTemplate = (e: NewUpdateEvent, data: MessageMetadata) => {
   const url = getMessageUrl("https://discord.js.org", data);
 
   return new MessageEmbed()
-    .setColor(getChannelColor(data.release.channel))
-    .setTitle(formatMessageTitle(data.release.version, data.release.channel))
+    .setColor(getChannelColor(e.release.channel))
+    .setTitle(formatMessageTitle(e.release.version, e.release.channel))
     .setURL(url)
-    .addField("Notes:", "\n" + data.release.notes ?? "none")
+    .addField("Notes:", "\n" + e.release.notes ?? "none")
     .addField("Platforms: ", formatMessagePlatforms(data.distributions))
     .setTimestamp()
     .setFooter(getMessageFooter(data.distributions.map((r) => r.os)));

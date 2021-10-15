@@ -107,9 +107,6 @@ export class AdminService {
       this.releasesService.findOneOrFail({ id: releaseId }),
       this.distributionsService.findOneOrFail({ id: distributionId }),
     ]);
-    // this.rmq.emit("patches", { release, distribution });
-
-    // return;
 
     if (await this.patchesService.findOne({ releaseId, distributionId })) {
       throw new BadRequestException(
@@ -157,7 +154,7 @@ export class AdminService {
       version: release.version,
     };
 
-    this.rmq.send(PATTERN_NEW_UPDATE, {
+    this.rmq.emit(PATTERN_NEW_UPDATE, {
       release,
       distribution,
     } as NewUpdateEvent);
