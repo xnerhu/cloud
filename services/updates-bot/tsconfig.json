@@ -3,6 +3,9 @@
   "compilerOptions": {
     "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates-bot"
   },
-  "references": [],
+  "references": [
+    { "path": "../../common/node" },
+    { "path": "../../common/utils" }
+  ],
   "include": ["src/**/*.ts"]
 }

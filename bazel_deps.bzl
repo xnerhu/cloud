@@ -31,7 +31,7 @@ def fetch_dependencies():
 
     http_archive(
         name = "com_google_protobuf",
-        # sha256 = "c6003e1d2e7fefa78a3039f19f383b4f3a61e81be8c19356f85b6461998ad3db",
+        sha256 = "9111bf0b542b631165fadbd80aa60e7fb25b25311c532139ed2089d76ddf6dd7",
         strip_prefix = "protobuf-3.18.1",
         urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.18.1.tar.gz"],
     )

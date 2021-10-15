@@ -56,4 +56,5 @@ def test_suite(
             ],
             size = size,
             entry_point = "//tools/tests:run_tests.ts",
+            env = env,
         )

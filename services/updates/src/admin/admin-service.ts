@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
@@ -27,6 +28,8 @@ import {
   verifyUploadFile,
 } from "./uploads-utils";
 import { TEST_UPDATES_PATH } from "../config/env";
+import { ClientProxy } from "@nestjs/microservices";
+import { RMQ_PROXY_TOKEN } from "../rmq/rmq-proxy";
 
 @Injectable()
 export class AdminService {
@@ -35,6 +38,7 @@ export class AdminService {
     private readonly patchesService: PatchesService,
     private readonly releasesService: ReleasesService,
     private readonly configService: ConfigService,
+    @Inject(RMQ_PROXY_TOKEN) private readonly rmq: ClientProxy,
   ) {}
 
   public async getDistribution(data: GetDistributionDto) {
@@ -102,6 +106,9 @@ export class AdminService {
       this.releasesService.findOneOrFail({ id: releaseId }),
       this.distributionsService.findOneOrFail({ id: distributionId }),
     ]);
+    this.rmq.emit("patches", { release, distribution });
+
+    return;
 
     if (await this.patchesService.findOne({ releaseId, distributionId })) {
       throw new BadRequestException(
@@ -148,6 +155,8 @@ export class AdminService {
       notes: release.notes,
       version: release.version,
     };
+
+    this.rmq.send("new-patch", { xdd: "lmao" });
 
     return {
       patch: getUpdateDownloadInfo(entry, false, publicPath!),
