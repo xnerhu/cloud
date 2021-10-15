@@ -59,7 +59,7 @@ test_suite(
         ":components_test",
     ],
     coverage = True,
-    deps = DEPS,
+    deps = DEPS + ["@npm//md5-file"],
 )
 
 js_library(

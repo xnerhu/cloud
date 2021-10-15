@@ -31,5 +31,4 @@ JEST_DEPS = [
     "@npm//@types/supertest",
     "@npm//c8",
     "@npm//ts-jest",
-    "@npm//md5-file",
 ]
