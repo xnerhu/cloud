@@ -20,6 +20,7 @@ DEPS = [
     "@npm//@nestjs/config",
     "@npm//@nestjs/common",
     "@npm//whatwg-url",
+    "@npm//@types/whatwg-url",
 ]
 
 TEST_FILES = ["src/**/*.test.ts"]
