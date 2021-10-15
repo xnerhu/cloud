@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import { extname } from "path";
-import { randomBytes } from "../crypto";
 import { stat } from "fs/promises";
+
+import { randomBytes } from "../crypto";
 
 export const pathExists = async (path: string) => {
   try {
