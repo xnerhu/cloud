@@ -8,7 +8,6 @@ package(default_visibility = ["//visibility:public"])
 
 DEPS = [
     "//common/node",
-    "//common/fastify",
     "//common/nest",
     "//common/utils",
     "@npm//@types/node",
@@ -46,7 +45,6 @@ ts_config(
     src = "tsconfig.json",
     deps = [
         "//:tsconfig.json",
-        "//common/fastify:tsconfig",
         "//common/nest:tsconfig",
         "//common/node:tsconfig",
         "//common/utils:tsconfig",

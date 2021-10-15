@@ -5,7 +5,6 @@
   },
   "references": [
     { "path": "../../common/node" },
-    { "path": "../../common/fastify" },
     { "path": "../../common/nest" },
     { "path": "../../common/utils" }
   ],

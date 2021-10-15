@@ -1,54 +1,54 @@
-load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("//tools/nodejs:index.bzl", "nodejs_app")
+# load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+# load("//tools/nodejs:index.bzl", "nodejs_app")
 
-package(default_visibility = ["//visibility:public"])
+# package(default_visibility = ["//visibility:public"])
 
-DEPS = [
-    "//common/node",
-    "//common/utils",
-    "@npm//@types/node",
-    "@npm//discord.js",
-    "@npm//discord-api-types",
-    "@npm//@discordjs/rest",
-    "@npm//query-string",
-]
+# DEPS = [
+#     "//common/node",
+#     "//common/utils",
+#     "@npm//@types/node",
+#     "@npm//discord.js",
+#     "@npm//discord-api-types",
+#     "@npm//@discordjs/rest",
+#     "@npm//query-string",
+# ]
 
-TEST_FILES = ["src/**/*.test.ts"]
+# TEST_FILES = ["src/**/*.test.ts"]
 
-SRC_FILES = glob(
-    [
-        "src/**/*.ts",
-    ],
-    exclude = TEST_FILES,
-)
+# SRC_FILES = glob(
+#     [
+#         "src/**/*.ts",
+#     ],
+#     exclude = TEST_FILES,
+# )
 
-ts_config(
-    name = "tsconfig",
-    src = "tsconfig.json",
-    deps = [
-        "//:tsconfig.json",
-        "//common/node:tsconfig",
-        "//common/utils:tsconfig",
-    ],
-)
+# ts_config(
+#     name = "tsconfig",
+#     src = "tsconfig.json",
+#     deps = [
+#         "//:tsconfig.json",
+#         "//common/node:tsconfig",
+#         "//common/utils:tsconfig",
+#     ],
+# )
 
-ts_project(
-    name = "components",
-    srcs = SRC_FILES,
-    allow_js = True,
-    composite = True,
-    declaration = True,
-    incremental = True,
-    source_map = True,
-    tsconfig = ":tsconfig",
-    deps = DEPS,
-)
+# ts_project(
+#     name = "components",
+#     srcs = SRC_FILES,
+#     allow_js = True,
+#     composite = True,
+#     declaration = True,
+#     incremental = True,
+#     source_map = True,
+#     tsconfig = ":tsconfig",
+#     deps = DEPS,
+# )
 
-nodejs_app(
-    name = "updates-bot",
-    data = [
-        ":components",
-    ],
-    dev_data = [".env"],
-    entry_point = "src/index.ts",
-)
+# nodejs_app(
+#     name = "updates-bot",
+#     data = [
+#         ":components",
+#     ],
+#     dev_data = [".env"],
+#     entry_point = "src/index.ts",
+# )
