@@ -1,12 +1,8 @@
 import { AppError } from "./app-error";
 
-export const handleError = (err: Error | AppError, statusCode?: number) => {
-  // Status codes less than 500 are related to bad user input
-  // 500 is an internal server error
-  if (statusCode != null && statusCode < 500) return true;
-
+export const handleError = (err: Error | AppError) => {
   if (!isErrorOperational(err)) {
-    console.warn(`Exiting process due to programmer error: ${err}`);
+    console.error(`Exiting process due to error: ${err}`);
     process.exit(1);
   }
 

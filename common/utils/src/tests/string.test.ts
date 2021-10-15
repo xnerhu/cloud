@@ -7,6 +7,10 @@ describe("@common/utils string", () => {
     it("returns a random string", () => {
       expect(makeId(12)).toHaveLength(12);
     });
+
+    it("returns a random string with given length", () => {
+      expect(makeId(6)).toHaveLength(6);
+    });
   });
 
   describe("capitalizeFirstLetter", () => {
