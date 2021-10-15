@@ -5,22 +5,24 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { DiskStorageFile } from "@common/nest";
 import { rename } from "fs/promises";
 import { join } from "path";
+import { ClientProxy } from "@nestjs/microservices";
 import { IS_TEST } from "@common/node";
+import { DiskStorageFile } from "@common/nest";
+import {
+  CreateReleaseDto,
+  GetDiffInfoDto,
+  GetDistributionDto,
+  UploadPatchDto,
+} from "@network/updates-api";
+import { NewUpdateEvent, PATTERN_NEW_UPDATE } from "@network/updates-queue";
 
 import { DistributionsService } from "../distributions/distributions-service";
 import { PatchEntry, PatchesService } from "../patches/patches-service";
 import { ReleaseEntity } from "../releases/release-entity";
 import { ReleasesService } from "../releases/releases-service";
 import { getUpdateDownloadInfo } from "../updates/updates-utils";
-import {
-  CreateReleaseDto,
-  GetDiffInfoDto,
-  GetDistributionDto,
-  UploadPatchDto,
-} from "./admin-dto";
 import { AdminCreateReleaseResponse } from "./admin-response";
 import {
   formatUploadFilename,
@@ -28,7 +30,6 @@ import {
   verifyUploadFile,
 } from "./uploads-utils";
 import { TEST_UPDATES_PATH } from "../config/env";
-import { ClientProxy } from "@nestjs/microservices";
 import { RMQ_PROXY_TOKEN } from "../rmq/rmq-proxy";
 
 @Injectable()
@@ -156,7 +157,10 @@ export class AdminService {
       version: release.version,
     };
 
-    this.rmq.send("new-patch", { xdd: "lmao" });
+    this.rmq.send(PATTERN_NEW_UPDATE, {
+      release,
+      distribution,
+    } as NewUpdateEvent);
 
     return {
       patch: getUpdateDownloadInfo(entry, false, publicPath!),

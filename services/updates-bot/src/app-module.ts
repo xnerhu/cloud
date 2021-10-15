@@ -3,7 +3,6 @@ import { ConfigModule } from "@nestjs/config";
 import { resolve } from "path";
 
 import { IS_PRODUCTION } from "@common/node";
-// import { DiscordModule } from "./discord/discord-module";
 import { SCHEMA_ENV } from "./config/env";
 import { UpdatesModule } from "./updates/updates-module";
 
@@ -15,7 +14,6 @@ import { UpdatesModule } from "./updates/updates-module";
       ignoreEnvFile: IS_PRODUCTION,
       validationSchema: SCHEMA_ENV,
     }),
-    // DiscordModule,
     UpdatesModule,
   ],
   controllers: [],

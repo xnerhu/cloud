@@ -8,7 +8,7 @@ import {
   ensureFile,
   getUniqueFilename,
   getFileSize,
-} from "../fs";
+} from "../";
 
 jest.mock("fs/promises");
 

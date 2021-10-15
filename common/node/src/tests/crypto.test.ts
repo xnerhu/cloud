@@ -1,6 +1,6 @@
 import "jest";
 
-import { randomBytes } from "../crypto";
+import { randomBytes } from "../";
 
 describe("@common/node crypto", () => {
   describe("randomBytes", () => {

@@ -10,7 +10,7 @@ jest.mock("axios");
 
 const mockedAxios = mocked(axios, true);
 
-import { downloadFile } from "../network";
+import { downloadFile } from "../";
 
 describe("@common/node network", () => {
   describe("downloadFile", () => {

@@ -12,4 +12,4 @@ export interface Release {
   createdAt: Date;
 }
 
-export type ReleaseChannel = "stable" | "alpha";
+export type ReleaseChannel = "alpha" | "beta" | "stable";

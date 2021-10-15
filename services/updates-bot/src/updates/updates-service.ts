@@ -1,28 +1,12 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Client, Message, MessageEmbed, TextChannel } from "discord.js";
+import { Client, TextChannel } from "discord.js";
+import { NewUpdateEvent } from "@network/updates-queue";
 
 import { DISCORD_CONNECTION } from "../discord/discord-connection";
-import {
-  findReleaseMessage,
-  formatMessageData,
-  ReleaseSearchQuery,
-  TOKEN_MESSAGE_DATA,
-} from "../utils/messages";
-import { messageTemplate } from "./message-template";
-
-export interface ReleaseData {
-  version: string;
-  releaseId: number;
-  distributions: {
-    id: number;
-    os: string;
-    architecture: string;
-  }[];
-  notes?: string;
-  channel: "alpha" | "beta" | "stable";
-}
-
+import { messageTemplate } from "../messages/message-template";
+import { findMessage, MessageSearchQuery } from "../messages/message-utils";
+import { decodeMessageMetadata } from "../messages/message-metadata";
 @Injectable()
 export class UpdatesService {
   constructor(
@@ -36,72 +20,38 @@ export class UpdatesService {
     return <TextChannel>this.clientService.channels.resolve(id);
   }
 
-  private async findReleaseMessage(data: ReleaseSearchQuery) {
+  public async sendDiscordMessage(data: NewUpdateEvent) {
+    const channel = this.getChannel();
+
+    const message = await this.findMessage({
+      releaseId: data.release.id,
+      distributionId: data.distribution.id,
+    });
+
+    if (!message) {
+      const embed = messageTemplate({
+        release: data.release,
+        distributions: [data.distribution],
+      });
+
+      await channel.send({ embeds: [embed] });
+
+      return;
+    }
+
+    const metadata = decodeMessageMetadata(message.url)!;
+
+    const embed = messageTemplate({
+      release: data.release,
+      distributions: [...metadata.distributions, data.distribution],
+    });
+
+    message.edit({ embeds: [embed] });
+  }
+
+  private async findMessage(data: MessageSearchQuery) {
     const messages = await this.getChannel().messages.fetch({ limit: 16 });
 
-    return findReleaseMessage(data, messages);
-  }
-
-  private async editMessage(message: Message) {
-    message.edit({ embeds: [] });
-  }
-
-  private async createMessage(data: ReleaseData) {
-    const embed = messageTemplate(data);
-
-    await this.getChannel().send({ embeds: [embed] });
-  }
-
-  public async sendDiscordMessage(data: any) {
-    const channelId = this.configService.get("DISCORD_CHANNEL") as string;
-
-    const channel = <TextChannel>this.clientService.channels.resolve(channelId);
-
-    const releaseData: ReleaseData = {
-      version: "6.9.0",
-      channel: "stable",
-      notes: "- Fixed React\n- Added npm",
-      releaseId: data.release.id,
-      distributions: [
-        {
-          id: data.distribution.id,
-          architecture: "x64",
-          os: "windows",
-        },
-      ],
-    };
-
-    await this.createMessage(releaseData);
-
-    // const msg = await this.findReleaseMessage({
-    //   releaseId: data.release.id,
-    //   distribution: data.distribution.id,
-    // });
-
-    // if (msg) {
-    //   await this.editMessage(msg);
-    // }
-
-    // const exampleEmbed = new MessageEmbed()
-    //   .setColor("#67ea76")
-    //   .setTitle("Wexond 1.0.0 Stable")
-    //   .setURL(
-    //     `https://discord.js.org/#${TOKEN_MESSAGE_DATA}=${formatMessageData(
-    //       releaseData,
-    //     )}`,
-    //   )
-    //   .addField("Changelog:", "- Fixed react\n- Added popup")
-    //   .addField("Platforms: ", "- Windows x64")
-    //   .setTimestamp()
-    //   .setFooter("🪟 🍏 🐧");
-
-    // await channel.send({ embeds: [exampleEmbed] }); // `Wexond 1.0.0 Alpha released!\nxd`
-    // await this.findReleaseMessage();
-    // const messages = await channel.messages.fetch({ limit: 16 });
-
-    // messages.find(r => r.components.fi
-    // console.log(messages.first()?.embeds);
-
-    // // messages.find(msg => msg.content
+    return findMessage(data, messages);
   }
 }

@@ -3,6 +3,9 @@
   "compilerOptions": {
     "outDir": "../../bazel-out/x64_windows-fastbuild/bin/packages/updates-cli"
   },
-  "references": [{ "path": "../../common/node" }],
+  "references": [
+    { "path": "../../common/node" },
+    { "path": "../../network/updates-api" }
+  ],
   "include": ["src/**/*.ts"]
 }

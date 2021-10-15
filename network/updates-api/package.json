@@ -1,0 +1,11 @@
+{
+  "name": "@network/updates-api",
+  "version": "1.0.0",
+  "publishConfig": {
+    "registry": "https://npm.wexond.net"
+  },
+  "dependencies": {
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1"
+  }
+}

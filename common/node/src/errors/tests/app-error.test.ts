@@ -1,6 +1,6 @@
 import "jest";
 
-import { createAppError, AppError } from "../app-error";
+import { createAppError, AppError } from "../../";
 
 describe("@common/node errors/app-error", () => {
   describe("createAppError", () => {

@@ -1,6 +1,6 @@
 import "jest";
 
-import { AppError, handleError, isErrorOperational } from "../../errors";
+import { AppError, handleError, isErrorOperational } from "../../";
 
 describe("@common/node errors/error-handler", () => {
   describe("isErrorOperational", () => {

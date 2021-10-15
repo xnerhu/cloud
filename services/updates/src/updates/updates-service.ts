@@ -1,13 +1,13 @@
 import { omitNull } from "@common/utils";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { GetUpdatesDto } from "@network/updates-api";
 
 import {
   DEFAULT_DISTRIBUTION_SEARCH_OPTIONS,
   DistributionsService,
 } from "../distributions/distributions-service";
 import { PatchesService } from "../patches/patches-service";
-import { GetUpdatesDto } from "./updates-dto";
 import { UpdateResponse, UpdateV1Response } from "./updates-response";
 import { getUpdateDownloadInfo, getUpdateStrategy } from "./updates-utils";
 import { transformUpdateResV1 } from "./updates-v1";

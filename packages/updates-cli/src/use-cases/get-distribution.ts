@@ -1,4 +1,5 @@
 import axios from "axios";
+import { GetDistributionDto } from "@network/updates-api";
 
 import { getAdminUrl, getAuthHeaders } from "../utils";
 import { info, infoRes } from "../utils/logger";
@@ -20,7 +21,11 @@ export const getDistribution = async ({
   info(`Searching distribution ${os}-${architecture}-${osVersion}`);
 
   const res = await axios.get<any>(getAdminUrl(api, "distribution"), {
-    params: { architecture, os, osVersion },
+    params: {
+      architecture,
+      os,
+      osVersion,
+    } as GetDistributionDto,
     headers: getAuthHeaders(token),
   });
 

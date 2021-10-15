@@ -2,7 +2,7 @@ import "jest";
 import { resolve } from "path";
 import hashFile from "md5-file";
 
-import { pump } from "../stream";
+import { pump } from "../";
 import { createReadStream, createWriteStream } from "fs";
 
 describe("@common/node stream", () => {

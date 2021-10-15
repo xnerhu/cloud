@@ -1,7 +1,7 @@
 import { MikroORM, ReflectMetadataProvider } from "@mikro-orm/core";
+import { Patch, Release } from "@core/updates";
 
 import { DistributionEntity } from "../src/distributions/distribution-entity";
-import { Patch, Release } from "../src/interfaces";
 import config from "../src/mikro-orm-config";
 import { PatchEntity } from "../src/patches/patch-entity";
 import { ReleaseEntity } from "../src/releases/release-entity";

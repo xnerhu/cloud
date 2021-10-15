@@ -1,6 +1,6 @@
 import { Entity, PrimaryKey, Property, ManyToOne } from "@mikro-orm/core";
+import { Patch } from "@core/updates";
 
-import { Patch } from "../interfaces";
 import { DistributionEntity } from "../distributions/distribution-entity";
 import { ReleaseEntity } from "../releases/release-entity";
 

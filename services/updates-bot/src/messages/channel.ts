@@ -1,3 +1,5 @@
+import { HexColorString } from "discord.js";
+
 const COLORS_CHANNELS: Record<string, string> = {
   alpha: "#8118bf",
   beta: "#00a6ff",
@@ -6,5 +8,6 @@ const COLORS_CHANNELS: Record<string, string> = {
 };
 
 export const getChannelColor = (channel: string) => {
-  return COLORS_CHANNELS[channel] || COLORS_CHANNELS["none"];
+  return (COLORS_CHANNELS[channel] ||
+    COLORS_CHANNELS["none"]) as HexColorString;
 };

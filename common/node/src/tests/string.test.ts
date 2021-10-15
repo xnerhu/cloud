@@ -1,6 +1,6 @@
 import "jest";
 
-import { makeId } from "../string";
+import { makeId } from "../";
 
 describe("@common/node string", () => {
   describe("makeId", () => {

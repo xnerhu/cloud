@@ -1,11 +1,11 @@
 import "jest";
 
-import { makeId, capitalizeFirstLetter } from "../string";
+import { makeId, capitalizeFirstLetter } from "../";
 
 describe("@common/utils string", () => {
   describe("makeId", () => {
     it("returns a random string", () => {
-      expect(makeId(12)).toHaveLength(12);
+      expect(makeId()).toHaveLength(12);
     });
 
     it("returns a random string with given length", () => {

@@ -1,6 +1,6 @@
 import "jest";
 
-import { handleNodeErrors } from "../node-errors";
+import { handleNodeErrors } from "../../";
 
 describe("@common/node errors/node-errors", () => {
   describe("handleNodeErrors", () => {
