@@ -15,7 +15,7 @@ def nodejs_app(
     )
 
     nodejs_binary(
-        name = name + "_dev",
+        name = name + ".dev",
         data = data + dev_data,
         env = {
             "NODE_ENV": "development",

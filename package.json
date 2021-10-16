@@ -2,8 +2,8 @@
   "name": "wexond-cloud",
   "private": true,
   "scripts": {
-    "dev:updates": "ibazel run //services/updates:updates_dev",
-    "dev:updates-bot": "ibazel run //services/updates-bot:updates-bot_dev",
+    "dev:updates": "ibazel run //services/updates:updates.dev",
+    "dev:updates-bot": "ibazel run //services/updates-bot:updates-bot.dev",
     "seed:updates": "bazel run //services/updates:schema_up && bazel run //services/updates:seed",
     "drop:updates": "bazel run //services/updates:schema_drop",
     "build:updates": "lerna exec yarn build --scope=@backend/{common,updates}",
