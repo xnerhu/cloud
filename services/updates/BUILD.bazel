@@ -76,6 +76,7 @@ nodejs_service(
     ],
     dev_data = [".env"],
     entry_point = "src/index.ts",
+    service_name = "updates",
 )
 
 ENV_MIKRO_ORM = {

@@ -1,29 +1,69 @@
-name: CD - npm
+name: CD
 
 on:
-  # pull_request:
+  pull_request:
   # push:
-  #   branches:
-  #     - master
-  workflow_run:
-    workflows: ["CI"]
-    branches: [deployment]
-    types:
-      - completed
+  # branches:
+  #   - master
+
+# on:
+#   release:
+#     types: [published]
 
 jobs:
-  on-success:
+  deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ github.token }}
+    env:
+      - NPM_REGISTRY: https://gitlab.com/api/v4/projects/28714630/packages/npm
+      - NPM_SCOPE: wexond
 
+    steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: Test
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Setup npm
         run: |
-          echo test
+          npm config set @${{ env.NPM_SCOPE }}:registry ${{ env.NPM_REGISTRY }}
+
+          npm config set -- '//${{ env.NPM_REGISTRY }}/:_authToken' "${{ secrets.NPM_TOKEN }}"
+
+          npm whoami
+      # - uses: actions/cache@v2.1.6
+      #   id: yarn-cache
+      #   with:
+      #     path: |
+      #       node_modules
+      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-yarn-
+
+      # - name: Install dependencies
+      #   run: yarn install --prefer-offline --frozen-lockfile
+      #   env:
+      #     ADBLOCK: true
+
+      # - name: Restore Bazelisk cache
+      #   uses: actions/cache@v2.1.6
+      #   with:
+      #     path: ~/.cache/bazelisk
+      #     key: ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-${{ hashFiles('tools/bazel_deps.bzl') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-
+
+      # - name: Restore Bazel cache
+      #   uses: actions/cache@v2.1.6
+      #   with:
+      #     path: ~/.cache/bazel
+      #     key: ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-
+
+      # - name: Publish
+      #   run: |
+      #     ./scripts/publish.sh

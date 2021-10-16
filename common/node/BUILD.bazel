@@ -1,6 +1,7 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "js_library", "pkg_npm")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("//tools/tests:index.bzl", "test_suite")
+load("//tools/npm:index.bzl", "pkg_npm")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -73,7 +74,6 @@ pkg_npm(
     name = "npm",
     package_name = "@wexond/common-node",
     srcs = [
-        "README.md",
         "package.json",
     ],
     substitutions = {

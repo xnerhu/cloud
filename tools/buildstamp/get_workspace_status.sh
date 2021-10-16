@@ -10,6 +10,10 @@
 # If the script exits with non-zero code, it's considered as a failure
 # and the output will be discarded.
 
+
+readonly RAW_TAG=$(git describe --abbrev=7 --tags HEAD)
+readonly TAG=$(echo $RAW_TAG | cut -d '-' -f2)
+
 echo "CI true"
 echo "CODECOV_TOKEN ${CODECOV_TOKEN}"
 echo "GITHUB_HEAD_REF ${GITHUB_HEAD_REF}"
@@ -19,8 +23,4 @@ echo "GITHUB_SHA ${GITHUB_SHA}"
 echo "GITHUB_PR_SHA ${GITHUB_PR_SHA}"
 echo "GITHUB_REPOSITORY ${GITHUB_REPOSITORY}"
 echo "GITHUB_EVENT_NAME ${GITHUB_EVENT_NAME}"
-
-NPM_TAG=$(git describe --abbrev=7 --tags HEAD)
-
-echo NPM_STABLE_BUILD_SCM_VERSION $(echo $NPM_TAG | cut -d '-' -f2)
-
+echo "BUILD_TAG $TAG"

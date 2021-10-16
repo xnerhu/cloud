@@ -1,9 +1,6 @@
 {
   "name": "@wexond/updates-cli",
-  "version": "1.1.0",
-  "publishConddfig": {
-    "registrxddy": "https://npm.wexond.net"
-  },
+  "version": "0.0.0-PLACEHOLDER",
   "bin": {
     "wexond-updates": "./bin/run"
   },

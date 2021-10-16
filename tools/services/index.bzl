@@ -4,6 +4,7 @@ load("//tools/nodejs:index.bzl", "nodejs_app")
 
 def nodejs_service(
         name,
+        service_name,
         data,
         dev_data = [],
         **kwargs):
@@ -11,11 +12,7 @@ def nodejs_service(
 
     nodejs_image(
         name = "image",
-        # binary = name,
-        data = data,
-        env = {
-            "NODE_ENV": "production",
-        },
+        binary = name,
         **kwargs
     )
 
@@ -24,8 +21,8 @@ def nodejs_service(
         format = "Docker",
         image = ":image",
         registry = "registry.gitlab.com",
-        repository = "wexond/cloud/xd",
-        tag = "1.1.2",
+        repository = "wexond/cloud/{}".format(service_name),
+        tag = "{BUILD_TAG}",
         target_compatible_with = select({
             "@platforms//os:windows": [],
             "@platforms//os:osx": ["@platforms//os:osx"],
@@ -33,4 +30,5 @@ def nodejs_service(
                 "@platforms//os:linux",
             ],
         }),
+        tags = ["manual"],
     )
