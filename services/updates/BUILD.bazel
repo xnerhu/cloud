@@ -1,8 +1,8 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@npm//@mikro-orm/cli:index.bzl", "mikro_orm")
-load("//tools/nodejs:index.bzl", "nodejs_app")
 load("//tools/tests:index.bzl", "test_suite")
 load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin")
+load("//tools/services:index.bzl", "nodejs_service")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -69,13 +69,14 @@ ts_project(
     deps = DEPS,
 )
 
-nodejs_app(
+nodejs_service(
     name = "updates",
     data = [
         ":components",
     ],
     dev_data = [".env"],
     entry_point = "src/index.ts",
+    service_name = "updates",
 )
 
 ENV_MIKRO_ORM = {

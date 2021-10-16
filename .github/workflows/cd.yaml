@@ -1,26 +1,19 @@
-name: CI
+name: CD
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
+  release:
+    types: [published]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     env:
-      GITHUB_PR_SHA: ${{ github.event.pull_request.head.sha }}
-      GITHUB_EVENT_NAME: ${{ github.event_name }}
+      NPM_REGISTRY: gitlab.com/api/v4/projects/28714630/packages/npm/
+      NPM_SCOPE: wexond
       BAZELISK_CACHE_VERSION: 2
       BAZEL_CACHE_VERSION: 5
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Check out Git repository
         uses: actions/checkout@v2
 
@@ -28,6 +21,15 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+
+      - name: Authenticate npm
+        run: |
+          npm config set @${{ env.NPM_SCOPE }}:registry https://${{ env.NPM_REGISTRY }}
+          npm config set -- '//${{ env.NPM_REGISTRY }}:_authToken' "${{ secrets.NPM_TOKEN }}"
+
+      - name: Authenticate gitlab
+        run: |
+          docker login registry.gitlab.com -u ${{ secrets.GITLAB_USERNAME }} -p ${{ secrets.GITLAB_PASSWORD }}
 
       - uses: actions/cache@v2.1.6
         id: yarn-cache
@@ -43,19 +45,6 @@ jobs:
         run: yarn install --prefer-offline --frozen-lockfile
         env:
           ADBLOCK: true
-
-      # - name: Restore Eslint Cache
-      #   uses: actions/cache@v2.1.6
-      #   id: eslint-cache
-      #   with:
-      #     path: |
-      #       .eslintcache
-      #     key: ${{ runner.os }}-eslint-${{ hashFiles('**/.eslintcache') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-eslint-
-
-      - name: Lint
-        run: yarn lint
 
       - name: Restore Bazelisk cache
         uses: actions/cache@v2.1.6
@@ -73,22 +62,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-
 
-      - name: Setup Bazel config
+      - name: Publish
         run: |
-          cat .bazelrc.ci >> .bazelrc
-
-      - name: Build
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: yarn build
-
-      - name: Pull docker
-        run: docker-compose pull
-
-      - name: Start docker
-        run: docker-compose up --build -d
-
-      - name: Test
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: yarn test
+          ./scripts/publish.sh
