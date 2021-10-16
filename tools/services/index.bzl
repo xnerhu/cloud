@@ -30,5 +30,4 @@ def nodejs_service(
                 "@platforms//os:linux",
             ],
         }),
-        tags = ["manual"],
     )

@@ -1,14 +1,8 @@
 name: CD
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-
-# on:
-#   release:
-#     types: [published]
+  release:
+    types: [published]
 
 jobs:
   deploy:
@@ -70,8 +64,4 @@ jobs:
 
       - name: Publish
         run: |
-          git tag updates-1.0.0
-
           ./scripts/publish.sh
-
-# test
