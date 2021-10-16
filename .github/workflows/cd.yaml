@@ -29,41 +29,41 @@ jobs:
       - name: Setup npm
         run: |
           npm config set @${{ env.NPM_SCOPE }}:registry ${{ env.NPM_REGISTRY }}
-
           npm config set -- '//${{ env.NPM_REGISTRY }}/:_authToken' "${{ secrets.NPM_TOKEN }}"
 
-          npm whoami
-      # - uses: actions/cache@v2.1.6
-      #   id: yarn-cache
-      #   with:
-      #     path: |
-      #       node_modules
-      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn-
+      - uses: actions/cache@v2.1.6
+        id: yarn-cache
+        with:
+          path: |
+            node_modules
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-      # - name: Install dependencies
-      #   run: yarn install --prefer-offline --frozen-lockfile
-      #   env:
-      #     ADBLOCK: true
+      - name: Install dependencies
+        run: yarn install --prefer-offline --frozen-lockfile
+        env:
+          ADBLOCK: true
 
-      # - name: Restore Bazelisk cache
-      #   uses: actions/cache@v2.1.6
-      #   with:
-      #     path: ~/.cache/bazelisk
-      #     key: ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-${{ hashFiles('tools/bazel_deps.bzl') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-
+      - name: Restore Bazelisk cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.cache/bazelisk
+          key: ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-${{ hashFiles('tools/bazel_deps.bzl') }}
+          restore-keys: |
+            ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-
 
-      # - name: Restore Bazel cache
-      #   uses: actions/cache@v2.1.6
-      #   with:
-      #     path: ~/.cache/bazel
-      #     key: ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-
+      - name: Restore Bazel cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.cache/bazel
+          key: ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-
 
-      # - name: Publish
-      #   run: |
-      #     ./scripts/publish.sh
+      - name: Publish
+        run: |
+          git tag npm-1.0.0
+
+          ./scripts/publish.sh
