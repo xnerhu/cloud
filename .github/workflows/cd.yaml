@@ -66,4 +66,6 @@ jobs:
         run: |
           git tag npm-1.0.0
 
-          ./scripts/publish.sh
+          bazel build //...
+
+#./scripts/publish.sh
