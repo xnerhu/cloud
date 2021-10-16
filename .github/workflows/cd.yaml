@@ -14,8 +14,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      - NPM_REGISTRY: https://gitlab.com/api/v4/projects/28714630/packages/npm
-      - NPM_SCOPE: wexond
+      - NPM_REGISTRY: "https://gitlab.com/api/v4/projects/28714630/packages/npm"
+      - NPM_SCOPE: "wexond"
 
     steps:
       - name: Check out Git repository
