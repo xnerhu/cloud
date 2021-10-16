@@ -16,6 +16,8 @@ jobs:
     env:
       NPM_REGISTRY: gitlab.com/api/v4/projects/28714630/packages/npm
       NPM_SCOPE: wexond
+      BAZELISK_CACHE_VERSION: 2
+      BAZEL_CACHE_VERSION: 5
 
     steps:
       - name: Check out Git repository
@@ -50,22 +52,20 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/bazelisk
-          key: ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-${{ hashFiles('tools/bazel_deps.bzl') }}
+          key: ${{ runner.os }}-bazelisk-${{ env.BAZELISK_CACHE_VERSION }}-${{ hashFiles('tools/bazel_deps.bzl') }}
           restore-keys: |
-            ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-
+            ${{ runner.os }}-bazelisk-${{ env.BAZELISK_CACHE_VERSION }}-
 
       - name: Restore Bazel cache
         uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/bazel
-          key: ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-${{ github.sha }}
+          key: ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-
+            ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-
 
       - name: Publish
         run: |
           git tag npm-1.0.0
 
-          bazel build //...
-
-#./scripts/publish.sh
+          ./scripts/publish.sh

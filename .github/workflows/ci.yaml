@@ -12,6 +12,8 @@
 #     env:
 #       GITHUB_PR_SHA: ${{ github.event.pull_request.head.sha }}
 #       GITHUB_EVENT_NAME: ${{ github.event_name }}
+#       BAZELISK_CACHE_VERSION: 2
+#       BAZEL_CACHE_VERSION: 5
 
 #     steps:
 #       - name: Cancel Previous Runs
@@ -59,17 +61,17 @@
 #         uses: actions/cache@v2.1.6
 #         with:
 #           path: ~/.cache/bazelisk
-#           key: ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-${{ hashFiles('tools/bazel_deps.bzl') }}
+#           key: ${{ runner.os }}-bazelisk-${{ env.BAZELISK_CACHE_VERSION }}-${{ hashFiles('tools/bazel_deps.bzl') }}
 #           restore-keys: |
-#             ${{ runner.os }}-bazelisk-${{ secrets.BAZELISK_CACHE_VERSION }}-
+#             ${{ runner.os }}-bazelisk-${{ env.BAZELISK_CACHE_VERSION }}-
 
 #       - name: Restore Bazel cache
 #         uses: actions/cache@v2.1.6
 #         with:
 #           path: ~/.cache/bazel
-#           key: ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-${{ github.sha }}
+#           key: ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-${{ github.sha }}
 #           restore-keys: |
-#             ${{ runner.os }}-bazel-${{ secrets.BAZEL_CACHE_VERSION }}-
+#             ${{ runner.os }}-bazel-${{ env.BAZEL_CACHE_VERSION }}-
 
 #       - name: Setup Bazel config
 #         run: |
