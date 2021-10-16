@@ -14,7 +14,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      NPM_REGISTRY: https://gitlab.com/api/v4/projects/28714630/packages/npm
+      NPM_REGISTRY: gitlab.com/api/v4/projects/28714630/packages/npm
       NPM_SCOPE: wexond
 
     steps:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Setup npm
         run: |
-          npm config set @${{ env.NPM_SCOPE }}:registry ${{ env.NPM_REGISTRY }}
+          npm config set @${{ env.NPM_SCOPE }}:registry https://${{ env.NPM_REGISTRY }}
           npm config set -- '//${{ env.NPM_REGISTRY }}/:_authToken' "${{ secrets.NPM_TOKEN }}"
 
       - uses: actions/cache@v2.1.6
