@@ -69,3 +69,5 @@ jobs:
           git tag npm-1.0.0
 
           ./scripts/publish.sh
+
+# test
