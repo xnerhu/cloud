@@ -22,6 +22,10 @@ export interface ReleaseFindBeforeOptions {
   channel: string;
 }
 
+export interface ReleaseFindLatestOptions {
+  channel: string;
+}
+
 @Injectable()
 export class ReleasesService {
   constructor(
@@ -31,6 +35,10 @@ export class ReleasesService {
 
   public async findOne(options: ReleaseSearchOptions) {
     return await this.releasesRepo.findOne(options);
+  }
+
+  public async findLatest(options: ReleaseFindLatestOptions) {
+    return await this.releasesRepo.findOne({ channel: options.channel });
   }
 
   public async findOneOrFail(

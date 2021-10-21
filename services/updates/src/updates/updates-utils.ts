@@ -1,3 +1,4 @@
+import { BadRequestException } from "@nestjs/common";
 import { getUpdateDownloadUrl } from "../files/file-utils";
 import { PatchEntry } from "../patches/patches-service";
 import { UpdateStrategy, UpdateEntry } from "./updates-response";

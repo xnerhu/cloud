@@ -1,6 +1,6 @@
 import { omitNull } from "@common/utils";
-import { Injectable } from "@nestjs/common";
-import { GetUpdatesDto } from "@network/updates-api";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { DownloadDto, GetUpdatesDto } from "@network/updates-api";
 
 import { ConfigService } from "../config/config-service";
 import {
@@ -11,6 +11,8 @@ import { PatchesService } from "../patches/patches-service";
 import { UpdateResponse, UpdateV1Response } from "./updates-response";
 import { getUpdateDownloadInfo, getUpdateStrategy } from "./updates-utils";
 import { transformUpdateResV1 } from "./updates-v1";
+import { ReleasesService } from "../releases/releases-service";
+import { getUpdateDownloadUrl } from "../files/file-utils";
 
 export interface ReleaseSearchOptions {
   version: string;
@@ -24,6 +26,7 @@ export class UpdatesService {
     private readonly distributionsService: DistributionsService,
     private readonly patchesService: PatchesService,
     private readonly configService: ConfigService,
+    private readonly releasesService: ReleasesService,
   ) {}
 
   public async get({
@@ -89,5 +92,24 @@ export class UpdatesService {
     });
 
     return transformUpdateResV1(update);
+  }
+
+  public async download({ os, architecture, channel }: DownloadDto) {
+    const distribution = await this.distributionsService.findOneOrFail({
+      architecture,
+      os,
+    });
+
+    if (!distribution) {
+      throw new NotFoundException("Distribution not found");
+    }
+
+    const release = await this.releasesService.findLatest({ channel });
+
+    if (!release) {
+      throw new NotFoundException("Release not found");
+    }
+
+    // return getUpdateDownloadUrl(
   }
 }
