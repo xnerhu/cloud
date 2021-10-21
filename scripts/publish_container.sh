@@ -3,8 +3,8 @@
 set -u -e -o pipefail
 
 readonly BAZEL=./node_modules/.bin/bazel
-readonly SERVICE=$(echo $1 | cut -d '-' -f1)
+readonly CONTAINER=$(echo $1 | cut -d '-' -f1)
 
-target="//$SERVICE:image.push"
+target="//$CONTAINER:image.push"
 
 $BAZEL run $target
