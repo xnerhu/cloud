@@ -13,13 +13,13 @@ export class DistributionEntity implements Distribution {
   @PrimaryKey()
   id: number;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   os: DistributionOS;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   osVersion: DistributionOSVersion;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   architecture: DistributionArchitecture;
 
   @OneToMany(() => PatchEntity, (patch) => patch.distribution)

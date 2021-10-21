@@ -9,19 +9,19 @@ export class PatchEntity implements Patch {
   @PrimaryKey()
   id: number;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   filename: string;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   hash: string;
 
   @Property({ columnType: "integer" })
   size: number;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   fullFilename: string;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   fullHash: string;
 
   @Property({ columnType: "integer" })

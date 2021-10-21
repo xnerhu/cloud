@@ -14,18 +14,18 @@ export class ReleaseEntity implements Release {
   @PrimaryKey()
   id: number;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   @Index()
   version: string;
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   @Index()
   channel: string;
 
   @OneToMany(() => PatchEntity, (patch) => patch.release)
   patches: PatchEntity[];
 
-  @Property({ columnType: "varchar" })
+  @Property({ columnType: "text" })
   notes: string;
 
   @Property({ columnType: "timestamp" })
