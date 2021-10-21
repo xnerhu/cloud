@@ -110,6 +110,6 @@ export class UpdatesService {
       throw new NotFoundException("Release not found");
     }
 
-    // return getUpdateDownloadUrl(
+    return getUpdateDownloadUrl(
   }
 }
