@@ -1,13 +1,17 @@
+import { extname, join } from "path";
 import { Asset, AssetType, Release } from "@core/updates";
-import { EntityRepository } from "@mikro-orm/knex";
+import { EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { DistributionSearchOptions, UpdateEntry } from "@network/updates-api";
+import { makeId } from "@common/node";
 
 import { ConfigService } from "../config/config-service";
 import { DistributionEntity } from "../distributions/distribution-entity";
 import { ReleaseEntity } from "../releases/release-entity";
 import { AssetEntity } from "./asset-entity";
+import { getAssetExtension, verifyAssetHash } from "./assets-utils";
+import { copyFile } from "fs/promises";
 
 export type FormatAssetOptions = Pick<Release, "notes" | "version"> &
   Pick<Asset, "filename" | "hash" | "size" | "type">;
@@ -33,6 +37,12 @@ export type CreateAssetOptions = {
   distribution: DistributionEntity;
 } & Pick<Asset, "filename" | "hash" | "type" | "size">;
 
+export type UploadAssetOptions = {
+  path: string;
+  release: ReleaseEntity;
+  distribution: DistributionEntity;
+} & Pick<Asset, "hash" | "size" | "type">;
+
 @Injectable()
 export class AssetsService {
   constructor(
@@ -53,6 +63,26 @@ export class AssetsService {
     return `${this.config.installersPublicPath}/${filename}`;
   }
 
+  public getUrl(type: AssetType, filename: string) {
+    if (type === AssetType.PATCH) {
+      return this.getPatchUrl(filename);
+    } else if (type === AssetType.PACKED) {
+      return this.getPatchUrl(filename);
+    } else if (type === AssetType.INSTALLER) {
+      return this.getInstallerUrl(filename);
+    }
+
+    throw new Error(`Can't format url for asset type ${type}`);
+  }
+
+  public getStoragePath(type: AssetType) {
+    if (type === AssetType.INSTALLER) {
+      return this.config.installersPath;
+    }
+
+    return this.config.patchesPath;
+  }
+
   /**
    * Returns assets fetch details.
    */
@@ -64,18 +94,13 @@ export class AssetsService {
     type,
     version,
   }: FormatAssetOptions): UpdateEntry {
-    const url =
-      type === AssetType.PATCH
-        ? this.getPatchUrl(filename)
-        : this.getPackedUrl(filename);
-
     return {
       filename,
       hash,
       notes,
       size,
       version,
-      url,
+      url: this.getUrl(type, filename),
     };
   }
 
@@ -129,5 +154,37 @@ export class AssetsService {
     entity.size = size;
 
     return entity;
+  }
+
+  /**
+   * Verifies asset hash, copies it to its dedicaded storage path, then inserts it to the database
+   */
+  public async upload({
+    type,
+    path,
+    hash,
+    distribution,
+    release,
+    size,
+  }: UploadAssetOptions) {
+    await verifyAssetHash(path, hash, type);
+
+    const filename = (await makeId(12)) + getAssetExtension(path, type);
+    const storagePath = join(this.getStoragePath(type), filename);
+
+    await copyFile(path, storagePath);
+
+    const asset = await this.createOne({
+      filename,
+      type,
+      hash,
+      distribution,
+      release,
+      size,
+    });
+
+    this.assetsRepo.persist(asset);
+
+    return asset;
   }
 }

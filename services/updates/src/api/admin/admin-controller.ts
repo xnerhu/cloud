@@ -12,16 +12,22 @@ import {
   DiskStorage,
   DiskStorageFile,
   FileFieldsInterceptor,
+  FileInterceptor,
+  UploadedFile,
   UploadedFiles,
 } from "@common/nest";
 import {
   CreateReleaseDto,
   GetDiffInfoDto,
+  UploadInstallerAssetDto,
   UploadPatchAssetsDto,
 } from "@network/updates-api";
 
 import { AdminService } from "./admin-service";
-import { uploadFilter } from "./upload-filter";
+import {
+  uploadInstallerAssetFilter,
+  uploadPatchAssetsFilter,
+} from "./upload-filter";
 import { uploadsStorage } from "./upload-storage";
 import { TokenGuard } from "../../security/token-guard";
 
@@ -47,11 +53,11 @@ export class AdminController {
   @Put("patch")
   @UseInterceptors(
     FileFieldsInterceptor([{ name: "patch" }, { name: "packed" }], {
-      filter: uploadFilter,
+      filter: uploadPatchAssetsFilter,
       storage: uploadsStorage,
     }),
   )
-  public async uploadPatchAssets(
+  public async uploadPatchAndPacked(
     @Body() data: UploadPatchAssetsDto,
     @UploadedFiles()
     files: {
@@ -67,10 +73,28 @@ export class AdminController {
       throw new BadRequestException("Packed file not provided");
     }
 
-    return this.adminService.uploadPatchAssets(
+    return this.adminService.uploadPatchAndPacked(
       data,
       files.patch[0],
       files.packed[0],
     );
+  }
+
+  @Put("installer")
+  @UseInterceptors(
+    FileInterceptor("installer", {
+      filter: uploadInstallerAssetFilter,
+      storage: uploadsStorage,
+    }),
+  )
+  public async uploadInstaller(
+    @Body() data: UploadInstallerAssetDto,
+    @UploadedFile() installerFile?: DiskStorageFile,
+  ) {
+    if (installerFile == null) {
+      throw new BadRequestException("No file provided");
+    }
+
+    return this.adminService.uploadInstaller(data, installerFile);
   }
 }

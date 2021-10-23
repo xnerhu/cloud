@@ -1,5 +1,3 @@
-import { join } from "path";
-import { rename } from "fs/promises";
 import { ClientProxy } from "@nestjs/microservices";
 import { AssetType } from "@core/updates";
 import { InjectRepository } from "@mikro-orm/nestjs";
@@ -17,16 +15,15 @@ import {
   AdminUploadPatchResponse,
   CreateReleaseDto,
   GetDiffInfoDto,
+  UploadInstallerAssetDto,
   UploadPatchAssetsDto,
 } from "@network/updates-api";
-import { makeId } from "@common/node";
 import { NewUpdateEvent, PATTERN_NEW_UPDATE } from "@network/updates-queue";
 
 import { AssetsService } from "../../assets/assets-service";
 import { ReleaseEntity } from "../../releases/release-entity";
 import { ConfigService } from "../../config/config-service";
 import { AssetEntity } from "../../assets/asset-entity";
-import { verifyUploadedFile } from "./upload-utils";
 import { DistributionEntity } from "../../distributions/distribution-entity";
 import { RMQ_PROXY_TOKEN } from "../../messaging/rmq-proxy";
 
@@ -92,10 +89,7 @@ export class AdminService {
     return this.assetsService.format(asset);
   }
 
-  /**
-   * Uploads new patch and packed
-   */
-  public async uploadPatchAssets(
+  public async uploadPatchAndPacked(
     {
       packedHash,
       patchHash,
@@ -118,55 +112,39 @@ export class AdminService {
       throw new NotFoundException("Distribution not found");
     }
 
-    const patchDb = await this.assetsRepo.findOne({
+    const patchDB = await this.assetsRepo.findOne({
       release: { id: release.id },
       distribution: { id: distribution.id },
+      type: { $in: [AssetType.PATCH, AssetType.PATCH] },
     });
 
-    if (patchDb) {
+    if (patchDB) {
       throw new BadRequestException(
         `Patch for distribution ${distribution.os}-` +
           `${distribution.architecture}-${distribution.osVersion} already exists`,
       );
     }
 
-    await Promise.all([
-      verifyUploadedFile(patch.path, patchHash, AssetType.PATCH),
-      verifyUploadedFile(packed.path, packedHash, AssetType.PACKED),
+    const [patchAsset, packedAsset] = await Promise.all([
+      this.assetsService.upload({
+        release,
+        distribution,
+        hash: patchHash,
+        path: patch.path,
+        size: patch.size,
+        type: AssetType.PATCH,
+      }),
+      this.assetsService.upload({
+        release,
+        distribution,
+        hash: packedHash,
+        path: packed.path,
+        size: packed.size,
+        type: AssetType.PACKED,
+      }),
     ]);
 
-    const baseFilename = await makeId(12);
-
-    const patchFilename = baseFilename + ".patch";
-    const patchPath = join(this.configService.patchesPath, patchFilename);
-
-    const packedFilename = baseFilename + ".packed.7z";
-    const packedPath = join(this.configService.patchesPath, packedFilename);
-
-    await Promise.all([
-      rename(patch.path, patchPath),
-      rename(packed.path, packedPath),
-    ]);
-
-    const patchAsset = await this.assetsService.createOne({
-      type: AssetType.PATCH,
-      filename: patchFilename,
-      hash: patchHash,
-      size: patch.size,
-      release,
-      distribution,
-    });
-
-    const packedAsset = await this.assetsService.createOne({
-      type: AssetType.PACKED,
-      filename: packedFilename,
-      hash: packedHash,
-      size: packed.size,
-      release,
-      distribution,
-    });
-
-    await this.assetsRepo.persistAndFlush([patchAsset, packedAsset]);
+    await this.assetsRepo.flush();
 
     const releaseData = { version, notes: release.notes };
 
@@ -189,5 +167,51 @@ export class AdminService {
       patch: this.assetsService.format({ ...releaseData, ...patchAsset }),
       packed: this.assetsService.format({ ...releaseData, ...packedAsset }),
     };
+  }
+
+  public async uploadInstaller(
+    {
+      installerHash,
+      version,
+      channel,
+      ..._distribution
+    }: UploadInstallerAssetDto,
+    installerFile: DiskStorageFile,
+  ) {
+    const release = await this.releasesRepo.findOne({ version, channel });
+
+    if (!release) {
+      throw new NotFoundException("Release not found");
+    }
+
+    const distribution = await this.distributionEntity.findOne(_distribution);
+
+    if (!distribution) {
+      throw new NotFoundException("Distribution not found");
+    }
+
+    const installerDB = await this.assetsRepo.findOne({
+      release: { id: release.id },
+      distribution: { id: distribution.id },
+      type: AssetType.INSTALLER,
+    });
+
+    if (installerDB) {
+      throw new BadRequestException(
+        `Installer for distribution ${distribution.os}-` +
+          `${distribution.architecture}-${distribution.osVersion} already exists`,
+      );
+    }
+
+    await this.assetsService.upload({
+      release,
+      distribution,
+      hash: installerHash,
+      path: installerFile.path,
+      size: installerFile.size,
+      type: AssetType.INSTALLER,
+    });
+
+    await this.assetsRepo.flush();
   }
 }
