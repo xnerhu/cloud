@@ -86,10 +86,21 @@ export class AssetsService {
   /**
    * Returns assets fetch details.
    */
-  public format(data: FormatAssetOptions): UpdateEntry {
+  public format({
+    filename,
+    hash,
+    notes,
+    size,
+    type,
+    version,
+  }: FormatAssetOptions): UpdateEntry {
     return {
-      ...data,
-      url: this.getUrl(data.type, data.filename),
+      filename,
+      hash,
+      notes,
+      size,
+      version,
+      url: this.getUrl(type, filename),
     };
   }
 

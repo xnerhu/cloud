@@ -115,7 +115,7 @@ export class AdminService {
     const patchDB = await this.assetsRepo.findOne({
       release: { id: release.id },
       distribution: { id: distribution.id },
-      type: { $or: [AssetType.PATCH, AssetType.PATCH] },
+      type: { $in: [AssetType.PATCH, AssetType.PATCH] },
     });
 
     if (patchDB) {
