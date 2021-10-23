@@ -1,5 +1,5 @@
 import { extname, join } from "path";
-import { Asset, AssetType, Release } from "@core/updates";
+import { Asset, AssetType, Release, ReleaseStatusType } from "@core/updates";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -118,7 +118,7 @@ export class AssetsService {
       .where({
         type: AssetType.PACKED,
         distribution,
-        release: { channel },
+        release: { channel, status: ReleaseStatusType.ROLLED_OUT },
       })
       .limit(1)
       .execute<AssetsDBEntry | undefined>("get");
@@ -129,7 +129,11 @@ export class AssetsService {
       .where({
         type: AssetType.PATCH,
         distribution: distribution,
-        release: { channel, version: { $gt: version } },
+        release: {
+          channel,
+          version: { $gt: version },
+          status: ReleaseStatusType.ROLLED_OUT,
+        },
       })
       .execute<AssetsDBEntry[]>("all");
   }

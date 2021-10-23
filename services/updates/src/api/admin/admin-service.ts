@@ -1,5 +1,5 @@
 import { ClientProxy } from "@nestjs/microservices";
-import { AssetType } from "@core/updates";
+import { AssetType, ReleaseStatusType } from "@core/updates";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import {
@@ -62,6 +62,7 @@ export class AdminService {
       release.channel = channel;
       release.version = version;
       release.notes = notes || "";
+      release.status = ReleaseStatusType.SUSPENDED;
 
       await this.releasesRepo.persistAndFlush(release);
     }

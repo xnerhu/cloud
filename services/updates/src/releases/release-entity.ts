@@ -4,8 +4,9 @@ import {
   Property,
   OneToMany,
   Index,
+  Enum,
 } from "@mikro-orm/core";
-import { Release } from "@core/updates";
+import { Release, ReleaseStatusType } from "@core/updates";
 
 import { AssetEntity } from "../assets/asset-entity";
 
@@ -24,6 +25,10 @@ export class ReleaseEntity implements Release {
 
   @OneToMany(() => AssetEntity, (asset) => asset.release)
   assets: AssetEntity[];
+
+  @Index()
+  @Enum(() => ReleaseStatusType)
+  status: number;
 
   @Property({ columnType: "text" })
   notes: string;
