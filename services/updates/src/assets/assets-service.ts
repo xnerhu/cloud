@@ -10,7 +10,7 @@ import { ConfigService } from "../config/config-service";
 import { DistributionEntity } from "../distributions/distribution-entity";
 import { ReleaseEntity } from "../releases/release-entity";
 import { AssetEntity } from "./asset-entity";
-import { verifyAssetHash } from "./assets-utils";
+import { getAssetExtension, verifyAssetHash } from "./assets-utils";
 import { copyFile } from "fs/promises";
 
 export type FormatAssetOptions = Pick<Release, "notes" | "version"> &
@@ -173,7 +173,7 @@ export class AssetsService {
   }: UploadAssetOptions) {
     await verifyAssetHash(path, hash, type);
 
-    const filename = (await makeId(12)) + extname(path);
+    const filename = (await makeId(12)) + getAssetExtension(path, type);
     const storagePath = join(this.getStoragePath(type), filename);
 
     await copyFile(path, storagePath);
