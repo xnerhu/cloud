@@ -8,14 +8,20 @@ export const mikroORM = (cwd: string, _config?: string) => {
 
   // if (!config) throw new Error("Config file not specified");
 
-  const run = (file: string, args: string[]) => {
-    return execa(resolve(cwd, file), args, {
-      stderr: process.stderr,
-      stdout: process.stdout,
-      // env: {
-      //   MIKRO_ORM_CLI: `${config}/src/mikro-orm-config.js`,
-      // },
-    });
+  const run = async (file: string, args: string[]) => {
+    // {
+    //   stderr: process.stderr,
+    //   stdout: process.stdout,
+    //   // env: {
+    //   //   MIKRO_ORM_CLI: `${config}/src/mikro-orm-config.js`,
+    //   // },
+    // }
+    const child = execa(resolve(cwd, file), args);
+
+    child.stderr?.pipe(process.stdout);
+    child.stdout?.pipe(process.stdout);
+
+    await child;
   };
 
   const DEFAULT_ARGS = ["--run", "--fk-checks"];

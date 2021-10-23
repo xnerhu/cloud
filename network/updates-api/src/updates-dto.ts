@@ -1,6 +1,8 @@
 import { IsString, IsOptional } from "class-validator";
 
-export class GetUpdatesDto {
+export class GetUpdatesDto
+  implements DistributionSearchOptions, ReleaseSearchOptions
+{
   @IsString()
   version: string;
 
@@ -23,4 +25,15 @@ export class GetUpdatesDto {
 export class GetUpdatesV1Dto {
   @IsString()
   browserVersion: string;
+}
+
+export interface DistributionSearchOptions {
+  os: string;
+  osVersion: string;
+  architecture: string;
+}
+
+export interface ReleaseSearchOptions {
+  version: string;
+  channel: string;
 }

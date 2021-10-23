@@ -33,6 +33,7 @@ DEPS = [
     "@npm//fastify",
     "@npm//fastify-multipart",
     "@npm//@types/busboy",
+    "@npm//@mikro-orm/core",
 ]
 
 ts_project(

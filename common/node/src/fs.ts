@@ -33,3 +33,13 @@ export const getUniqueFilename = async (filename: string) => {
 export const getFileSize = (path: string) => {
   return stat(path).then((r) => r.size);
 };
+
+export const ensureDirs = async (...paths: string[]) => {
+  await Promise.all(
+    paths.map(async (path) => {
+      if (!(await pathExists(path))) {
+        await mkdir(path, { recursive: true });
+      }
+    }),
+  );
+};

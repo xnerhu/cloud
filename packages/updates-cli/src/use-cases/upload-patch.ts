@@ -7,25 +7,33 @@ import { getFileSize } from "@common/node";
 import { info, infoRes } from "../utils/logger";
 import { UseCaseOptions } from "./base";
 import { getAdminUrl, getAuthHeaders } from "../utils";
+import {
+  DistributionSearchOptions,
+  ReleaseSearchOptions,
+} from "@network/updates-api";
 
-export type UploadPatchOptions = UseCaseOptions<{
-  patch: string;
-  packed: string;
-  release: number;
-  distribution: number;
-}>;
+export type UploadPatchOptions = UseCaseOptions<
+  {
+    patch: string;
+    packed: string;
+  } & ReleaseSearchOptions &
+    DistributionSearchOptions
+>;
 
 export const uploadPatch = async ({
   api,
   token,
   patch,
   packed,
-  release,
-  distribution,
+  version,
+  channel,
+  architecture,
+  os,
+  osVersion,
 }: UploadPatchOptions) => {
   info(`Uploading patch at ${patch} and packed at ${packed}`);
 
-  const [patchHash, fullHash, patchSize, packedSize] = await Promise.all([
+  const [patchHash, packedHash, patchSize, packedSize] = await Promise.all([
     hashFile(patch),
     hashFile(packed),
     getFileSize(patch),
@@ -39,11 +47,14 @@ export const uploadPatch = async ({
   const data = new FormData();
 
   data.append("patch", createReadStream(patch));
-  data.append("full", createReadStream(packed));
-  data.append("releaseId", release);
-  data.append("distributionId", distribution);
-  data.append("hash", patchHash);
-  data.append("fullHash", fullHash);
+  data.append("packed", createReadStream(packed));
+  data.append("patchHash", patchHash);
+  data.append("packedHash", packedHash);
+  data.append("version", version);
+  data.append("channel", channel);
+  data.append("os", os);
+  data.append("osVersion", osVersion);
+  data.append("architecture", architecture);
 
   const res = await axios({
     method: "put",

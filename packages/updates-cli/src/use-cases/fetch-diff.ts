@@ -5,20 +5,24 @@ import { createWriteStream } from "fs";
 import { resolve } from "path";
 import Progressbar from "progress";
 import { downloadFile } from "@common/node";
-import { GetDiffInfoDto } from "@network/updates-api";
+import {
+  DistributionSearchOptions,
+  GetDiffInfoDto,
+  ReleaseSearchOptions,
+} from "@network/updates-api";
 
 import { getAdminUrl, getAuthHeaders } from "../utils";
 import { info, infoRes, warn } from "../utils/logger";
 import { UseCaseOptions } from "./base";
 import { unpackRelease } from "../utils/release";
 
-export type FetchDiffOptions = UseCaseOptions<{
-  version: string;
-  channel: string;
-  distributionId: number;
-  path?: string;
-  ignoreHash?: boolean;
-}>;
+export type FetchDiffOptions = UseCaseOptions<
+  {
+    path?: string;
+    ignoreHash?: boolean;
+  } & ReleaseSearchOptions &
+    DistributionSearchOptions
+>;
 
 const download = async (downloadUrl: string, path: string) => {
   info(`Downloading ${downloadUrl} to ${path}`);
@@ -47,18 +51,20 @@ export const fetchDiff = async ({
   api,
   token,
   channel,
-  distributionId,
   version,
   path,
   ignoreHash,
+  ...distribution
 }: FetchDiffOptions) => {
-  info(`Getting diff info for ${version}-${channel}_${distributionId}`);
+  info(
+    `Fetching diff info for ${version} ${channel} ${distribution.os}-${distribution.architecture}`,
+  );
 
   const res = await axios.get<any>(getAdminUrl(api, "diff"), {
     params: {
       channel,
-      distributionId,
       version,
+      ...distribution,
     } as GetDiffInfoDto,
     headers: getAuthHeaders(token),
   });

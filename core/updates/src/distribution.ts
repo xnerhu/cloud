@@ -1,11 +1,8 @@
-import { Patch } from "./patch";
-
 export interface Distribution {
   id: number;
-  os: DistributionOS;
-  osVersion: DistributionOSVersion;
-  architecture: DistributionArchitecture;
-  patches: Patch[];
+  os: string;
+  osVersion: string;
+  architecture: string;
   createdAt: Date;
 }
 

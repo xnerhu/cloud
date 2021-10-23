@@ -6,8 +6,7 @@ import { IS_PRODUCTION } from "@common/node";
 
 import { config } from "./mikro-orm-config";
 import { SCHEMA_ENV } from "./config/env";
-import { UpdatesModule } from "./updates/updates-module";
-import { AdminModule } from "./admin/admin-module";
+import { ApiModule } from "./api/api-module";
 
 const PATH_ROOT = resolve(__dirname, "../");
 @Module({
@@ -22,8 +21,7 @@ const PATH_ROOT = resolve(__dirname, "../");
       ignoreEnvFile: IS_PRODUCTION,
       validationSchema: SCHEMA_ENV,
     }),
-    UpdatesModule,
-    AdminModule,
+    ApiModule,
   ],
   controllers: [],
   providers: [],
