@@ -18,6 +18,10 @@ export class ReleaseEntity implements Release {
   @Property({ columnType: "text" })
   version: string;
 
+  @Index()
+  @Property({ columnType: "text" })
+  channel: string;
+
   @OneToMany(() => AssetEntity, (asset) => asset.release)
   assets: AssetEntity[];
 
