@@ -1,10 +1,10 @@
 import { MikroORM, ReflectMetadataProvider } from "@mikro-orm/core";
-import { Patch, Release } from "@core/updates";
+import { AssetType } from "@core/updates";
 
 import { DistributionEntity } from "../src/distributions/distribution-entity";
 import config from "../src/mikro-orm-config";
-import { PatchEntity } from "../src/patches/patch-entity";
 import { ReleaseEntity } from "../src/releases/release-entity";
+import { AssetEntity } from "../src/assets/asset-entity";
 
 export default async () => {
   const connection = await MikroORM.init({
@@ -44,11 +44,7 @@ export default async () => {
     macosArmDistro,
   ]);
 
-  const releases: (Omit<Release, "id" | "patches" | "createdAt"> & {
-    patches: (Omit<Patch, "id" | "distribution" | "release" | "createdAt"> & {
-      distribution: DistributionEntity;
-    })[];
-  })[] = [
+  const releases = [
     {
       version: "2.1.0-alpha",
       notes: "alpha-third-release",
@@ -217,32 +213,39 @@ export default async () => {
     },
   ].reverse();
 
-  const patchRepo = connection.em.getRepository(PatchEntity);
   const releaseRepo = connection.em.getRepository(ReleaseEntity);
 
   for (const release of releases) {
     const releaseEntity = new ReleaseEntity();
 
-    const patches = await Promise.all(
+    const assets = await Promise.all(
       release.patches.map(async (patch) => {
-        const patchEntity = new PatchEntity();
+        const patchAsset = new AssetEntity();
 
-        patchEntity.hash = patch.hash;
-        patchEntity.size = patch.size;
-        patchEntity.fullHash = patch.fullHash;
-        patchEntity.fullSize = patch.fullSize;
-        patchEntity.distribution = patch.distribution;
-        patchEntity.filename = patch.filename;
-        patchEntity.fullFilename = patch.fullFilename;
+        patchAsset.type = AssetType.PATCH;
+        patchAsset.filename = patch.filename;
+        patchAsset.hash = patch.hash;
+        patchAsset.size = patch.size;
+        patchAsset.distribution = patch.distribution;
+        patchAsset.release = releaseEntity;
 
-        return patchEntity;
+        const packedAsset = new AssetEntity();
+
+        packedAsset.type = AssetType.PACKED;
+        packedAsset.filename = patch.fullFilename;
+        packedAsset.hash = patch.fullHash;
+        packedAsset.size = patch.fullSize;
+        packedAsset.distribution = patch.distribution;
+        packedAsset.release = releaseEntity;
+
+        return [patchAsset, packedAsset];
       }),
     );
 
     releaseEntity.channel = release.channel;
     releaseEntity.version = release.version;
     releaseEntity.notes = release.notes;
-    releaseEntity.patches = patches;
+    releaseEntity.assets = assets.flat();
 
     await releaseRepo.persistAndFlush(releaseEntity);
   }

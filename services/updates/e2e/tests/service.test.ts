@@ -2,9 +2,9 @@ import "jest";
 import { NestFastifyApplication } from "@nestjs/platform-fastify";
 import request from "supertest";
 import { resolve } from "path";
+import { omitKeys } from "@common/utils";
 
 import { runApp } from "../../src/app";
-import { statSync } from "fs";
 
 const API_KEY = "TEST_TOKEN";
 const API_KEY_HEADER = "authorization";
@@ -41,7 +41,7 @@ describe("[e2e]: Admin", () => {
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty("strategy", "patches");
 
-        expect(res.body.full).toEqual({
+        expect(res.body.packed).toEqual({
           version: "2.0.0",
           notes: "fourth-release",
           hash: "windows-2.0.0-full",
@@ -78,16 +78,16 @@ describe("[e2e]: Admin", () => {
         ]);
       });
 
-      it("returns full if patches are heavier", async () => {
+      it("returns packed if patches are heavier", async () => {
         const res = await request(app.getHttpServer())
           .get("/updates")
           .query({ version: "1.0.0", channel: "stable", os: "macos" });
 
         expect(res.statusCode).toEqual(200);
 
-        expect(res.body).toHaveProperty("strategy", "full");
+        expect(res.body).toHaveProperty("strategy", "packed");
 
-        expect(res.body.full).toEqual({
+        expect(res.body.packed).toEqual({
           version: "2.0.0",
           notes: "fourth-release",
           hash: "macos-2.0.0-full",
@@ -105,7 +105,7 @@ describe("[e2e]: Admin", () => {
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty("strategy", "patches");
 
-        expect(res.body.full).toEqual({
+        expect(res.body.packed).toEqual({
           version: "1.2.0",
           notes: "third-release",
           hash: "linux-1.2.0-full",
@@ -134,7 +134,7 @@ describe("[e2e]: Admin", () => {
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty("strategy", "patches");
 
-        expect(res.body.full).toEqual({
+        expect(res.body.packed).toEqual({
           version: "2.1.0-alpha",
           notes: "alpha-third-release",
           hash: "windows-alpha-2.1.0-full",
@@ -172,7 +172,7 @@ describe("[e2e]: Admin", () => {
       });
     });
 
-    describe("/v1", () => {
+    describe("/v1 - backwards compatibility", () => {
       it("returns patches", async () => {
         const res = await request(app.getHttpServer())
           .get("/v1")
@@ -215,34 +215,13 @@ describe("[e2e]: Admin", () => {
 
   describe("API for new releases", () => {
     it("is not accessible without token", async () => {
-      const res = await request(app.getHttpServer()).get("/admin/distribution");
+      const res = await request(app.getHttpServer()).get("/admin/diff");
 
       expect(res.statusCode).toEqual(403);
     });
 
-    describe("/getDistribution", () => {
-      it("returns distribution id", async () => {
-        const res = await request(app.getHttpServer())
-          .get("/admin/distribution")
-          .set(API_KEY_HEADER, API_KEY)
-          .query({ os: "macos", osVersion: "any", architecture: "arm" });
-
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual({ distributionId: 4 });
-      });
-
-      it("throws error if not found", async () => {
-        const res = await request(app.getHttpServer())
-          .get("/admin/distribution")
-          .set(API_KEY_HEADER, API_KEY)
-          .query({ os: "NOT_FOUND", osVersion: "any", architecture: "arm" });
-
-        expect(res.statusCode).toBe(404);
-      });
-    });
-
     describe("Creating a new release", () => {
-      describe("/release", () => {
+      describe("/admin/release", () => {
         it("creates a new release", async () => {
           const res = await request(app.getHttpServer())
             .put("/admin/release")
@@ -280,7 +259,7 @@ describe("[e2e]: Admin", () => {
         });
       });
 
-      describe("/diff", () => {
+      describe("/admin/diff", () => {
         it("handles first-time releases", async () => {
           const res = await request(app.getHttpServer())
             .get("/admin/diff")
@@ -288,7 +267,9 @@ describe("[e2e]: Admin", () => {
             .query({
               version: "4.0.0",
               channel: "stable",
-              distributionId: 4,
+              os: "macos",
+              architecture: "arm",
+              osVersion: "any",
             });
 
           expect(res.statusCode).toEqual(404);
@@ -301,7 +282,9 @@ describe("[e2e]: Admin", () => {
             .query({
               version: "4.0.0",
               channel: "stable",
-              distributionId: 1,
+              os: "windows",
+              osVersion: "any",
+              architecture: "x64",
             });
 
           expect(res.statusCode).toEqual(200);
@@ -318,18 +301,37 @@ describe("[e2e]: Admin", () => {
 
       describe("/patch", () => {
         const PATH_PATCH = resolve(PATH_ASSETS, "4.0.0.patch");
-        const PATH_FULL = resolve(PATH_ASSETS, "4.0.0.packed.7z");
+        const PATH_PACKED = resolve(PATH_ASSETS, "4.0.0.packed.7z");
         const PATH_FORMAT_TEST = resolve(PATH_ASSETS, "format-test.png");
 
         const HASH_PATCH = "67faad59f243eeddadbc18789bc65bf0";
-        const HASH_FULL = "36f81a68402b54768cace0bbcceab06a";
+        const HASH_PACKED = "36f81a68402b54768cace0bbcceab06a";
 
-        const getRequest = () => {
+        const getRequestBase = () => {
           return request(app.getHttpServer())
             .put("/admin/patch")
-            .set(API_KEY_HEADER, API_KEY)
+            .set(API_KEY_HEADER, API_KEY);
+        };
+
+        const getRequestWithDistribution = () => {
+          return getRequestBase()
+            .field("os", "windows")
+            .field("osVersion", "any")
+            .field("architecture", "x64")
+            .field("version", "4.0.0")
+            .field("channel", "stable");
+        };
+
+        const getRequestWithAssets = () => {
+          return getRequestWithDistribution()
             .attach("patch", PATH_PATCH)
-            .attach("full", PATH_FULL);
+            .attach("packed", PATH_PACKED);
+        };
+
+        const getRequestWithAssetsAndHashes = () => {
+          return getRequestWithAssets()
+            .field("patchHash", HASH_PATCH)
+            .field("packedHash", HASH_PACKED);
         };
 
         it("is not accessible without token", async () => {
@@ -339,29 +341,23 @@ describe("[e2e]: Admin", () => {
         });
 
         it("throws error if file format is incorrect", async () => {
-          const res = await request(app.getHttpServer())
-            .put("/admin/patch")
-            .set(API_KEY_HEADER, API_KEY)
+          const res = await getRequestWithDistribution()
             .attach("patch", PATH_FORMAT_TEST)
-            .attach("full", PATH_FORMAT_TEST)
-            .field("releaseId", 8)
-            .field("distributionId", 1)
-            .field("hash", "d656e422b1b3027329a7128b636b0986")
-            .field("fullHash", "dbbeb775238fad0a93172e3e965d83d7");
+            .attach("packed", PATH_FORMAT_TEST)
+            .field("patchHash", "d656e422b1b3027329a7128b636b0986")
+            .field("packedHash", "dbbeb775238fad0a93172e3e965d83d7");
 
           expect(res.statusCode).toEqual(400);
         });
 
         it("throws error if patch is corrupt", async () => {
-          const res = await getRequest()
-            .field("releaseId", 8)
-            .field("distributionId", 1)
-            .field("hash", "d656e422b1b3027329a7128b636b0986")
-            .field("fullHash", "dbbeb775238fad0a93172e3e965d83d7");
-
-          expect(res.statusCode).toEqual(400);
+          const res = await getRequestWithAssets()
+            .field("patchHash", "d656e422b1b3027329a7128b636b0986")
+            .field("packedHash", "dbbeb775238fad0a93172e3e965d83d7");
 
           const message = res.body.message as string;
+
+          expect(res.statusCode).toEqual(400);
 
           expect(message.includes("corrupt")).toBe(true);
           expect(message.includes("d656e422b1b3027329a7128b636b0986")).toBe(
@@ -369,12 +365,10 @@ describe("[e2e]: Admin", () => {
           );
         });
 
-        it("throws error if full is corrupt", async () => {
-          const res = await getRequest()
-            .field("releaseId", 8)
-            .field("distributionId", 1)
-            .field("hash", HASH_PATCH)
-            .field("fullHash", "dbbeb775238fad0a93172e3e965d83d7");
+        it("throws error if packed is corrupt", async () => {
+          const res = await getRequestWithAssets()
+            .field("patchHash", HASH_PATCH)
+            .field("packedHash", "dbbeb775238fad0a93172e3e965d83d7");
 
           expect(res.statusCode).toEqual(400);
 
@@ -387,50 +381,58 @@ describe("[e2e]: Admin", () => {
         });
 
         it("throws error if patch is not provided", async () => {
-          const res = await request(app.getHttpServer())
-            .put("/admin/patch")
-            .set(API_KEY_HEADER, API_KEY)
-            .attach("full", PATH_FULL);
+          const res = await getRequestWithDistribution()
+            .attach("packed", PATH_PACKED)
+            .field("patchHash", HASH_PATCH)
+            .field("packedHash", HASH_PACKED);
 
           expect(res.statusCode).toEqual(400);
+          expect(res.body.message).toBe("Patch file not provided");
         });
 
-        it("throws error if full is not provided", async () => {
-          const res = await request(app.getHttpServer())
-            .put("/admin/patch")
-            .set(API_KEY_HEADER, API_KEY)
-            .attach("patch", PATH_PATCH);
+        it("throws error if packed is not provided", async () => {
+          const res = await getRequestWithDistribution()
+            .attach("patch", PATH_PATCH)
+            .field("patchHash", HASH_PATCH)
+            .field("packedHash", HASH_PACKED);
 
           expect(res.statusCode).toEqual(400);
+          expect(res.body.message).toBe("Packed file not provided");
         });
 
-        it("uploads patch and full, then returns info", async () => {
-          const res = await getRequest()
-            .field("releaseId", 8)
-            .field("distributionId", 1)
-            .field("hash", HASH_PATCH)
-            .field("fullHash", HASH_FULL);
+        it("uploads assets and returns info", async () => {
+          const res = await getRequestWithAssetsAndHashes();
 
           expect(res.statusCode).toEqual(200);
 
-          expect(res.body).toEqual({
+          const OMIT_KEYS_LIST = ["filename", "url"];
+
+          // We want to omit file keys because they are unique
+          expect({
+            patch: omitKeys(res.body.patch, OMIT_KEYS_LIST),
+            packed: omitKeys(res.body.packed, OMIT_KEYS_LIST),
+          }).toEqual({
             patch: {
-              version: "4.0.0",
-              notes: "new_release_notes",
-              hash: HASH_FULL,
-              size: 151,
-              filename: "4.0.0_stable_windows-x64-any.7z",
-              url: "/updates/4.0.0_stable_windows-x64-any.7z",
-            },
-            full: {
               version: "4.0.0",
               notes: "new_release_notes",
               hash: HASH_PATCH,
               size: 9,
-              filename: "4.0.0_stable_windows-x64-any.patch",
-              url: "/updates/4.0.0_stable_windows-x64-any.patch",
+            },
+            packed: {
+              version: "4.0.0",
+              notes: "new_release_notes",
+              hash: HASH_PACKED,
+              size: 151,
             },
           });
+
+          expect(res.body.patch.filename.endsWith(".patch")).toBe(true);
+          expect(/^\/updates.*.patch$/.test(res.body.patch.url)).toBe(true);
+
+          expect(res.body.packed.filename.endsWith(".packed.7z")).toBe(true);
+          expect(/^\/updates.*.packed.7z$/.test(res.body.packed.url)).toBe(
+            true,
+          );
         });
 
         it("new patch is accessible from public API", async () => {
@@ -440,15 +442,23 @@ describe("[e2e]: Admin", () => {
 
           expect(res.statusCode).toEqual(200);
 
-          expect(res.body).toEqual({
+          const OMIT_KEYS_LIST = ["filename", "url"];
+
+          const body = {
+            ...res.body,
+            packed: omitKeys(res.body.packed, OMIT_KEYS_LIST),
+            patches: res.body.patches.map((patch) =>
+              omitKeys(patch, OMIT_KEYS_LIST),
+            ),
+          };
+
+          expect(body).toEqual({
             strategy: "patches",
-            full: {
+            packed: {
               version: "4.0.0",
               notes: "new_release_notes",
-              hash: HASH_FULL,
+              hash: HASH_PACKED,
               size: 151,
-              filename: "4.0.0_stable_windows-x64-any.7z",
-              url: "/updates/4.0.0_stable_windows-x64-any.7z",
             },
             patches: [
               {
@@ -456,21 +466,26 @@ describe("[e2e]: Admin", () => {
                 notes: "new_release_notes",
                 hash: HASH_PATCH,
                 size: 9,
-                filename: "4.0.0_stable_windows-x64-any.patch",
-                url: "/updates/4.0.0_stable_windows-x64-any.patch",
               },
             ],
           });
+
+          expect(res.body.patches[0].filename.endsWith(".patch")).toBe(true);
+          expect(/^\/updates.*.patch$/.test(res.body.patches[0].url)).toBe(
+            true,
+          );
+
+          expect(res.body.packed.filename.endsWith(".packed.7z")).toBe(true);
+          expect(/^\/updates.*.packed.7z$/.test(res.body.packed.url)).toBe(
+            true,
+          );
         });
 
         it("throws error if patch already exists", async () => {
-          const res = await getRequest()
-            .field("releaseId", 8)
-            .field("distributionId", 1)
-            .field("hash", HASH_PATCH)
-            .field("fullHash", HASH_FULL);
+          const res = await getRequestWithAssetsAndHashes();
 
           expect(res.statusCode).toEqual(400);
+          expect(res.body.message.includes("already exists")).toBe(true);
         });
       });
     });

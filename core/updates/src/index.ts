@@ -1,3 +1,3 @@
 export * from "./distribution";
 export * from "./release";
-export * from "./patch";
+export * from "./asset";

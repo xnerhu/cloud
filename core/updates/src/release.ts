@@ -1,4 +1,4 @@
-import { Patch } from "./patch";
+import { Asset } from "./asset";
 
 export interface Release {
   id: number;
@@ -7,7 +7,7 @@ export interface Release {
    */
   version: string;
   channel: string;
-  patches: Patch[];
+  assets: Asset[];
   notes: string;
   createdAt: Date;
 }

@@ -1,7 +1,11 @@
-import { makeId, pathExists } from "@common/node";
 import { unlink } from "fs/promises";
 import { tmpdir } from "os";
 import { resolve } from "path";
+import { makeId, pathExists } from "@common/node";
+import {
+  DistributionSearchOptions,
+  ReleaseSearchOptions,
+} from "@network/updates-api";
 
 import { info } from "../utils/logger";
 import { unpackRelease } from "../utils/release";
@@ -9,57 +13,50 @@ import { UseCaseOptions } from "./base";
 import { createPatch } from "./create-patch";
 import { createRelease } from "./create-release";
 import { fetchDiff } from "./fetch-diff";
-import { getDistribution } from "./get-distribution";
 import { uploadPatch } from "./upload-patch";
 
-export type PublishReleaseOptions = UseCaseOptions<{
-  tag: string;
-  channel: string;
-  notes?: string;
-  os: string;
-  osVersion: string;
-  architecture: string;
-  path: string;
-  ignoreHash?: boolean;
-}>;
+export type PublishReleaseOptions = UseCaseOptions<
+  {
+    notes?: string;
+    path: string;
+    ignoreHash?: boolean;
+  } & ReleaseSearchOptions &
+    DistributionSearchOptions
+>;
 
 export const publishRelease = async ({
   api,
   token,
   channel,
-  tag,
+  version,
   notes,
-  architecture,
-  os,
-  osVersion,
   path,
   ignoreHash,
+  ...distribution
 }: PublishReleaseOptions) => {
   if (!(await pathExists(path))) {
     throw new Error(`Can't find release at ${path}`);
   }
 
-  const distributionId = await getDistribution({
-    api,
-    architecture,
-    os,
-    osVersion,
-    token,
-  });
-
   const { path: unpackedPath } = await unpackRelease(tmpdir(), path);
 
   info(`Unpacked release at ${unpackedPath}`);
 
-  const releaseId = await createRelease({ api, channel, tag, token, notes });
+  await createRelease({
+    api,
+    channel,
+    version,
+    token,
+    notes,
+  });
 
   const diff = await fetchDiff({
     api,
     channel,
-    distributionId,
     token,
-    version: tag,
+    version,
     ignoreHash,
+    ...distribution,
   });
 
   const patchPath = resolve(tmpdir(), (await makeId()) + ".patch");
@@ -73,10 +70,11 @@ export const publishRelease = async ({
   await uploadPatch({
     api,
     token,
-    distribution: distributionId,
-    release: releaseId,
     packed: path,
     patch,
+    version,
+    channel,
+    ...distribution,
   });
 
   await Promise.all([patchPath, unpackedPath].map((path) => unlink(path)));

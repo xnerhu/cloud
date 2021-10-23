@@ -3,28 +3,24 @@ import {
   PublishReleaseOptions,
 } from "../use-cases/publish-release";
 import { handleCommand } from "../utils/command";
-import { createCommand } from "./base";
+import {
+  BASE_OPTIONS_RELEASE,
+  createCommand,
+  transformReleaseOptionsArgs,
+} from "./base";
 
-export const publishReleaseCommand = createCommand(
-  "publish",
-  "creates a release, makes a patch and uploads it automatically",
-)
-  .requiredOption("-t, --tag <string>", "version tag")
-  .requiredOption("-c, --channel <string>", "release channel")
+export const publishReleaseCommand = createCommand({
+  name: "publish",
+  description: "creates a release, makes a patch and uploads it automatically",
+  usesAuth: true,
+  baseOptions: BASE_OPTIONS_RELEASE,
+})
   .option("-n, --notes <string>", "notes")
-  .requiredOption("-o, --os <string>", "operating system name")
-  .requiredOption(
-    "-s, --os_version <string>",
-    "operating system version",
-    "any",
-  )
-  .requiredOption("-a, --architecture <string>", "CPU architecture")
-  .requiredOption("-p, --path <string>", "path to new release (packed)")
+  .requiredOption("--path <string>", "path to new release (packed)")
   .option("--ignore_hash", "ignore checksum")
   .action(
     handleCommand<PublishReleaseOptions>(publishRelease, (args) => ({
-      ...args,
-      osVersion: args["os_version"],
+      ...transformReleaseOptionsArgs(args),
       pathPrevious: args["path_previous"],
       ignoreHash: !!args["ignore_hash"],
     })),

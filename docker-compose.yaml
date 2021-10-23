@@ -19,7 +19,7 @@ services:
     environment:
       - NGINX_PORT=80
     volumes:
-      - ./.dev/updates-files:/usr/share/nginx/html
+      - ./.dev/updates_files:/usr/share/nginx/html
 
   broker:
     image: rabbitmq:3-management-alpine

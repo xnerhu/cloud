@@ -8,4 +8,4 @@ import { rmqProxyFactory } from "./rmq-proxy";
   providers: [rmqProxyFactory],
   exports: [rmqProxyFactory],
 })
-export class RMQModule {}
+export class MessagingModule {}

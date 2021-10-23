@@ -3,7 +3,18 @@ import {
   UpdateV1Response,
   UpdateEntry,
   UpdateEntryV1,
-} from "./updates-response";
+  UpdateV1Strategy,
+  UpdateStrategy,
+} from "@network/updates-api";
+
+export const transformUpdateStrategyV1 = (
+  strategy: UpdateStrategy,
+): UpdateV1Strategy => {
+  if (strategy === "packed") {
+    return "full";
+  }
+  return strategy;
+};
 
 export const transformUpdateResV1 = (res: UpdateResponse): UpdateV1Response => {
   if (res.strategy === "none") {
@@ -11,11 +22,11 @@ export const transformUpdateResV1 = (res: UpdateResponse): UpdateV1Response => {
   }
 
   const resV1: UpdateV1Response = {
-    type: res.strategy,
-    fullFile: transformUpdateEntryV1(res.full!),
+    type: transformUpdateStrategyV1(res.strategy),
+    fullFile: transformUpdateEntryV1(res.packed!),
   };
 
-  if (res.strategy === "full") {
+  if (res.strategy === "packed") {
     return resV1;
   }
 
