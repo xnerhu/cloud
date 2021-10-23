@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from "fs";
+import { readFileSync } from "fs";
 import { resolve } from "path";
 import execa from "execa";
 
@@ -19,13 +19,19 @@ const main = async () => {
   );
 
   try {
-    // process.stdout.write("XDD" + __dirname);
-    // process.exit(1);
+    const testChild = execa(testPath, [], {
+      env: {
+        __TESTS_TMP_PATH__: resolve(
+          process.env.TEST_UNDECLARED_OUTPUTS_DIR as string,
+          `.${packageName}-${Date.now()}`,
+        ),
+      },
+    });
 
-    const res = await execa(testPath, []);
+    testChild.stderr?.pipe(process.stdout);
+    testChild.stdout?.pipe(process.stdout);
 
-    process.stdout.write(res.stdout);
-    process.stderr.write(res.stderr);
+    await testChild;
 
     if (status.CI === "true") {
       if (status["CODECOV_TOKEN"].length === 0) {
@@ -39,7 +45,7 @@ const main = async () => {
       const sha = isPR ? status["GITHUB_PR_SHA"] : status["GITHUB_SHA"];
       const pr = isPR ? status["GITHUB_REF"].split("/")[2] : "";
 
-      const covRes = await execa(covPath, [
+      const covChild = execa(covPath, [
         `--token=${status["CODECOV_TOKEN"]}`,
         `--commit=${sha}`,
         `--slug=${status["GITHUB_REPOSITORY"]}`,
@@ -49,8 +55,10 @@ const main = async () => {
         "--disable=detect,gcov",
       ]);
 
-      process.stdout.write(covRes.stdout);
-      process.stderr.write(covRes.stderr);
+      covChild.stderr?.pipe(process.stdout);
+      covChild.stdout?.pipe(process.stdout);
+
+      await covChild;
     }
   } catch (error) {
     process.stderr.write(error.stderr);

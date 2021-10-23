@@ -1,15 +1,19 @@
-import { Release } from "./release";
 import { Distribution } from "./distribution";
+import { Release } from "./release";
 
-export interface Patch {
+export interface Asset {
   id: number;
+  type: AssetType;
   filename: string;
   hash: string;
   size: number;
-  fullFilename: string;
-  fullHash: string;
-  fullSize: number;
   distribution: Distribution;
   release: Release;
   createdAt: Date;
+}
+
+export enum AssetType {
+  PATCH = 0,
+  PACKED,
+  INSTALLER,
 }

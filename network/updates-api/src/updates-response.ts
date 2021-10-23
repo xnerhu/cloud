@@ -1,4 +1,4 @@
-export type UpdateStrategy = "patches" | "full" | "none";
+export type UpdateStrategy = "patches" | "packed" | "none";
 
 export interface UpdateEntry {
   version: string;
@@ -11,12 +11,14 @@ export interface UpdateEntry {
 
 export interface UpdateResponse {
   strategy: UpdateStrategy;
-  full?: UpdateEntry;
+  packed?: UpdateEntry;
   patches?: UpdateEntry[];
 }
 
+export type UpdateV1Strategy = "patches" | "full" | "none";
+
 export interface UpdateV1Response {
-  type: UpdateStrategy;
+  type: UpdateV1Strategy;
   patches?: UpdateEntryV1[];
   fullFile?: UpdateEntryV1;
 }

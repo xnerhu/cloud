@@ -9,6 +9,7 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import {
+  DiskStorage,
   DiskStorageFile,
   FileFieldsInterceptor,
   UploadedFiles,
@@ -16,23 +17,21 @@ import {
 import {
   CreateReleaseDto,
   GetDiffInfoDto,
-  GetDistributionDto,
-  UploadPatchDto,
+  UploadPatchAssetsDto,
 } from "@network/updates-api";
 
 import { AdminService } from "./admin-service";
-import { TokenGuard } from "../security/token-guard";
 import { uploadFilter } from "./upload-filter";
-import { uploadsStorage } from "./uploads-storage";
+import { uploadsStorage } from "./upload-storage";
+import { TokenGuard } from "../../security/token-guard";
 
 @Controller("admin")
 @UseGuards(TokenGuard)
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  private readonly uploadStorage: DiskStorage;
 
-  @Get("distribution")
-  public getDistribution(@Query() data: GetDistributionDto) {
-    return this.adminService.getDistribution(data);
+  constructor(private readonly adminService: AdminService) {
+    this.uploadStorage = new DiskStorage();
   }
 
   @Put("release")
@@ -47,27 +46,31 @@ export class AdminController {
 
   @Put("patch")
   @UseInterceptors(
-    FileFieldsInterceptor([{ name: "patch" }, { name: "full" }], {
+    FileFieldsInterceptor([{ name: "patch" }, { name: "packed" }], {
       filter: uploadFilter,
       storage: uploadsStorage,
     }),
   )
-  public async uploadPatch(
-    @Body() data: UploadPatchDto,
+  public async uploadPatchAssets(
+    @Body() data: UploadPatchAssetsDto,
     @UploadedFiles()
     files: {
       patch: DiskStorageFile[];
-      full: DiskStorageFile[];
+      packed: DiskStorageFile[];
     },
   ) {
-    if (files.patch == null) {
+    if (!files.patch?.length) {
       throw new BadRequestException("Patch file not provided");
     }
 
-    if (files.full == null) {
-      throw new BadRequestException("Full file not provided");
+    if (!files.packed?.length) {
+      throw new BadRequestException("Packed file not provided");
     }
 
-    return this.adminService.uploadPatch(data, files.patch[0], files.full[0]);
+    return this.adminService.uploadPatchAssets(
+      data,
+      files.patch[0],
+      files.packed[0],
+    );
   }
 }

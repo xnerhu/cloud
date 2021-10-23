@@ -1,12 +1,5 @@
-import { Entity, PrimaryKey, Property, OneToMany } from "@mikro-orm/core";
-
-import {
-  DistributionArchitecture,
-  DistributionOSVersion,
-  DistributionOS,
-  Distribution,
-} from "@core/updates";
-import { PatchEntity } from "../patches/patch-entity";
+import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { DistributionArchitecture, Distribution } from "@core/updates";
 
 @Entity({ tableName: "distributions" })
 export class DistributionEntity implements Distribution {
@@ -14,16 +7,13 @@ export class DistributionEntity implements Distribution {
   id: number;
 
   @Property({ columnType: "text" })
-  os: DistributionOS;
+  os: string;
 
   @Property({ columnType: "text" })
-  osVersion: DistributionOSVersion;
+  osVersion: string;
 
   @Property({ columnType: "text" })
   architecture: DistributionArchitecture;
-
-  @OneToMany(() => PatchEntity, (patch) => patch.distribution)
-  patches: PatchEntity[];
 
   @Property({ columnType: "timestamp" })
   createdAt: Date = new Date();

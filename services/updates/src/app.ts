@@ -5,20 +5,13 @@ import {
   NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { ValidationPipe } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import multipart from "fastify-multipart";
-import { mkdir } from "fs/promises";
-import { NestHttpExceptionHandler } from "@common/nest";
-import { IS_TEST } from "@common/node";
+import { HttpExceptionHandler, MikroOrmExceptionHandler } from "@common/nest";
 
 import { AppModule } from "./app-module";
-import { TEST_UPDATES_PATH } from "./config/env";
+import { ConfigService } from "./config/config-service";
 
 export const runApp = async (port?: number) => {
-  if (IS_TEST) {
-    await mkdir(TEST_UPDATES_PATH!, { recursive: true });
-  }
-
   const adapter = new FastifyAdapter();
 
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -28,18 +21,19 @@ export const runApp = async (port?: number) => {
 
   const config = app.get(ConfigService);
 
-  const defaultPort = config.get<number>("PORT", { infer: true });
-
   const { httpAdapter } = app.get(HttpAdapterHost);
 
-  app.useGlobalFilters(new NestHttpExceptionHandler(httpAdapter));
+  app.useGlobalFilters(new HttpExceptionHandler(httpAdapter));
+  app.useGlobalFilters(new MikroOrmExceptionHandler(httpAdapter));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   app.register(multipart as any, {});
 
   app.enableCors();
 
-  await app.listen(port ?? defaultPort);
+  await config.init();
+
+  await app.listen(port ?? config.port);
 
   return app;
 };

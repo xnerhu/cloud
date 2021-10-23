@@ -1,20 +1,33 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService as NestConfigService } from "@nestjs/config";
-import { IS_TEST } from "@common/node";
-
-import { TEST_UPDATES_PATH } from "./env";
+import { ensureDirs, normalizePath } from "@common/node";
 
 @Injectable()
 export class ConfigService {
   constructor(private readonly env: NestConfigService) {}
 
-  public get updatesPublicPath() {
-    return this.env.get<string>("UPDATES_PUBLIC_PATH")!;
+  public async init() {
+    await ensureDirs(this.patchesPath, this.installersPath);
   }
 
-  public get updatesPath() {
-    if (IS_TEST) return TEST_UPDATES_PATH!;
-    return this.env.get<string>("UPDATES_PATH")!;
+  public get port() {
+    return this.env.get("PORT", { infer: true }) as number;
+  }
+
+  public get patchesPublicPath() {
+    return this.env.get<string>("PATCHES_PUBLIC_PATH")!;
+  }
+
+  public get installersPublicPath() {
+    return this.env.get<string>("INSTALLERS_PUBLIC_PATH")!;
+  }
+
+  public get patchesPath() {
+    return normalizePath(this.env.get<string>("PATCHES_PATH")!);
+  }
+
+  public get installersPath() {
+    return normalizePath(this.env.get<string>("INSTALLERS_PATH")!);
   }
 
   public get apiKey() {

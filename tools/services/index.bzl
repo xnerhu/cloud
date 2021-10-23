@@ -13,6 +13,7 @@ def nodejs_service(
     nodejs_image(
         name = "image",
         binary = name,
+        tags = ["manual"],
         **kwargs
     )
 
@@ -30,4 +31,5 @@ def nodejs_service(
                 "@platforms//os:linux",
             ],
         }),
+        tags = ["manual"],
     )

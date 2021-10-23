@@ -4,10 +4,11 @@ import { BaseExceptionFilter } from "@nestjs/core";
 import { AppError, handleError } from "@common/node";
 
 @Catch()
-export class NestHttpExceptionHandler extends BaseExceptionFilter {
+export class HttpExceptionHandler extends BaseExceptionFilter {
   public catch(error: Error, host: ArgumentsHost) {
     const res = host.switchToHttp().getResponse<FastifyReply>();
 
+    console.log("aha");
     const delegate =
       error instanceof HttpException || !(error instanceof AppError);
 

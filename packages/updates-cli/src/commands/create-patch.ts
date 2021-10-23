@@ -2,11 +2,10 @@ import { createPatch, CreatePatchOptions } from "../use-cases/create-patch";
 import { handleCommand } from "../utils/command";
 import { createCommand } from "./base";
 
-export const createPatchCommand = createCommand(
-  "patch",
-  "creates a patch for a release",
-  false,
-)
+export const createPatchCommand = createCommand({
+  name: "patch",
+  description: "creates a patch for a release",
+})
   .requiredOption(
     "-p, --path <string>",
     "path to uncompressed new release (packed)",

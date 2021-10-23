@@ -1,7 +1,7 @@
 import { Options } from "@mikro-orm/core";
 
+import { AssetEntity } from "./assets/asset-entity";
 import { DistributionEntity } from "./distributions/distribution-entity";
-import { PatchEntity } from "./patches/patch-entity";
 import { ReleaseEntity } from "./releases/release-entity";
 
 export const config: Options = {
@@ -11,7 +11,7 @@ export const config: Options = {
   dbName: "updates",
   user: "root",
   password: "example",
-  entities: [ReleaseEntity, DistributionEntity, PatchEntity],
+  entities: [ReleaseEntity, DistributionEntity, AssetEntity],
   debug: process.env.NODE_ENV === "development",
   forceUtcTimezone: true,
   strict: true,

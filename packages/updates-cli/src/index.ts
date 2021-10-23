@@ -3,7 +3,6 @@ import chalk from "chalk";
 
 import { createReleaseCommand } from "./commands/create-release";
 import { fetchDiffCommand } from "./commands/fetch-diff";
-import { getDistributionCommand } from "./commands/get-distribution";
 import { createPatchCommand } from "./commands/create-patch";
 import { uploadPatchCommand } from "./commands/upload-patch";
 import { publishReleaseCommand } from "./commands/publish-release";
@@ -11,9 +10,8 @@ import { publishReleaseCommand } from "./commands/publish-release";
 const program = new Command();
 
 program
-  .version("1.0.0")
+  .version("0.0.0-PLACEHOLDER")
   .addCommand(createReleaseCommand)
-  .addCommand(getDistributionCommand)
   .addCommand(fetchDiffCommand)
   .addCommand(createPatchCommand)
   .addCommand(uploadPatchCommand)
