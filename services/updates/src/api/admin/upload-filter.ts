@@ -18,3 +18,16 @@ export const uploadsFilter: UploadFilterHandler = (
 
   return true;
 };
+
+export const uploadInstallerAssetFilter: UploadFilterHandler = (
+  req,
+  file: DiskStorageFile,
+) => {
+  // if (!MIMETYPES.includes(file.mimetype)) {
+  //   return "Incorrect file format";
+  // }
+
+  console.log(file.mimetype);
+
+  return true;
+};

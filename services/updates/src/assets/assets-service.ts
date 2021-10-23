@@ -1,4 +1,4 @@
-import { extname, join } from "path";
+import { join } from "path";
 import { Asset, AssetType, Release, ReleaseStatusType } from "@core/updates";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";

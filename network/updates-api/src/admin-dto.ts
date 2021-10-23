@@ -61,3 +61,25 @@ export class AdminReleaseRolloutDto implements ReleaseSearchOptions {
   @IsString()
   channel: string;
 }
+
+export class UploadInstallerAssetDto
+  implements ReleaseSearchOptions, DistributionSearchOptions
+{
+  @IsString()
+  installerHash: string;
+
+  @IsString()
+  version: string;
+
+  @IsString()
+  channel: string;
+
+  @IsString()
+  os: string;
+
+  @IsString()
+  osVersion: string;
+
+  @IsString()
+  architecture: string;
+}
