@@ -3,7 +3,7 @@ import { Asset, AssetType, Release, ReleaseStatusType } from "@core/updates";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
-import { DistributionSearchOptions, UpdateEntry } from "@network/updates-api";
+import { DistributionSearchOptions } from "@network/updates-api";
 import { makeId } from "@common/node";
 
 import { ConfigService } from "../config/config-service";
