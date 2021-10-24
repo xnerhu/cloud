@@ -1,6 +1,6 @@
 import "jest";
-import { AssetType } from "@core/updates";
 
+import { AssetType } from "../asset";
 import { assetTypeToString } from "../utils";
 
 describe("Utils", () => {
