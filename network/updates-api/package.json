@@ -2,6 +2,7 @@
   "name": "@network/updates-api",
   "version": "0.0.0-PLACEHOLDER",
   "dependencies": {
+    "@wexond/updates-core": "^0.0.0-PLACEHOLDER",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1"
   }

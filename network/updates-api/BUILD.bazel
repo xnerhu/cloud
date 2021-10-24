@@ -58,6 +58,7 @@ pkg_npm(
     srcs = ["package.json"],
     substitutions = {
         "@network/updates-api": "@wexond/updates-api",
+        "@core/updates": "@wexond/updates-core",
     },
     validate = False,
     deps = [

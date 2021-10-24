@@ -1,9 +1,9 @@
 import "jest";
 import { AssetType } from "@core/updates";
 
-import { assetTypeToString } from "../assets-utils";
+import { assetTypeToString } from "../utils";
 
-describe("Assets utils", () => {
+describe("Utils", () => {
   describe("assetTypeToString", () => {
     it("returns corresponding keyword", () => {
       expect(assetTypeToString(AssetType.INSTALLER)).toBe("installer");
