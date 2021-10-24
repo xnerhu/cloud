@@ -138,8 +138,6 @@ export class AdminService {
       type,
     });
 
-    await this.assetsRepo.flush();
-
     return {
       asset: this.assetsService.format(asset),
     };
