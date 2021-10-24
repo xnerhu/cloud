@@ -1,6 +1,6 @@
 # Wexond Cloud
 
-# Prerequisites
+## Prerequisites
 
 ## Install Bazel
 
