@@ -1,23 +1,22 @@
 import axios from "axios";
 import { CreateReleaseDto, ReleaseSearchOptions } from "@network/updates-api";
 
-import { getAdminUrl, getAuthHeaders } from "../utils";
-import { info, infoRes, warn } from "../utils/logger";
-import { UseCaseOptions } from "./base";
+import { getAdminUrl, getAuthHeaders, info, success, warn } from "../../utils";
+import { UseCaseAuthOptions } from "../base";
 
-export type CreateReleaseOptions = UseCaseOptions<
-  {
-    notes?: string;
-  } & ReleaseSearchOptions
->;
+export interface ReleaseCreateOptions
+  extends ReleaseSearchOptions,
+    UseCaseAuthOptions {
+  notes?: string;
+}
 
-export const createRelease = async ({
+export const releaseCreate = async ({
   api,
   token,
   channel,
   notes,
   version,
-}: CreateReleaseOptions) => {
+}: ReleaseCreateOptions) => {
   info(`Creating new release ${version}-${channel}`);
 
   const res = await axios.put<any>(
@@ -31,14 +30,14 @@ export const createRelease = async ({
   );
 
   if (!res.data.created) {
-    warn("Release not created, because it may already exists.");
+    warn("Release already exists.");
   } else {
     info("Release created");
   }
 
   const id = res.data.releaseId;
 
-  infoRes("Release id: " + id);
+  success("Release id: " + id);
 
   return id as number;
 };

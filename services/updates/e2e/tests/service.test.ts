@@ -501,7 +501,9 @@ describe("[e2e]: Admin", () => {
               .field("type", AssetType.INSTALLER);
 
             expect(res.statusCode).toEqual(400);
-            expect(res.body.message).toEqual("Incorrect file format");
+            expect(res.body.message.startsWith("Incorrect file format")).toBe(
+              true,
+            );
           });
 
           it("throws error if file is corrupted", async () => {
@@ -577,64 +579,47 @@ describe("[e2e]: Admin", () => {
           });
         });
 
-        describe("/admin/status", () => {
-          it("throws error if status type is incorrect", async () => {
-            const res = await request(app.getHttpServer())
-              .post("/admin/status")
-              .set(API_KEY_HEADER, API_KEY)
-              .send({
-                version: "5.0.0",
-                channel: "stable",
-                status: -1,
-              });
-
-            expect(res.statusCode).toEqual(400);
-            expect(res.body.message).toEqual("Incorrect status type");
-          });
-
+        describe("/admin/rollout", () => {
           it("throws error if release doesn't exists", async () => {
             const res = await request(app.getHttpServer())
-              .post("/admin/status")
+              .post("/admin/rollout")
               .set(API_KEY_HEADER, API_KEY)
               .send({
                 version: "5.0.0",
                 channel: "stable",
-                status: ReleaseStatusType.SUSPENDED,
               });
 
             expect(res.statusCode).toEqual(404);
             expect(res.body.message).toEqual("Release not found");
           });
 
-          it("changes release status", async () => {
+          it("rollouts release", async () => {
             const res = await request(app.getHttpServer())
-              .post("/admin/status")
+              .post("/admin/rollout")
               .set(API_KEY_HEADER, API_KEY)
               .send({
                 version: "2.0.0",
                 channel: "stable",
-                status: ReleaseStatusType.ROLLED_OUT,
               });
 
             expect(res.statusCode).toEqual(201);
             expect(res.body).toEqual({ changed: true });
           });
 
-          it("doesn't change release status if it has already given status", async () => {
+          it("doesn't rollout release if its already rolled out", async () => {
             const res = await request(app.getHttpServer())
-              .post("/admin/status")
+              .post("/admin/rollout")
               .set(API_KEY_HEADER, API_KEY)
               .send({
                 version: "2.0.0",
                 channel: "stable",
-                status: ReleaseStatusType.ROLLED_OUT,
               });
 
             expect(res.statusCode).toEqual(201);
             expect(res.body).toEqual({ changed: false });
           });
 
-          it("release is accessible after changing status", async () => {
+          it("release is accessible after rollout", async () => {
             const res = await request(app.getHttpServer())
               .get("/updates")
               .query({ version: "1.3.0", channel: "stable", os: "windows" });

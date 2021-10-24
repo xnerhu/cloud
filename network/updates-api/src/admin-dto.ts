@@ -1,6 +1,6 @@
 import { Type } from "class-transformer";
 import { IsString, IsOptional, IsNumber } from "class-validator";
-import { AssetType, ReleaseStatusType } from "@core/updates";
+import { AssetType } from "@core/updates";
 
 import { DistributionSearchOptions, ReleaseSearchOptions } from "./updates-dto";
 export class CreateReleaseDto implements ReleaseSearchOptions {
@@ -54,14 +54,10 @@ export class UploadAssetDto
   type: AssetType;
 }
 
-export class ChangeStatusDto implements ReleaseSearchOptions {
+export class AdminReleaseRolloutDto implements ReleaseSearchOptions {
   @IsString()
   version: string;
 
   @IsString()
   channel: string;
-
-  @IsNumber()
-  @Type(() => Number)
-  status: ReleaseStatusType;
 }

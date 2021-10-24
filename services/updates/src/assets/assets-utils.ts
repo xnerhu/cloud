@@ -3,10 +3,6 @@ import hashFile from "md5-file";
 import { extname } from "path";
 import { AssetType } from "@core/updates";
 
-export const assetTypeToString = (type: AssetType) => {
-  return AssetType[type].toLowerCase();
-};
-
 export const verifyAssetHash = async (path: string, remoteHash: string) => {
   const localHash = await hashFile(path);
 

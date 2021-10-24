@@ -16,7 +16,7 @@ import {
   UploadedFile,
 } from "@common/nest";
 import {
-  ChangeStatusDto,
+  AdminReleaseRolloutDto,
   CreateReleaseDto,
   GetDiffInfoDto,
   UploadAssetDto,
@@ -69,12 +69,8 @@ export class AdminController {
     return this.adminService.uploadAsset(data, file);
   }
 
-  @Post("status")
-  public changeStatus(@Body() data: ChangeStatusDto) {
-    if (ReleaseStatusType[data.status] == null) {
-      throw new BadRequestException("Incorrect status type");
-    }
-
-    return this.adminService.changeStatus(data);
+  @Post("rollout")
+  public rolloutRelease(@Body() data: AdminReleaseRolloutDto) {
+    return this.adminService.rolloutRelease(data);
   }
 }

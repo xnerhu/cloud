@@ -1,13 +1,15 @@
 import execa from "execa";
+import { dirname } from "path";
+import { ensureDir } from "@common/node";
 
-import { PATH_ZUCCHINI } from "../constants";
-import { info, infoRes } from "../utils/logger";
+import { info, success } from "../../utils";
+import { PATH_ZUCCHINI } from "../../constants";
 
-export type CreatePatchOptions = {
+export interface MakePatchOptions {
   path: string;
   pathPrevious: string;
   out: string;
-};
+}
 
 const runZucchini = async (
   newPath: string,
@@ -22,16 +24,18 @@ const runZucchini = async (
   await patch;
 };
 
-export const createPatch = async ({
+export const makePatch = async ({
   path,
   pathPrevious,
   out,
-}: CreatePatchOptions) => {
+}: MakePatchOptions) => {
   info(`Runing Zucchini ${path} - ${pathPrevious}`);
+
+  await ensureDir(dirname(path));
 
   await runZucchini(path, pathPrevious, out);
 
-  infoRes(`Patch generated at ${out}`);
+  success(`Patch generated at ${out}`);
 
   return out;
 };

@@ -13,8 +13,8 @@ import {
   AdminChangeStatusResponse,
   AdminCreateReleaseResponse,
   AdminGetDiffInfoResponse,
+  AdminReleaseRolloutDto,
   AdminUploadAssetResponse,
-  ChangeStatusDto,
   CreateReleaseDto,
   GetDiffInfoDto,
   UploadAssetDto,
@@ -27,6 +27,7 @@ import { ConfigService } from "../../config/config-service";
 import { AssetEntity } from "../../assets/asset-entity";
 import { DistributionEntity } from "../../distributions/distribution-entity";
 import { RMQ_PROXY_TOKEN } from "../../messaging/rmq-proxy";
+import { validateReleaseRollout } from "../../releases/release-utils";
 
 export interface ReleaseSearchOptions {
   version: string;
@@ -142,22 +143,29 @@ export class AdminService {
     };
   }
 
-  public async changeStatus({
+  public async rolloutRelease({
     channel,
     version,
-    status,
-  }: ChangeStatusDto): Promise<AdminChangeStatusResponse> {
+  }: AdminReleaseRolloutDto): Promise<AdminChangeStatusResponse> {
     const release = await this.releasesRepo.findOne({ version, channel });
 
     if (!release) {
       throw new NotFoundException("Release not found");
     }
 
-    if (release.status === status) {
+    const assets = await this.assetsRepo.find({ release });
+
+    const canRollout = validateReleaseRollout(assets);
+
+    if (canRollout !== true) {
+      throw new BadRequestException(`Cannot rollout release.`, canRollout);
+    }
+
+    if (release.status === ReleaseStatusType.ROLLED_OUT) {
       return { changed: false };
     }
 
-    release.status = status;
+    release.status = ReleaseStatusType.ROLLED_OUT;
 
     await this.releasesRepo.persistAndFlush(release);
 

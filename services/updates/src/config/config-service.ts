@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService as NestConfigService } from "@nestjs/config";
-import { ensureDirs, normalizePath } from "@common/node";
+import { ensureDir, normalizePath } from "@common/node";
 
 @Injectable()
 export class ConfigService {
   constructor(private readonly env: NestConfigService) {}
 
   public async init() {
-    await ensureDirs(this.patchesPath, this.installersPath);
+    await ensureDir(this.patchesPath, this.installersPath);
   }
 
   public get port() {
