@@ -83,3 +83,25 @@ export class UploadInstallerAssetDto
   @IsString()
   architecture: string;
 }
+
+export class UploadInstallerAssetDto
+  implements ReleaseSearchOptions, DistributionSearchOptions
+{
+  @IsString()
+  installerHash: string;
+
+  @IsString()
+  version: string;
+
+  @IsString()
+  channel: string;
+
+  @IsString()
+  os: string;
+
+  @IsString()
+  osVersion: string;
+
+  @IsString()
+  architecture: string;
+}
