@@ -41,11 +41,6 @@ export interface FindPatchOptions {
 
 export type GetPatchesOptions = FindPatchOptions;
 
-export type CreateAssetOptions = {
-  release: ReleaseEntity;
-  distribution: DistributionEntity;
-} & Pick<Asset, "filename" | "hash" | "type" | "size">;
-
 export type UploadAssetOptions = {
   path: string;
   release: ReleaseEntity;
@@ -148,28 +143,6 @@ export class AssetsService {
       .execute<AssetsDBEntry[]>("all");
   }
 
-  public async createOne({
-    filename,
-    hash,
-    release,
-    distribution,
-    type,
-    size,
-  }: CreateAssetOptions) {
-    const entity = new AssetEntity();
-
-    entity.distribution = distribution;
-    entity.release = release;
-
-    entity.filename = filename;
-    entity.hash = hash;
-    entity.type = type;
-    entity.release = release;
-    entity.size = size;
-
-    return entity;
-  }
-
   /**
    * Verifies asset hash, copies it to its dedicaded storage path, then inserts it to the database
    */
@@ -188,16 +161,17 @@ export class AssetsService {
 
     await copyFile(path, storagePath);
 
-    const asset = await this.createOne({
+    const asset = new AssetEntity({
       filename,
       type,
       hash,
       distribution,
-      release,
       size,
     });
 
-    this.assetsRepo.persist(asset);
+    asset.release = release;
+
+    this.assetsRepo.persistAndFlush(asset);
 
     return asset;
   }

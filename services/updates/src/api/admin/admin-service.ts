@@ -59,11 +59,13 @@ export class AdminService {
     const created = !release;
 
     if (!release) {
-      release = new ReleaseEntity();
-
-      release.channel = channel;
-      release.version = version;
-      release.notes = notes || "";
+      release = new ReleaseEntity({
+        channel,
+        version,
+        notes: notes || "",
+        status: ReleaseStatusType.SUSPENDED,
+        assets: [],
+      });
 
       await this.releasesRepo.persistAndFlush(release);
     }
