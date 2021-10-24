@@ -15,10 +15,6 @@ export class GetUpdatesDto
 
   @IsOptional()
   @IsString()
-  osVersion: string;
-
-  @IsOptional()
-  @IsString()
   architecture: string;
 }
 
@@ -29,7 +25,6 @@ export class GetUpdatesV1Dto {
 
 export interface DistributionSearchOptions {
   os: string;
-  osVersion: string;
   architecture: string;
 }
 

@@ -1,8 +1,17 @@
 import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
-import { DistributionArchitecture, Distribution } from "@core/updates";
+import { Distribution } from "@core/updates";
+
+export type DistributionEntityOptions = Omit<Distribution, "id" | "createdAt">;
 
 @Entity({ tableName: "distributions" })
 export class DistributionEntity implements Distribution {
+  constructor(options?: DistributionEntityOptions) {
+    if (options) {
+      this.os = options.os;
+      this.architecture = options.architecture;
+    }
+  }
+
   @PrimaryKey()
   id: number;
 
@@ -10,10 +19,7 @@ export class DistributionEntity implements Distribution {
   os: string;
 
   @Property({ columnType: "text" })
-  osVersion: string;
-
-  @Property({ columnType: "text" })
-  architecture: DistributionArchitecture;
+  architecture: string;
 
   @Property({ columnType: "timestamp" })
   createdAt: Date = new Date();

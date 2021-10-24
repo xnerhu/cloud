@@ -11,8 +11,25 @@ import { Asset, AssetType } from "@core/updates";
 import { DistributionEntity } from "../distributions/distribution-entity";
 import { ReleaseEntity } from "../releases/release-entity";
 
+export type AssetEntityOptions = Omit<
+  Asset,
+  "id" | "createdAt" | "distribution" | "release"
+> & {
+  distribution: DistributionEntity;
+};
+
 @Entity({ tableName: "assets" })
 export class AssetEntity implements Asset {
+  constructor(options?: AssetEntityOptions) {
+    if (options) {
+      this.type = options.type;
+      this.filename = options.filename;
+      this.hash = options.hash;
+      this.size = options.size;
+      this.distribution = options.distribution;
+    }
+  }
+
   @PrimaryKey()
   id: number;
 

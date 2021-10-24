@@ -10,8 +10,25 @@ import { Release, ReleaseStatusType } from "@core/updates";
 
 import { AssetEntity } from "../assets/asset-entity";
 
+export type ReleaseEntityOptions = Omit<
+  ReleaseEntity,
+  "id" | "createdAt" | "distribution" | "assets"
+> & {
+  assets: AssetEntity[];
+};
+
 @Entity({ tableName: "releases" })
 export class ReleaseEntity implements Release {
+  constructor(options?: ReleaseEntityOptions) {
+    if (options) {
+      this.version = options.version;
+      this.channel = options.channel;
+      this.assets = options.assets;
+      this.status = options.status;
+      this.notes = options.notes;
+    }
+  }
+
   @PrimaryKey()
   id: number;
 
@@ -28,7 +45,7 @@ export class ReleaseEntity implements Release {
 
   @Index()
   @Enum(() => ReleaseStatusType)
-  status: number;
+  status: number = ReleaseStatusType.SUSPENDED;
 
   @Property({ columnType: "text" })
   notes: string;

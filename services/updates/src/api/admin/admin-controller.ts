@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Post,
   Put,
   Query,
   UseGuards,
@@ -11,25 +12,21 @@ import {
 import {
   DiskStorage,
   DiskStorageFile,
-  FileFieldsInterceptor,
   FileInterceptor,
   UploadedFile,
-  UploadedFiles,
 } from "@common/nest";
 import {
+  ChangeStatusDto,
   CreateReleaseDto,
   GetDiffInfoDto,
-  UploadInstallerAssetDto,
-  UploadPatchAssetsDto,
+  UploadAssetDto,
 } from "@network/updates-api";
 
 import { AdminService } from "./admin-service";
-import {
-  uploadInstallerAssetFilter,
-  uploadPatchAssetsFilter,
-} from "./upload-filter";
+import { uploadsFilter } from "./upload-filter";
 import { uploadsStorage } from "./upload-storage";
 import { TokenGuard } from "../../security/token-guard";
+import { AssetType, ReleaseStatusType } from "@core/updates";
 
 @Controller("admin")
 @UseGuards(TokenGuard)
@@ -50,51 +47,34 @@ export class AdminController {
     return this.adminService.getDiffInfo(data);
   }
 
-  @Put("patch")
+  @Put("asset")
   @UseInterceptors(
-    FileFieldsInterceptor([{ name: "patch" }, { name: "packed" }], {
-      filter: uploadPatchAssetsFilter,
+    FileInterceptor("asset", {
+      filter: uploadsFilter,
       storage: uploadsStorage,
     }),
   )
-  public async uploadPatchAndPacked(
-    @Body() data: UploadPatchAssetsDto,
-    @UploadedFiles()
-    files: {
-      patch: DiskStorageFile[];
-      packed: DiskStorageFile[];
-    },
+  public async uploadAsset(
+    @Body() data: UploadAssetDto,
+    @UploadedFile() file?: DiskStorageFile,
   ) {
-    if (!files.patch?.length) {
-      throw new BadRequestException("Patch file not provided");
+    if (AssetType[data.type] == null) {
+      throw new BadRequestException("Incorrect asset type");
     }
 
-    if (!files.packed?.length) {
-      throw new BadRequestException("Packed file not provided");
-    }
-
-    return this.adminService.uploadPatchAndPacked(
-      data,
-      files.patch[0],
-      files.packed[0],
-    );
-  }
-
-  @Put("installer")
-  @UseInterceptors(
-    FileInterceptor("installer", {
-      filter: uploadInstallerAssetFilter,
-      storage: uploadsStorage,
-    }),
-  )
-  public async uploadInstaller(
-    @Body() data: UploadInstallerAssetDto,
-    @UploadedFile() installerFile?: DiskStorageFile,
-  ) {
-    if (installerFile == null) {
+    if (file == null) {
       throw new BadRequestException("No file provided");
     }
 
-    return this.adminService.uploadInstaller(data, installerFile);
+    return this.adminService.uploadAsset(data, file);
+  }
+
+  @Post("status")
+  public changeStatus(@Body() data: ChangeStatusDto) {
+    if (ReleaseStatusType[data.status] == null) {
+      throw new BadRequestException("Incorrect status type");
+    }
+
+    return this.adminService.changeStatus(data);
   }
 }

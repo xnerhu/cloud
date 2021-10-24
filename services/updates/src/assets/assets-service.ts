@@ -12,9 +12,18 @@ import { ReleaseEntity } from "../releases/release-entity";
 import { AssetEntity } from "./asset-entity";
 import { getAssetExtension, verifyAssetHash } from "./assets-utils";
 import { copyFile } from "fs/promises";
+import {
+  AssetFetchInfo,
+  ReleaseAssetFetchInfo,
+} from "@network/updates-api/src/assets-response";
 
-export type FormatAssetOptions = Pick<Release, "notes" | "version"> &
-  Pick<Asset, "filename" | "hash" | "size" | "type">;
+export type FormatAssetOptions = Pick<
+  Asset,
+  "filename" | "hash" | "size" | "type"
+>;
+
+export type FormatReleaseAssetOptions = FormatAssetOptions &
+  Pick<Release, "version" | "notes">;
 
 export type AssetsDBEntry = Pick<Asset, "type" | "filename" | "hash" | "size"> &
   Pick<Release, "version" | "notes">;
@@ -83,25 +92,26 @@ export class AssetsService {
     return this.config.patchesPath;
   }
 
-  /**
-   * Returns assets fetch details.
-   */
   public format({
     filename,
     hash,
-    notes,
     size,
     type,
-    version,
-  }: FormatAssetOptions): UpdateEntry {
+  }: FormatAssetOptions): AssetFetchInfo {
     return {
       filename,
       hash,
-      notes,
       size,
-      version,
       url: this.getUrl(type, filename),
     };
+  }
+
+  public formatRelease({
+    version,
+    notes,
+    ...opts
+  }: FormatReleaseAssetOptions): ReleaseAssetFetchInfo {
+    return { version, notes, ...this.format(opts) };
   }
 
   private getAssetsQuery() {
@@ -171,7 +181,7 @@ export class AssetsService {
     release,
     size,
   }: UploadAssetOptions) {
-    await verifyAssetHash(path, hash, type);
+    await verifyAssetHash(path, hash);
 
     const filename = (await makeId(12)) + getAssetExtension(path, type);
     const storagePath = join(this.getStoragePath(type), filename);
