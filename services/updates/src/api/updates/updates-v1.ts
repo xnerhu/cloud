@@ -1,11 +1,11 @@
 import {
   UpdateResponse,
   UpdateV1Response,
-  UpdateEntry,
   UpdateEntryV1,
   UpdateV1Strategy,
   UpdateStrategy,
 } from "@network/updates-api";
+import { ReleaseAssetFetchInfo } from "@network/updates-api/src/assets-response";
 
 export const transformUpdateStrategyV1 = (
   strategy: UpdateStrategy,
@@ -39,6 +39,6 @@ export const transformUpdateResV1 = (res: UpdateResponse): UpdateV1Response => {
 export const transformUpdateEntryV1 = ({
   filename,
   url,
-}: UpdateEntry): UpdateEntryV1 => {
+}: ReleaseAssetFetchInfo): UpdateEntryV1 => {
   return { filename, url };
 };

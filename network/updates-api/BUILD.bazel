@@ -4,6 +4,13 @@ load("//tools/npm:index.bzl", "pkg_npm")
 
 package(default_visibility = ["//visibility:public"])
 
+DEPS = [
+    "//core/updates",
+    "@npm//@types/node",
+    "@npm//class-transformer",
+    "@npm//class-validator",
+]
+
 exports_files(
     [
         "tsconfig.json",
@@ -15,6 +22,7 @@ ts_config(
     src = "tsconfig.json",
     deps = [
         "//:tsconfig.json",
+        "//core/updates:tsconfig",
     ],
 )
 
@@ -24,12 +32,6 @@ SRC_FILES = glob(
     ["src/**/*.ts"],
     exclude = TEST_FILES,
 ) + ["index.ts"]
-
-DEPS = [
-    "@npm//@types/node",
-    "@npm//class-transformer",
-    "@npm//class-validator",
-]
 
 ts_project(
     name = "components",
@@ -56,6 +58,7 @@ pkg_npm(
     srcs = ["package.json"],
     substitutions = {
         "@network/updates-api": "@wexond/updates-api",
+        "@core/updates": "@wexond/updates-core",
     },
     validate = False,
     deps = [

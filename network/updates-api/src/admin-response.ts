@@ -1,13 +1,18 @@
-import { UpdateEntry } from "./updates-response";
+import { AssetFetchInfo } from "./assets-response";
 
 export interface AdminCreateReleaseResponse {
   releaseId: number;
   created: boolean;
 }
 
-export type AdminGetDiffInfoResponse = Omit<UpdateEntry, "notes">;
+export interface AdminGetDiffInfoResponse {
+  asset: AssetFetchInfo;
+}
 
-export interface AdminUploadPatchResponse {
-  patch: UpdateEntry;
-  packed: UpdateEntry;
+export interface AdminUploadAssetResponse {
+  asset: AssetFetchInfo;
+}
+
+export interface AdminChangeStatusResponse {
+  changed: boolean;
 }

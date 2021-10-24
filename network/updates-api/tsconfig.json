@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../../bazel-out/x64_windows-fastbuild/bin/network/updates-api"
   },
+  "references": [{ "path": "../../core/updates" }],
   "include": ["src/**/*.ts", "index.ts"],
   "exclude": ["src/**/*.test.ts"]
 }

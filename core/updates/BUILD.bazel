@@ -1,5 +1,7 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+load("//tools/tests:index.bzl", "test_suite")
+load("//tools/npm:index.bzl", "pkg_npm")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -40,9 +42,36 @@ ts_project(
     deps = DEPS,
 )
 
+filegroup(
+    name = "components_test",
+    srcs = SRC_FILES + glob(TEST_FILES),
+)
+
+test_suite(
+    name = "test",
+    srcs = [
+        ":components_test",
+    ],
+    coverage = True,
+    deps = DEPS,
+)
+
 js_library(
     name = "updates",
     package_name = "@core/updates",
     srcs = ["package.json"],
     deps = [":components"],
+)
+
+pkg_npm(
+    name = "npm",
+    package_name = "@wexond/updates-core",
+    srcs = ["package.json"],
+    substitutions = {
+        "@core/updates": "@wexond/updates-core",
+    },
+    validate = False,
+    deps = [
+        ":components",
+    ],
 )

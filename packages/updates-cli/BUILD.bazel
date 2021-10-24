@@ -5,6 +5,7 @@ load("//tools/npm:index.bzl", "pkg_npm")
 package(default_visibility = ["//visibility:public"])
 
 DEPS = [
+    "//core/updates",
     "//common/node",
     "//network/updates-api",
     "@npm//@types/node",
@@ -36,6 +37,7 @@ ts_config(
     deps = [
         "//:tsconfig.json",
         "//common/node:tsconfig",
+        "//core/updates:tsconfig",
         "//network/updates-api:tsconfig",
     ],
 )
@@ -76,6 +78,7 @@ pkg_npm(
     substitutions = {
         "@common/node": "@wexond/common-node",
         "@network/updates-api": "@wexond/updates-api",
+        "@core/updates": "@wexond/updates-core",
     },
     deps = [
         ":components",

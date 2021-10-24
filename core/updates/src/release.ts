@@ -9,7 +9,13 @@ export interface Release {
   channel: string;
   assets: Asset[];
   notes: string;
+  status: ReleaseStatusType;
   createdAt: Date;
 }
 
 export type ReleaseChannel = "alpha" | "beta" | "stable";
+
+export enum ReleaseStatusType {
+  SUSPENDED = 0,
+  ROLLED_OUT,
+}

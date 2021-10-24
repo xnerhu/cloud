@@ -1,27 +1,20 @@
 import { DiskStorageFile, UploadFilterHandler } from "@common/nest";
 
-const MIMETYPES = ["application/octet-stream", "application/x-7z-compressed"];
+const MIMETYPES = [
+  "application/octet-stream",
+  "application/x-7z-compressed",
+  "application/x-msdos-program",
+  "application/x-debian-package",
+  "application/x-apple-diskimage",
+];
 
-export const uploadPatchAssetsFilter: UploadFilterHandler = (
+export const uploadsFilter: UploadFilterHandler = (
   req,
   file: DiskStorageFile,
 ) => {
   if (!MIMETYPES.includes(file.mimetype)) {
-    return "Incorrect file format";
+    return `Incorrect file format ${file.mimetype}`;
   }
-
-  return true;
-};
-
-export const uploadInstallerAssetFilter: UploadFilterHandler = (
-  req,
-  file: DiskStorageFile,
-) => {
-  // if (!MIMETYPES.includes(file.mimetype)) {
-  //   return "Incorrect file format";
-  // }
-
-  console.log(file.mimetype);
 
   return true;
 };

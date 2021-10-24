@@ -1,5 +1,5 @@
 import { ClientProxy } from "@nestjs/microservices";
-import { AssetType } from "@core/updates";
+import { AssetType, ReleaseStatusType } from "@core/updates";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import {
@@ -10,13 +10,14 @@ import {
 } from "@nestjs/common";
 import { DiskStorageFile } from "@common/nest";
 import {
+  AdminChangeStatusResponse,
   AdminCreateReleaseResponse,
   AdminGetDiffInfoResponse,
-  AdminUploadPatchResponse,
+  AdminReleaseRolloutDto,
+  AdminUploadAssetResponse,
   CreateReleaseDto,
   GetDiffInfoDto,
-  UploadInstallerAssetDto,
-  UploadPatchAssetsDto,
+  UploadAssetDto,
 } from "@network/updates-api";
 import { NewUpdateEvent, PATTERN_NEW_UPDATE } from "@network/updates-queue";
 
@@ -26,6 +27,7 @@ import { ConfigService } from "../../config/config-service";
 import { AssetEntity } from "../../assets/asset-entity";
 import { DistributionEntity } from "../../distributions/distribution-entity";
 import { RMQ_PROXY_TOKEN } from "../../messaging/rmq-proxy";
+import { validateReleaseRollout } from "../../releases/release-utils";
 
 export interface ReleaseSearchOptions {
   version: string;
@@ -57,11 +59,13 @@ export class AdminService {
     const created = !release;
 
     if (!release) {
-      release = new ReleaseEntity();
-
-      release.channel = channel;
-      release.version = version;
-      release.notes = notes || "";
+      release = new ReleaseEntity({
+        channel,
+        version,
+        notes: notes || "",
+        status: ReleaseStatusType.SUSPENDED,
+        assets: [],
+      });
 
       await this.releasesRepo.persistAndFlush(release);
     }
@@ -86,24 +90,25 @@ export class AdminService {
       throw new NotFoundException(`No previous release found`);
     }
 
-    return this.assetsService.format(asset);
+    return { asset: this.assetsService.format(asset) };
   }
 
-  public async uploadPatchAndPacked(
-    {
-      packedHash,
-      patchHash,
-      version,
-      channel,
-      ..._distribution
-    }: UploadPatchAssetsDto,
-    patch: DiskStorageFile,
-    packed: DiskStorageFile,
-  ): Promise<AdminUploadPatchResponse> {
+  public async uploadAsset(
+    { hash, version, channel, type, ..._distribution }: UploadAssetDto,
+    file: DiskStorageFile,
+  ): Promise<AdminUploadAssetResponse> {
+    if (!AssetType[type]) {
+      throw new BadRequestException(`Asset type ${type} doesn't exists`);
+    }
+
     const release = await this.releasesRepo.findOne({ version, channel });
 
     if (!release) {
       throw new NotFoundException("Release not found");
+    }
+
+    if (release.status === ReleaseStatusType.ROLLED_OUT) {
+      throw new BadRequestException(`Release is rolled out`);
     }
 
     const distribution = await this.distributionEntity.findOne(_distribution);
@@ -112,106 +117,58 @@ export class AdminService {
       throw new NotFoundException("Distribution not found");
     }
 
-    const patchDB = await this.assetsRepo.findOne({
+    const dbEntry = await this.assetsRepo.findOne({
       release: { id: release.id },
       distribution: { id: distribution.id },
-      type: { $in: [AssetType.PATCH, AssetType.PATCH] },
+      type,
     });
 
-    if (patchDB) {
+    if (dbEntry) {
       throw new BadRequestException(
-        `Patch for distribution ${distribution.os}-` +
-          `${distribution.architecture}-${distribution.osVersion} already exists`,
+        `Asset for this distribution already exists`,
       );
     }
 
-    const [patchAsset, packedAsset] = await Promise.all([
-      this.assetsService.upload({
-        release,
-        distribution,
-        hash: patchHash,
-        path: patch.path,
-        size: patch.size,
-        type: AssetType.PATCH,
-      }),
-      this.assetsService.upload({
-        release,
-        distribution,
-        hash: packedHash,
-        path: packed.path,
-        size: packed.size,
-        type: AssetType.PACKED,
-      }),
-    ]);
-
-    await this.assetsRepo.flush();
-
-    const releaseData = { version, notes: release.notes };
-
-    if (this.configService.isRMQEnabled) {
-      this.rmq.emit(PATTERN_NEW_UPDATE, {
-        release: {
-          id: release.id,
-          notes: release.notes,
-          channel,
-          version,
-        },
-        distribution: {
-          id: distribution.id,
-          ..._distribution,
-        },
-      } as NewUpdateEvent);
-    }
+    const asset = await this.assetsService.upload({
+      release,
+      distribution,
+      hash,
+      path: file.path,
+      size: file.size,
+      type,
+    });
 
     return {
-      patch: this.assetsService.format({ ...releaseData, ...patchAsset }),
-      packed: this.assetsService.format({ ...releaseData, ...packedAsset }),
+      asset: this.assetsService.format(asset),
     };
   }
 
-  public async uploadInstaller(
-    {
-      installerHash,
-      version,
-      channel,
-      ..._distribution
-    }: UploadInstallerAssetDto,
-    installerFile: DiskStorageFile,
-  ) {
+  public async rolloutRelease({
+    channel,
+    version,
+  }: AdminReleaseRolloutDto): Promise<AdminChangeStatusResponse> {
     const release = await this.releasesRepo.findOne({ version, channel });
 
     if (!release) {
       throw new NotFoundException("Release not found");
     }
 
-    const distribution = await this.distributionEntity.findOne(_distribution);
+    const assets = await this.assetsRepo.find({ release });
 
-    if (!distribution) {
-      throw new NotFoundException("Distribution not found");
+    const canRollout = validateReleaseRollout(assets);
+
+    if (canRollout !== true) {
+      throw new BadRequestException(`Cannot rollout release.`, canRollout);
     }
 
-    const installerDB = await this.assetsRepo.findOne({
-      release: { id: release.id },
-      distribution: { id: distribution.id },
-      type: AssetType.INSTALLER,
-    });
-
-    if (installerDB) {
-      throw new BadRequestException(
-        `Installer for distribution ${distribution.os}-` +
-          `${distribution.architecture}-${distribution.osVersion} already exists`,
-      );
+    if (release.status === ReleaseStatusType.ROLLED_OUT) {
+      return { changed: false };
     }
 
-    await this.assetsService.upload({
-      release,
-      distribution,
-      hash: installerHash,
-      path: installerFile.path,
-      size: installerFile.size,
-      type: AssetType.INSTALLER,
-    });
+    release.status = ReleaseStatusType.ROLLED_OUT;
 
-    await this.assetsRepo.flush();
+    await this.releasesRepo.persistAndFlush(release);
+
+    return { changed: true };
   }
 }

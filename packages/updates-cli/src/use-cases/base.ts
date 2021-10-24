@@ -1,4 +1,4 @@
-export type UseCaseOptions<T = Record<string, any>> = T & {
+export interface UseCaseAuthOptions {
   api: string;
   token: string;
-};
+}

@@ -13,7 +13,6 @@ import { transformUpdateResV1 } from "./updates-v1";
 
 const DEFAULT_DISTRIBUTION: Partial<Distribution> = {
   os: "windows",
-  osVersion: "any",
   architecture: "x64",
 };
 
@@ -53,7 +52,7 @@ export class UpdatesService {
 
     const res: UpdateResponse = {
       strategy,
-      packed: this.assetsService.format(packed),
+      packed: this.assetsService.formatRelease(packed),
     };
 
     if (strategy === "packed") {
@@ -62,7 +61,7 @@ export class UpdatesService {
 
     return {
       ...res,
-      patches: patches.map((patch) => this.assetsService.format(patch)),
+      patches: patches.map((patch) => this.assetsService.formatRelease(patch)),
     };
   }
 
@@ -74,7 +73,6 @@ export class UpdatesService {
     const update = await this.get({
       os: "windows",
       architecture: "x64",
-      osVersion: "any",
       channel: "stable",
       version,
     });

@@ -3,22 +3,12 @@ import hashFile from "md5-file";
 import { extname } from "path";
 import { AssetType } from "@core/updates";
 
-export const assetTypeToString = (type: AssetType) => {
-  return AssetType[type].toLowerCase();
-};
-
-export const verifyAssetHash = async (
-  path: string,
-  remoteHash: string,
-  type: AssetType,
-) => {
+export const verifyAssetHash = async (path: string, remoteHash: string) => {
   const localHash = await hashFile(path);
 
   if (localHash !== remoteHash) {
     throw new BadRequestException(
-      `${assetTypeToString(
-        type,
-      )} is corrupt. Expected ${remoteHash}, got: ${localHash}`,
+      `File is corrupted. Expected ${remoteHash}, got: ${localHash}`,
     );
   }
 };

@@ -5,8 +5,9 @@
     "wexond-updates": "./bin/run"
   },
   "dependencies": {
-    "@wexond/common-node": "^1.1.0",
-    "@wexond/updates-api": "^1.0.0",
+    "@wexond/common-node": "^0.0.0-PLACEHOLDER",
+    "@wexond/updates-api": "^0.0.0-PLACEHOLDER",
+    "@wexond/updates-core": "^0.0.0-PLACEHOLDER",
     "7zip-bin": "^5.1.1",
     "axios": "^0.22.0",
     "chalk": "^4.1.2",

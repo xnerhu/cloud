@@ -1,4 +1,7 @@
-import { IsString, IsOptional } from "class-validator";
+import { Type } from "class-transformer";
+import { IsString, IsOptional, IsNumber } from "class-validator";
+import { AssetType } from "@core/updates";
+
 import { DistributionSearchOptions, ReleaseSearchOptions } from "./updates-dto";
 export class CreateReleaseDto implements ReleaseSearchOptions {
   @IsString()
@@ -25,13 +28,10 @@ export class GetDiffInfoDto
   os: string;
 
   @IsString()
-  osVersion: string;
-
-  @IsString()
   architecture: string;
 }
 
-export class UploadPatchAssetsDto
+export class UploadAssetDto
   implements ReleaseSearchOptions, DistributionSearchOptions
 {
   @IsString()
@@ -41,19 +41,25 @@ export class UploadPatchAssetsDto
   channel: string;
 
   @IsString()
-  patchHash: string;
-
-  @IsString()
-  packedHash: string;
+  hash: string;
 
   @IsString()
   os: string;
 
   @IsString()
-  osVersion: string;
+  architecture: string;
+
+  @IsNumber()
+  @Type(() => Number)
+  type: AssetType;
+}
+
+export class AdminReleaseRolloutDto implements ReleaseSearchOptions {
+  @IsString()
+  version: string;
 
   @IsString()
-  architecture: string;
+  channel: string;
 }
 
 export class UploadInstallerAssetDto

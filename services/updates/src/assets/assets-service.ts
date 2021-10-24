@@ -1,9 +1,9 @@
-import { extname, join } from "path";
-import { Asset, AssetType, Release } from "@core/updates";
+import { join } from "path";
+import { Asset, AssetType, Release, ReleaseStatusType } from "@core/updates";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
-import { DistributionSearchOptions, UpdateEntry } from "@network/updates-api";
+import { DistributionSearchOptions } from "@network/updates-api";
 import { makeId } from "@common/node";
 
 import { ConfigService } from "../config/config-service";
@@ -12,9 +12,18 @@ import { ReleaseEntity } from "../releases/release-entity";
 import { AssetEntity } from "./asset-entity";
 import { getAssetExtension, verifyAssetHash } from "./assets-utils";
 import { copyFile } from "fs/promises";
+import {
+  AssetFetchInfo,
+  ReleaseAssetFetchInfo,
+} from "@network/updates-api/src/assets-response";
 
-export type FormatAssetOptions = Pick<Release, "notes" | "version"> &
-  Pick<Asset, "filename" | "hash" | "size" | "type">;
+export type FormatAssetOptions = Pick<
+  Asset,
+  "filename" | "hash" | "size" | "type"
+>;
+
+export type FormatReleaseAssetOptions = FormatAssetOptions &
+  Pick<Release, "version" | "notes">;
 
 export type AssetsDBEntry = Pick<Asset, "type" | "filename" | "hash" | "size"> &
   Pick<Release, "version" | "notes">;
@@ -31,11 +40,6 @@ export interface FindPatchOptions {
 }
 
 export type GetPatchesOptions = FindPatchOptions;
-
-export type CreateAssetOptions = {
-  release: ReleaseEntity;
-  distribution: DistributionEntity;
-} & Pick<Asset, "filename" | "hash" | "type" | "size">;
 
 export type UploadAssetOptions = {
   path: string;
@@ -83,25 +87,26 @@ export class AssetsService {
     return this.config.patchesPath;
   }
 
-  /**
-   * Returns assets fetch details.
-   */
   public format({
     filename,
     hash,
-    notes,
     size,
     type,
-    version,
-  }: FormatAssetOptions): UpdateEntry {
+  }: FormatAssetOptions): AssetFetchInfo {
     return {
       filename,
       hash,
-      notes,
       size,
-      version,
       url: this.getUrl(type, filename),
     };
+  }
+
+  public formatRelease({
+    version,
+    notes,
+    ...opts
+  }: FormatReleaseAssetOptions): ReleaseAssetFetchInfo {
+    return { version, notes, ...this.format(opts) };
   }
 
   private getAssetsQuery() {
@@ -118,7 +123,7 @@ export class AssetsService {
       .where({
         type: AssetType.PACKED,
         distribution,
-        release: { channel },
+        release: { channel, status: ReleaseStatusType.ROLLED_OUT },
       })
       .limit(1)
       .execute<AssetsDBEntry | undefined>("get");
@@ -129,31 +134,13 @@ export class AssetsService {
       .where({
         type: AssetType.PATCH,
         distribution: distribution,
-        release: { channel, version: { $gt: version } },
+        release: {
+          channel,
+          version: { $gt: version },
+          status: ReleaseStatusType.ROLLED_OUT,
+        },
       })
       .execute<AssetsDBEntry[]>("all");
-  }
-
-  public async createOne({
-    filename,
-    hash,
-    release,
-    distribution,
-    type,
-    size,
-  }: CreateAssetOptions) {
-    const entity = new AssetEntity();
-
-    entity.distribution = distribution;
-    entity.release = release;
-
-    entity.filename = filename;
-    entity.hash = hash;
-    entity.type = type;
-    entity.release = release;
-    entity.size = size;
-
-    return entity;
   }
 
   /**
@@ -167,23 +154,24 @@ export class AssetsService {
     release,
     size,
   }: UploadAssetOptions) {
-    await verifyAssetHash(path, hash, type);
+    await verifyAssetHash(path, hash);
 
     const filename = (await makeId(12)) + getAssetExtension(path, type);
     const storagePath = join(this.getStoragePath(type), filename);
 
     await copyFile(path, storagePath);
 
-    const asset = await this.createOne({
+    const asset = new AssetEntity({
       filename,
       type,
       hash,
       distribution,
-      release,
       size,
     });
 
-    this.assetsRepo.persist(asset);
+    asset.release = release;
+
+    this.assetsRepo.persistAndFlush(asset);
 
     return asset;
   }

@@ -1,21 +1,21 @@
 import { Command } from "commander";
 import chalk from "chalk";
 
-import { createReleaseCommand } from "./commands/create-release";
-import { fetchDiffCommand } from "./commands/fetch-diff";
-import { createPatchCommand } from "./commands/create-patch";
-import { uploadPatchCommand } from "./commands/upload-patch";
-import { publishReleaseCommand } from "./commands/publish-release";
+import { commandRelease } from "./commands/release";
+import { commandFetch } from "./commands/fetch";
+import { commandMakePatch } from "./commands/patch";
+import { commandUpload } from "./commands/upload";
+import { commandPublish } from "./commands/publish";
 
 const program = new Command();
 
 program
   .version("0.0.0-PLACEHOLDER")
-  .addCommand(createReleaseCommand)
-  .addCommand(fetchDiffCommand)
-  .addCommand(createPatchCommand)
-  .addCommand(uploadPatchCommand)
-  .addCommand(publishReleaseCommand)
+  .addCommand(commandRelease)
+  .addCommand(commandFetch)
+  .addCommand(commandMakePatch)
+  .addCommand(commandUpload)
+  .addCommand(commandPublish)
   .parse(process.argv);
 
 process.on("unhandledRejection", (err) => {

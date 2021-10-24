@@ -1,28 +1,34 @@
 import axios from "axios";
-import { tmpdir } from "os";
 import hashFile from "md5-file";
 import { createWriteStream } from "fs";
+import { tmpdir } from "os";
 import { resolve } from "path";
 import Progressbar from "progress";
-import { downloadFile } from "@common/node";
 import {
+  AdminGetDiffInfoResponse,
   DistributionSearchOptions,
   GetDiffInfoDto,
   ReleaseSearchOptions,
 } from "@network/updates-api";
+import { downloadFile } from "@common/node";
 
-import { getAdminUrl, getAuthHeaders } from "../utils";
-import { info, infoRes, warn } from "../utils/logger";
-import { UseCaseOptions } from "./base";
-import { unpackRelease } from "../utils/release";
+import {
+  getAdminUrl,
+  getAuthHeaders,
+  info,
+  success,
+  unpackRelease,
+  warn,
+} from "../../utils";
+import { UseCaseAuthOptions } from "../base";
 
-export type FetchDiffOptions = UseCaseOptions<
-  {
-    path?: string;
-    ignoreHash?: boolean;
-  } & ReleaseSearchOptions &
-    DistributionSearchOptions
->;
+export interface FetchAssetOptions
+  extends ReleaseSearchOptions,
+    DistributionSearchOptions,
+    UseCaseAuthOptions {
+  path?: string;
+  ignoreHash?: boolean;
+}
 
 const download = async (downloadUrl: string, path: string) => {
   info(`Downloading ${downloadUrl} to ${path}`);
@@ -53,27 +59,29 @@ export const fetchDiff = async ({
   channel,
   version,
   path,
+  os,
+  architecture,
   ignoreHash,
-  ...distribution
-}: FetchDiffOptions) => {
-  info(
-    `Fetching diff info for ${version} ${channel} ${distribution.os}-${distribution.architecture}`,
-  );
+}: FetchAssetOptions) => {
+  info(`Fetching diff info for ${version} ${channel} ${os}-${architecture}`);
 
   const res = await axios.get<any>(getAdminUrl(api, "diff"), {
     params: {
       channel,
       version,
-      ...distribution,
+      os,
+      architecture,
     } as GetDiffInfoDto,
     headers: getAuthHeaders(token),
   });
 
   const diffData = res.data;
 
-  infoRes(JSON.stringify(diffData));
+  success(JSON.stringify(diffData));
 
-  const { url: downloadUrl, filename, hash } = diffData;
+  const {
+    asset: { url: downloadUrl, filename, hash },
+  } = diffData as AdminGetDiffInfoResponse;
 
   const dirPath = path || tmpdir();
   const filePath = resolve(dirPath, filename);
@@ -94,7 +102,7 @@ export const fetchDiff = async ({
 
   const { path: unpackedFilePath } = await unpackRelease(dirPath, filePath);
 
-  infoRes(`Unpacked release to ${unpackedFilePath}`);
+  success(`Unpacked release to ${unpackedFilePath}`);
 
   return { packedPath: filePath, unpackedPath: unpackedFilePath };
 };

@@ -4,6 +4,7 @@
     "outDir": "../../bazel-out/x64_windows-fastbuild/bin/packages/updates-cli"
   },
   "references": [
+    { "path": "../../core/updates" },
     { "path": "../../common/node" },
     { "path": "../../network/updates-api" }
   ],

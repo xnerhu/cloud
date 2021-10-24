@@ -1,7 +1,6 @@
 import { extname } from "path";
 import { copyFile, mkdir, stat } from "fs/promises";
 
-import { randomBytes } from "./crypto";
 import { makeId } from "./string";
 
 export const pathExists = async (path: string) => {
@@ -14,10 +13,14 @@ export const pathExists = async (path: string) => {
   return true;
 };
 
-export const ensureDir = async (path: string) => {
-  if (!(await pathExists(path))) {
-    await mkdir(path, { recursive: true });
-  }
+export const ensureDir = async (...paths: string[]) => {
+  await Promise.all(
+    paths.map(async (path) => {
+      if (!(await pathExists(path))) {
+        await mkdir(path, { recursive: true });
+      }
+    }),
+  );
 };
 
 export const ensureFile = async (dst: string, src: string) => {
@@ -32,14 +35,4 @@ export const getUniqueFilename = async (filename: string) => {
 
 export const getFileSize = (path: string) => {
   return stat(path).then((r) => r.size);
-};
-
-export const ensureDirs = async (...paths: string[]) => {
-  await Promise.all(
-    paths.map(async (path) => {
-      if (!(await pathExists(path))) {
-        await mkdir(path, { recursive: true });
-      }
-    }),
-  );
 };

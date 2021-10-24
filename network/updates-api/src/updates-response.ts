@@ -1,18 +1,11 @@
-export type UpdateStrategy = "patches" | "packed" | "none";
+import { ReleaseAssetFetchInfo } from "./assets-response";
 
-export interface UpdateEntry {
-  version: string;
-  url: string;
-  filename: string;
-  notes: string;
-  hash: string;
-  size: number;
-}
+export type UpdateStrategy = "patches" | "packed" | "none";
 
 export interface UpdateResponse {
   strategy: UpdateStrategy;
-  packed?: UpdateEntry;
-  patches?: UpdateEntry[];
+  packed?: ReleaseAssetFetchInfo;
+  patches?: ReleaseAssetFetchInfo[];
 }
 
 export type UpdateV1Strategy = "patches" | "full" | "none";
