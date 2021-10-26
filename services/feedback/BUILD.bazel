@@ -5,7 +5,6 @@ package(default_visibility = ["//visibility:public"])
 
 DEPS = [
     "//network/feedback-api",
-    "//common/node",
     "//common/nest",
     "//common/utils",
     "//libs/jira-api",
@@ -39,7 +38,6 @@ ts_config(
     deps = [
         "//:tsconfig.json",
         "//common/nest:tsconfig",
-        "//common/node:tsconfig",
         "//common/utils:tsconfig",
         "//libs/jira-api:tsconfig",
         "//network/feedback-api:tsconfig",

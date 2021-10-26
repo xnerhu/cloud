@@ -7,12 +7,6 @@ export const SCHEMA_ENV = Joi.object({
   JIRA_USERNAME: Joi.string().required(),
   JIRA_PASSWORD: Joi.string().required(),
   MAX_ATTACHMENT_SIZE: Joi.number().required(),
-  ATTACHMENTS_PATH: Joi.string().required(),
-  ATTACHMENTS_URL: Joi.string().required(),
-  API_KEY: Joi.string().required(),
-  RMQ_ENABLED: Joi.boolean().optional().default(true),
-  RMQ_URL: Joi.string().required(),
-  RMQ_QUEUE: Joi.string().required(),
 });
 
 export const ENV_MAX_ATTACHMENT_SIZE = parseInt(

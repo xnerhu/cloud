@@ -5,7 +5,6 @@
   },
   "references": [
     { "path": "../../network/feedback-api" },
-    { "path": "../../common/node" },
     { "path": "../../common/nest" },
     { "path": "../../common/utils" },
     { "path": "../..//libs/jira-api" }
