@@ -1,0 +1,50 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+
+package(default_visibility = ["//visibility:public"])
+
+DEPS = [
+    "@npm//@types/node",
+    "@npm//jira-client",
+    "@npm//@types/jira-client",
+]
+
+exports_files(
+    [
+        "tsconfig.json",
+    ],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+    ],
+)
+
+TEST_FILES = ["src/**/*.test.ts"]
+
+SRC_FILES = glob(
+    ["src/**/*.ts"],
+    exclude = TEST_FILES,
+) + ["index.ts"]
+
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    allow_js = True,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig",
+    deps = DEPS,
+)
+
+js_library(
+    name = "jira-api",
+    package_name = "@libs/jira-api",
+    srcs = ["package.json"],
+    deps = [":components"],
+)

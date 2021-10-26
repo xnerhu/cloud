@@ -59,13 +59,22 @@
       "./bazel-out/x64_windows-fastbuild/bin/network",
       "./bazel-out/darwin-dbg/bin/network",
       "./bazel-out/k8-dbg/bin/network",
-      "./bazel-out/x64_windows-dbg/bin/network"
+      "./bazel-out/x64_windows-dbg/bin/network",
+
+      "./libs",
+      "./bazel-out/darwin-fastbuild/bin/libs",
+      "./bazel-out/k8-fastbuild/bin/libs",
+      "./bazel-out/x64_windows-fastbuild/bin/libs",
+      "./bazel-out/darwin-dbg/bin/libs",
+      "./bazel-out/k8-dbg/bin/libs",
+      "./bazel-out/x64_windows-dbg/bin/libs"
     ],
 
     "paths": {
       "@common/*": ["./common/*"],
       "@core/*": ["./core/*"],
-      "@network/*": ["./network/*"]
+      "@network/*": ["./network/*"],
+      "@libs/*": ["./libs/*"]
     }
   },
   "exclude": [

@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/libs/jira-api"
+  },
+  "include": ["src/**/*.ts", "index.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}
