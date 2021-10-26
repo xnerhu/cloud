@@ -2,10 +2,10 @@ import { Client, Intents } from "discord.js";
 
 import { ConfigService } from "../config/config-service";
 
-export const DISCORD_CONNECTION = "DISCORD_CONNECTION";
+export const CLIENT_CONNECTION = "DISCORD_CONNECTION";
 
-export const discordConnectionFactory = {
-  provide: DISCORD_CONNECTION,
+export const clientFactory = {
+  provide: CLIENT_CONNECTION,
   useFactory: async (config: ConfigService) => {
     const client = new Client({
       intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],

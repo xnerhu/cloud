@@ -19,7 +19,10 @@ import {
   GetDiffInfoDto,
   UploadAssetDto,
 } from "@network/updates-api";
-import { NewUpdateEvent, PATTERN_NEW_UPDATE } from "@network/updates-queue";
+import {
+  ReleaseRolloutEvent,
+  PATTERN_RELEASE_ROLLOUT_EVENT,
+} from "@network/updates-queue";
 
 import { AssetsService } from "../../assets/assets-service";
 import { ReleaseEntity } from "../../releases/release-entity";
@@ -168,6 +171,22 @@ export class AdminService {
     release.status = ReleaseStatusType.ROLLED_OUT;
 
     await this.releasesRepo.persistAndFlush(release);
+
+    const distributions = await this.assetsService.getDistributions({
+      release,
+    });
+
+    if (this.configService.isRMQEnabled) {
+      this.rmq.emit(PATTERN_RELEASE_ROLLOUT_EVENT, {
+        release: {
+          channel: release.channel,
+          id: release.id,
+          notes: release.notes,
+          version: release.version,
+        },
+        distributions,
+      } as ReleaseRolloutEvent);
+    }
 
     return { changed: true };
   }
