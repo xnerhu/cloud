@@ -1,6 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Client, TextChannel } from "discord.js";
-import { ReleaseRolloutEvent } from "@network/updates-queue";
 
 import { ConfigService } from "../config/config-service";
 import { CLIENT_CONNECTION } from "../client/client-connection";
@@ -9,11 +8,11 @@ import { CLIENT_CONNECTION } from "../client/client-connection";
 export class ClientService {
   constructor(
     private readonly configService: ConfigService,
-    @Inject(CLIENT_CONNECTION) private readonly clientService: Client<true>,
+    @Inject(CLIENT_CONNECTION) private readonly connection: Client<true>,
   ) {}
 
   public getUpdatesChannel() {
     const id = this.configService.updatesChannel;
-    return <TextChannel>this.clientService.channels.resolve(id);
+    return <TextChannel>this.connection.channels.resolve(id);
   }
 }
