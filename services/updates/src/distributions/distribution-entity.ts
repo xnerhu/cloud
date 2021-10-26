@@ -1,5 +1,7 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { Distribution } from "@core/updates";
+
+import { AssetEntity } from "../assets/asset-entity";
 
 export type DistributionEntityOptions = Omit<Distribution, "id" | "createdAt">;
 
@@ -23,4 +25,7 @@ export class DistributionEntity implements Distribution {
 
   @Property({ columnType: "timestamp" })
   createdAt: Date = new Date();
+
+  @OneToMany(() => AssetEntity, (asset) => asset.distribution)
+  assets: AssetEntity[];
 }

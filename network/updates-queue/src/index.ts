@@ -1,8 +1,8 @@
 import { Release, Distribution } from "@core/updates";
 
-export interface NewUpdateEvent {
+export interface ReleaseRolloutEvent {
   release: Pick<Release, "id" | "version" | "channel" | "notes">;
-  distribution: Pick<Distribution, "id" | "os" | "architecture">;
+  distributions: Pick<Distribution, "id" | "os" | "architecture">[];
 }
 
-export const PATTERN_NEW_UPDATE = "new-update";
+export const PATTERN_RELEASE_ROLLOUT_EVENT = "release-rollout";

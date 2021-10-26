@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/updates-bot"
+    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/discord-bot"
   },
   "references": [
     { "path": "../../common/node" },

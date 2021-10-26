@@ -2,11 +2,11 @@ import { Module } from "@nestjs/common";
 
 import { UpdatesController } from "./updates-controller";
 import { UpdatesService } from "./updates-service";
-import { DiscordModule } from "../discord/discord-module";
 import { ConfigModule } from "../config/config-module";
+import { ClientModule } from "../client/client-module";
 
 @Module({
-  imports: [DiscordModule, ConfigModule],
+  imports: [ClientModule, ConfigModule],
   providers: [UpdatesService],
   controllers: [UpdatesController],
 })

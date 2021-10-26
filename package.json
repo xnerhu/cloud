@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev:updates": "ibazel run //services/updates:updates.dev",
-    "dev:updates-bot": "ibazel run //services/updates-bot:updates-bot.dev",
+    "dev:discord-bot": "ibazel run //services/discord-bot:discord-bot.dev",
     "dev:feedback": "ibazel run //services/feedback:feedback.dev",
     "seed:updates": "bazel run //services/updates:schema_up && bazel run //services/updates:seed",
     "drop:updates": "bazel run //services/updates:schema_drop",

@@ -1,6 +1,9 @@
 import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
-import { PATTERN_NEW_UPDATE, NewUpdateEvent } from "@network/updates-queue";
+import {
+  PATTERN_RELEASE_ROLLOUT_EVENT,
+  ReleaseRolloutEvent,
+} from "@network/updates-queue";
 
 import { UpdatesService } from "./updates-service";
 
@@ -8,8 +11,8 @@ import { UpdatesService } from "./updates-service";
 export class UpdatesController {
   constructor(private readonly updatesService: UpdatesService) {}
 
-  @MessagePattern(PATTERN_NEW_UPDATE)
-  public getPatches(@Payload() data: NewUpdateEvent) {
-    this.updatesService.sendDiscordMessage(data);
+  @MessagePattern(PATTERN_RELEASE_ROLLOUT_EVENT)
+  public onReleaseRollout(@Payload() data: ReleaseRolloutEvent) {
+    this.updatesService.onReleaseRollout(data);
   }
 }

@@ -1,5 +1,11 @@
 import { join } from "path";
-import { Asset, AssetType, Release, ReleaseStatusType } from "@core/updates";
+import {
+  Asset,
+  AssetType,
+  Distribution,
+  Release,
+  ReleaseStatusType,
+} from "@core/updates";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -46,6 +52,15 @@ export type UploadAssetOptions = {
   release: ReleaseEntity;
   distribution: DistributionEntity;
 } & Pick<Asset, "hash" | "size" | "type">;
+
+export interface GetAssetDistributionsOptions {
+  release?: ReleaseEntity;
+}
+
+export type AssetDistributionEntry = Pick<
+  Distribution,
+  "id" | "os" | "architecture"
+>;
 
 @Injectable()
 export class AssetsService {
@@ -174,5 +189,23 @@ export class AssetsService {
     this.assetsRepo.persistAndFlush(asset);
 
     return asset;
+  }
+
+  public async getDistributions({ release }: GetAssetDistributionsOptions) {
+    let query = this.assetsRepo
+      .createQueryBuilder("assets")
+      .leftJoin("assets.distribution", "distributions")
+      .select([
+        "distributions.id",
+        "distributions.os",
+        "distributions.architecture",
+      ])
+      .groupBy("distributions.id");
+
+    if (release) {
+      query = query.where({ release: release });
+    }
+
+    return query.execute<AssetDistributionEntry[]>("all");
   }
 }
