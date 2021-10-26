@@ -1,0 +1,69 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("//tools/services:index.bzl", "nodejs_service")
+
+package(default_visibility = ["//visibility:public"])
+
+DEPS = [
+    "//network/feedback-api",
+    "//common/node",
+    "//common/nest",
+    "//common/utils",
+    "//libs/jira-api",
+    "@npm//@types/node",
+    "@npm//fastify-helmet",
+    "@npm//fastify-formbody",
+    "@npm//reflect-metadata",
+    "@npm//@nestjs/common",
+    "@npm//@nestjs/core",
+    "@npm//@nestjs/platform-fastify",
+    "@npm//@nestjs/config",
+    "@npm//fastify-multipart",
+    "@npm//class-validator",
+    "@npm//class-transformer",
+    "@npm//rxjs",
+    "@npm//joi",
+]
+
+TEST_FILES = ["src/**/*.test.ts"]
+
+SRC_FILES = glob(
+    [
+        "src/**/*.ts",
+    ],
+    exclude = TEST_FILES,
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    deps = [
+        "//:tsconfig.json",
+        "//common/nest:tsconfig",
+        "//common/node:tsconfig",
+        "//common/utils:tsconfig",
+        "//libs/jira-api:tsconfig",
+        "//network/feedback-api:tsconfig",
+    ],
+)
+
+ts_project(
+    name = "components",
+    srcs = SRC_FILES,
+    allow_js = True,
+    composite = True,
+    declaration = True,
+    incremental = True,
+    source_map = True,
+    tsconfig = ":tsconfig",
+    deps = DEPS,
+)
+
+nodejs_service(
+    name = "feedback",
+    data = [
+        ":components",
+    ],
+    dev_data = [".env"],
+    entry_point = "src/index.ts",
+    service_name = "feedback",
+)

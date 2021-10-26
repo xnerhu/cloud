@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../bazel-out/x64_windows-fastbuild/bin/services/feedback"
+  },
+  "references": [
+    { "path": "../../network/feedback-api" },
+    { "path": "../../common/node" },
+    { "path": "../../common/nest" },
+    { "path": "../../common/utils" },
+    { "path": "../..//libs/jira-api" }
+  ],
+  "include": ["src/**/*.ts"]
+}

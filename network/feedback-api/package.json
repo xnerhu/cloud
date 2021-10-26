@@ -1,0 +1,8 @@
+{
+  "name": "@network/feedback-api",
+  "version": "0.0.0-PLACEHOLDER",
+  "dependencies": {
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1"
+  }
+}
