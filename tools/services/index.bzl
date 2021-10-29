@@ -7,8 +7,7 @@ def nodejs_service(
         service_name,
         data,
         port = 80,
-        dev_data = [],
-        **kwargs):
+        dev_data = []):
     nodejs_app(name, data, dev_data, **kwargs)
 
     container_image(
@@ -23,7 +22,6 @@ def nodejs_service(
         binary = name,
         base = "image.base",
         tags = ["manual"],
-        **kwargs
     )
 
     container_push(
