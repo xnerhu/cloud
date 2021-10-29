@@ -14,6 +14,8 @@ export const jiraDescriptionTemplate = ({
   diagnosticData,
   version,
   channel,
+  email,
+  url,
 }: Pick<
   BrowserFeedbackDto,
   | "description"
@@ -22,16 +24,23 @@ export const jiraDescriptionTemplate = ({
   | "diagnosticData"
   | "version"
   | "channel"
+  | "email"
+  | "url"
 >) => {
   const fragments: string[] = [
     `${description.trim()}`,
     `\nWexond Version: ${version}-${channel}`,
     `Chromium version: ${chromiumVersion}`,
     `User Agent: ${userAgent}`,
+    `Url: ${url}`,
   ];
 
+  if (email) {
+    fragments.push(`Email: ${email}`);
+  }
+
   if (diagnosticData) {
-    fragments.push(`Diagnostic: ${diagnosticData}`);
+    fragments.push(`\nDiagnostic: ${diagnosticData}`);
   }
 
   return fragments.join("\n");
