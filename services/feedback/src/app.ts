@@ -30,7 +30,11 @@ export const runApp = async (port?: number) => {
 
   app.enableCors();
 
-  await app.listen(port ?? config.port);
+  const listenPort = port ?? config.port;
+
+  await app.listen(listenPort);
+
+  console.log(`Listening on port ${listenPort}`);
 
   return app;
 };
