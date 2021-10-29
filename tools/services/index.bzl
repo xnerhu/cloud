@@ -1,5 +1,5 @@
 load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
-load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
 load("//tools/nodejs:index.bzl", "nodejs_app")
 
 def nodejs_service(
