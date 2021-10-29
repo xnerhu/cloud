@@ -6,7 +6,7 @@ def nodejs_service(
         name,
         service_name,
         data,
-        port = 80,
+        port = "80",
         dev_data = [],
         **kwargs):
     nodejs_app(name, data, dev_data, **kwargs)
