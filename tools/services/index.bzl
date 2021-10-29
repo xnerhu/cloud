@@ -7,7 +7,8 @@ def nodejs_service(
         service_name,
         data,
         port = 80,
-        dev_data = []):
+        dev_data = [],
+        **kwargs):
     nodejs_app(name, data, dev_data, **kwargs)
 
     container_image(
