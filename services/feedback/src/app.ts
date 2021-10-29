@@ -34,7 +34,7 @@ export const runApp = async (port?: number) => {
 
   await app.listen(listenPort);
 
-  console.log(`Listening on port ${listenPort}`);
+  console.log(`Listening on port ${listenPort} - ${process.env.PORT}`);
 
   return app;
 };
