@@ -8,5 +8,5 @@ if [[ $RAW_TAG == npm-* ]] ;
 then
   scripts/publish_npm.sh 
 else
-  ./scripts/publish_container.sh $RAW_TAG
+  scripts/publish_container.sh $RAW_TAG
 fi
