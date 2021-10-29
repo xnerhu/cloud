@@ -6,13 +6,22 @@ def nodejs_service(
         name,
         service_name,
         data,
+        port = 80,
         dev_data = [],
         **kwargs):
     nodejs_app(name, data, dev_data, **kwargs)
 
+    container_image(
+        name = "image.base",
+        base = "@nodejs_image_base//image",
+        ports = [port],
+        stamp = True,
+    )
+
     nodejs_image(
         name = "image",
         binary = name,
+        base = "image.base",
         tags = ["manual"],
         **kwargs
     )
