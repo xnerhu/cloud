@@ -5,6 +5,8 @@ set -u -e -o pipefail
 readonly BAZEL=./node_modules/.bin/bazel
 readonly CONTAINER=$(echo $1 | cut -d '-' -f1)
 
-target="//$CONTAINER:image.push"
+target="//$CONTAINER"
 
-$BAZEL run $target
+$BAZEL build $target
+
+$BAZEL run "$target:image.push"
