@@ -22,7 +22,7 @@ export class ConfigService {
   }
 
   public get port() {
-    return this.env.get("PORT", { infer: true }) as number;
+    return this.env.get("FEEDBACK_PORT", { infer: true }) as number;
   }
 
   public get attachmentsUrl() {
