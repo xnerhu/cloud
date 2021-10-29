@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const SCHEMA_ENV = Joi.object({
-  PORT: Joi.number().default(8080),
+  PORT: Joi.number().default(80),
   JIRA_HOST: Joi.string().required(),
   JIRA_PROJECT_KEY: Joi.string().required(),
   JIRA_USERNAME: Joi.string().required(),
