@@ -15,13 +15,13 @@ def nodejs_service(
         name = "image.base",
         base = "@nodejs_image_base//image",
         ports = [port],
-        stamp = True,
+        tags = ["manual"],
     )
 
     nodejs_image(
         name = "image",
         binary = name,
-        base = "image.base",
+        base = ":image.base",
         tags = ["manual"],
     )
 

@@ -10,7 +10,6 @@
 # If the script exits with non-zero code, it's considered as a failure
 # and the output will be discarded.
 
-
 readonly RAW_TAG=$(git describe --abbrev=7 --tags HEAD)
 readonly TAG=$(echo $RAW_TAG | cut -d '-' -f2)
 

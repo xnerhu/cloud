@@ -32,9 +32,10 @@ export const runApp = async (port?: number) => {
 
   const listenPort = port ?? config.port;
 
-  await app.listen(listenPort);
-
-  console.log(`Listening on port ${listenPort} - ${process.env.FEEDBACK_PORT}`);
+  await app.listen(listenPort, "0.0.0.0", (err, address) => {
+    if (err) throw err;
+    console.log(`Listening on ${address}`);
+  });
 
   return app;
 };

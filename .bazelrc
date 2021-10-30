@@ -81,7 +81,7 @@ build --enable_runfiles
 run --enable_runfiles
 test --enable_runfiles
 
-# build --workspace_status_command=tools/buildstamp/get_workspace_status.sh 
+#build --workspace_status_command=tools/buildstamp/get_workspace_status.sh 
 test --workspace_status_command=tools/buildstamp/get_workspace_status.sh
 
 
