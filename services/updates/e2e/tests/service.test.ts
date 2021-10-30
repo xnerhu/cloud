@@ -245,7 +245,7 @@ describe("[e2e]: Admin", () => {
     describe("v1 backwards compatibility", () => {
       it("handles the oldest version", async () => {
         const res = await request(app.getHttpServer())
-          .get("/v1")
+          .get("/v1/")
           .query({ browserVersion: "1.0.0" });
 
         expect(res.statusCode).toEqual(200);
@@ -270,7 +270,7 @@ describe("[e2e]: Admin", () => {
 
       it("handles up-to-date version", async () => {
         const res = await request(app.getHttpServer())
-          .get("/v1")
+          .get("/v1/")
           .query({ browserVersion: "1.2.0" });
 
         expect(res.statusCode).toEqual(200);
