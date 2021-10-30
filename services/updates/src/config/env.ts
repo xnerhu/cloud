@@ -4,7 +4,7 @@ import { resolve } from "path";
 import { IS_TEST } from "@common/node";
 
 export const SCHEMA_ENV = Joi.object({
-  PORT: Joi.number().default(8000),
+  PORT: Joi.number().default(80),
   PATCHES_PUBLIC_PATH: Joi.string().required(),
   INSTALLERS_PUBLIC_PATH: Joi.string().required(),
   PATCHES_PATH: Joi.string().required(),
