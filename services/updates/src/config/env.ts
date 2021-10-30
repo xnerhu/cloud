@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { config } from "dotenv";
 import { resolve } from "path";
-import { IS_TEST } from "@common/node";
+import { IS_DEV, IS_TEST } from "@common/node";
 
 export const SCHEMA_ENV = Joi.object({
   PORT: Joi.number().default(80),
@@ -25,11 +25,15 @@ export const getPostgresConfig = () => {
     config({ path: resolve(__dirname, "../../.test.env") });
   }
 
+  if (IS_DEV) {
+    config({ path: resolve(__dirname, "../../.env") });
+  }
+
   return {
-    host: (process.env.POSTGRES_HOST as string).trim(),
+    host: process.env.POSTGRES_HOST as string,
     port: parseInt(process.env.POSTGRES_PORT as string),
-    dbName: (process.env.POSTGRES_DB as string).trim(),
-    user: (process.env.POSTGRES_USER as string).trim(),
-    password: (process.env.POSTGRES_PASSWORD as string).trim(),
+    dbName: process.env.POSTGRES_DB as string,
+    user: process.env.POSTGRES_USER as string,
+    password: process.env.POSTGRES_PASSWORD as string,
   };
 };
