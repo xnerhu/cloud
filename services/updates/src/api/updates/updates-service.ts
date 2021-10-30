@@ -73,7 +73,7 @@ export class UpdatesService {
     const update = await this.get({
       os: "windows",
       architecture: "x64",
-      channel: "stable",
+      channel: "alpha",
       version,
     });
 

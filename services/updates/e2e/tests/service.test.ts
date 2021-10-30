@@ -252,21 +252,17 @@ describe("[e2e]: Admin", () => {
         expect(res.body).toEqual({
           type: "patches",
           fullFile: {
-            filename: "1.3.0-stable-windows-x64.packed",
-            url: "/updates/1.3.0-stable-windows-x64.packed",
+            filename: "1.2.0-alpha-windows-x64.packed",
+            url: "/updates/1.2.0-alpha-windows-x64.packed",
           },
           patches: [
             {
-              filename: "1.3.0-stable-windows-x64.patch",
-              url: "/updates/1.3.0-stable-windows-x64.patch",
+              filename: "1.2.0-alpha-windows-x64.patch",
+              url: "/updates/1.2.0-alpha-windows-x64.patch",
             },
             {
-              filename: "1.2.0-stable-windows-x64.patch",
-              url: "/updates/1.2.0-stable-windows-x64.patch",
-            },
-            {
-              filename: "1.1.0-stable-windows-x64.patch",
-              url: "/updates/1.1.0-stable-windows-x64.patch",
+              filename: "1.1.0-alpha-windows-x64.patch",
+              url: "/updates/1.1.0-alpha-windows-x64.patch",
             },
           ],
         });
@@ -275,7 +271,7 @@ describe("[e2e]: Admin", () => {
       it("handles up-to-date version", async () => {
         const res = await request(app.getHttpServer())
           .get("/v1")
-          .query({ browserVersion: "1.3.0" });
+          .query({ browserVersion: "1.2.0" });
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({ type: "none" });
