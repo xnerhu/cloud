@@ -33,7 +33,12 @@ export const runApp = async (port?: number) => {
 
   await config.init();
 
-  await app.listen(port ?? config.port);
+  const listenPort = port ?? config.port;
+
+  await app.listen(listenPort, "0.0.0.0", (err, address) => {
+    if (err) throw err;
+    console.log(`Listening on ${address}`);
+  });
 
   return app;
 };
