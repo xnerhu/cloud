@@ -26,10 +26,10 @@ export const getPostgresConfig = () => {
   }
 
   return {
-    host: process.env.POSTGRES_HOST as string,
+    host: (process.env.POSTGRES_HOST as string).trim(),
     port: parseInt(process.env.POSTGRES_PORT as string),
-    dbName: process.env.POSTGRES_DB as string,
-    user: process.env.POSTGRES_USER as string,
-    password: process.env.POSTGRES_PASSWORD as string,
+    dbName: (process.env.POSTGRES_DB as string).trim(),
+    user: (process.env.POSTGRES_USER as string).trim(),
+    password: (process.env.POSTGRES_PASSWORD as string).trim(),
   };
 };
