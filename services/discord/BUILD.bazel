@@ -57,7 +57,7 @@ ts_project(
 )
 
 nodejs_app(
-    name = "discord-bot",
+    name = "discord",
     data = [
         ":components",
     ],
