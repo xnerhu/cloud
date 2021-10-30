@@ -51,12 +51,12 @@ describe("[e2e]: Admin", () => {
           },
           patches: [
             {
-              version: "1.3.0",
-              notes: "1.3.0-stable-notes",
-              filename: "1.3.0-stable-windows-x64.patch",
-              hash: "1.3.0-stable-windows-x64.patch-hash",
+              version: "1.1.0",
+              notes: "1.1.0-stable-notes",
+              filename: "1.1.0-stable-windows-x64.patch",
+              hash: "1.1.0-stable-windows-x64.patch-hash",
               size: 1024,
-              url: "/updates/1.3.0-stable-windows-x64.patch",
+              url: "/updates/1.1.0-stable-windows-x64.patch",
             },
             {
               version: "1.2.0",
@@ -67,12 +67,12 @@ describe("[e2e]: Admin", () => {
               url: "/updates/1.2.0-stable-windows-x64.patch",
             },
             {
-              version: "1.1.0",
-              notes: "1.1.0-stable-notes",
-              filename: "1.1.0-stable-windows-x64.patch",
-              hash: "1.1.0-stable-windows-x64.patch-hash",
+              version: "1.3.0",
+              notes: "1.3.0-stable-notes",
+              filename: "1.3.0-stable-windows-x64.patch",
+              hash: "1.3.0-stable-windows-x64.patch-hash",
               size: 1024,
-              url: "/updates/1.1.0-stable-windows-x64.patch",
+              url: "/updates/1.3.0-stable-windows-x64.patch",
             },
           ],
         });
@@ -175,12 +175,12 @@ describe("[e2e]: Admin", () => {
           },
           patches: [
             {
-              version: "1.4.0",
-              notes: "beta-1.4.0-notes",
-              filename: "1.4.0-beta-windows-x64.patch",
-              hash: "1.4.0-beta-windows-x64.patch-hash",
+              version: "1.2.0",
+              notes: "beta-1.2.0-notes",
+              filename: "1.2.0-beta-windows-x64.patch",
+              hash: "1.2.0-beta-windows-x64.patch-hash",
               size: 1000,
-              url: "/updates/1.4.0-beta-windows-x64.patch",
+              url: "/updates/1.2.0-beta-windows-x64.patch",
             },
             {
               version: "1.3.0",
@@ -191,12 +191,12 @@ describe("[e2e]: Admin", () => {
               url: "/updates/1.3.0-beta-windows-x64.patch",
             },
             {
-              version: "1.2.0",
-              notes: "beta-1.2.0-notes",
-              filename: "1.2.0-beta-windows-x64.patch",
-              hash: "1.2.0-beta-windows-x64.patch-hash",
+              version: "1.4.0",
+              notes: "beta-1.4.0-notes",
+              filename: "1.4.0-beta-windows-x64.patch",
+              hash: "1.4.0-beta-windows-x64.patch-hash",
               size: 1000,
-              url: "/updates/1.2.0-beta-windows-x64.patch",
+              url: "/updates/1.4.0-beta-windows-x64.patch",
             },
           ],
         });
@@ -222,20 +222,20 @@ describe("[e2e]: Admin", () => {
           },
           patches: [
             {
-              version: "1.2.0",
-              notes: "alpha-1.2.0-notes",
-              filename: "1.2.0-alpha-windows-x64.patch",
-              hash: "1.2.0-alpha-windows-x64.patch-hash",
-              size: 1000,
-              url: "/updates/1.2.0-alpha-windows-x64.patch",
-            },
-            {
               version: "1.1.0",
               notes: "alpha-1.1.0-notes",
               filename: "1.1.0-alpha-windows-x64.patch",
               hash: "1.1.0-alpha-windows-x64.patch-hash",
               size: 1000,
               url: "/updates/1.1.0-alpha-windows-x64.patch",
+            },
+            {
+              version: "1.2.0",
+              notes: "alpha-1.2.0-notes",
+              filename: "1.2.0-alpha-windows-x64.patch",
+              hash: "1.2.0-alpha-windows-x64.patch-hash",
+              size: 1000,
+              url: "/updates/1.2.0-alpha-windows-x64.patch",
             },
           ],
         });
@@ -257,12 +257,12 @@ describe("[e2e]: Admin", () => {
           },
           patches: [
             {
-              filename: "1.2.0-alpha-windows-x64.patch",
-              url: "/updates/1.2.0-alpha-windows-x64.patch",
-            },
-            {
               filename: "1.1.0-alpha-windows-x64.patch",
               url: "/updates/1.1.0-alpha-windows-x64.patch",
+            },
+            {
+              filename: "1.2.0-alpha-windows-x64.patch",
+              url: "/updates/1.2.0-alpha-windows-x64.patch",
             },
           ],
         });

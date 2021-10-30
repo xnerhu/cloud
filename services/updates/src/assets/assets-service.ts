@@ -155,6 +155,7 @@ export class AssetsService {
           status: ReleaseStatusType.ROLLED_OUT,
         },
       })
+      .orderBy({ id: "ASC" })
       .execute<AssetsDBEntry[]>("all");
   }
 
