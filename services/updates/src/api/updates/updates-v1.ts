@@ -18,10 +18,11 @@ export const transformUpdateStrategyV1 = (
 
 export const transformUpdateResV1 = (res: UpdateResponse): UpdateV1Response => {
   if (res.strategy === "none") {
-    return { type: "none" };
+    return { success: true, type: "none" };
   }
 
   const resV1: UpdateV1Response = {
+    success: true,
     type: transformUpdateStrategyV1(res.strategy),
     fullFile: transformUpdateEntryV1(res.packed!),
   };

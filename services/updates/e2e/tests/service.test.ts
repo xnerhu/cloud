@@ -40,6 +40,7 @@ describe("[e2e]: Admin", () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
+          success: true,
           strategy: "patches",
           packed: {
             version: "1.3.0",
@@ -85,6 +86,7 @@ describe("[e2e]: Admin", () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
+          success: true,
           strategy: "patches",
           packed: {
             version: "1.2.0",
@@ -114,6 +116,7 @@ describe("[e2e]: Admin", () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
+          success: true,
           strategy: "patches",
           packed: {
             version: "1.2.0",
@@ -145,6 +148,7 @@ describe("[e2e]: Admin", () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
+          success: true,
           strategy: "packed",
           packed: {
             version: "1.4.0",
@@ -164,6 +168,7 @@ describe("[e2e]: Admin", () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
+          success: true,
           strategy: "patches",
           packed: {
             version: "1.4.0",
@@ -211,6 +216,7 @@ describe("[e2e]: Admin", () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
+          success: true,
           strategy: "patches",
           packed: {
             version: "1.2.0",
@@ -250,6 +256,7 @@ describe("[e2e]: Admin", () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
+          success: true,
           type: "patches",
           fullFile: {
             filename: "1.2.0-alpha-windows-x64.packed",
@@ -274,7 +281,7 @@ describe("[e2e]: Admin", () => {
           .query({ browserVersion: "1.2.0" });
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body).toEqual({ type: "none" });
+        expect(res.body).toEqual({ success: true, type: "none" });
       });
     });
 

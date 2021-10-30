@@ -40,12 +40,13 @@ export class UpdatesService {
     ]);
 
     if (!packed || patches.length === 0) {
-      return { strategy: "none" };
+      return { success: true, strategy: "none" };
     }
 
     const strategy = getUpdateStrategy(packed, patches);
 
     const res: UpdateResponse = {
+      success: true,
       strategy,
       packed: this.assetsService.formatRelease(packed),
     };
