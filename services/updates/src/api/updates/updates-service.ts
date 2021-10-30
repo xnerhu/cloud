@@ -1,15 +1,10 @@
 import { Distribution } from "@core/updates";
 import { Injectable } from "@nestjs/common";
-import {
-  GetUpdatesDto,
-  UpdateResponse,
-  UpdateV1Response,
-} from "@network/updates-api";
+import { GetUpdatesDto, UpdateResponse } from "@network/updates-api";
 import { omitNull } from "@common/utils";
 
 import { getUpdateStrategy } from "./strategy";
 import { AssetsService } from "../../assets/assets-service";
-import { transformUpdateResV1 } from "./updates-v1";
 
 const DEFAULT_DISTRIBUTION: Partial<Distribution> = {
   os: "windows",
@@ -63,20 +58,5 @@ export class UpdatesService {
       ...res,
       patches: patches.map((patch) => this.assetsService.formatRelease(patch)),
     };
-  }
-
-  /**
-   * Returns data for the most efficient update strategy.
-   * Supports only windows x64
-   */
-  public async getV1(version: string): Promise<UpdateV1Response> {
-    const update = await this.get({
-      os: "windows",
-      architecture: "x64",
-      channel: "alpha",
-      version,
-    });
-
-    return transformUpdateResV1(update);
   }
 }
