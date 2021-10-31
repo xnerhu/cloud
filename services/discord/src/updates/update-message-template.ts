@@ -42,7 +42,7 @@ export const updateMessageTemplate = ({
     .setColor(getChannelColor(release.channel))
     .setTitle(formatMessageTitle(release.version, release.channel))
     .setURL(url)
-    .addField("Notes:", "\n" + release.notes ?? "none")
+    .addField("Notes:", release.notes || "none")
     .addField("Platforms: ", formatMessagePlatforms(distributions))
     .setTimestamp()
     .setFooter(formatMessageFooter(distributions.map((r) => r.os)));
