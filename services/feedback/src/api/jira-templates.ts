@@ -32,8 +32,11 @@ export const jiraDescriptionTemplate = ({
     `\nWexond Version: ${version}-${channel}`,
     `Chromium version: ${chromiumVersion}`,
     `User Agent: ${userAgent}`,
-    `Url: ${url}`,
   ];
+
+  if (url) {
+    fragments.push(`URL: ${url}`);
+  }
 
   if (email) {
     fragments.push(`Email: ${email}`);
