@@ -22,7 +22,8 @@ export class BrowserFeedbackDto {
   description: string;
 
   @IsString()
-  url: string;
+  @IsOptional()
+  url?: string;
 
   @IsString()
   chromiumVersion: string;
