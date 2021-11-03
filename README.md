@@ -34,6 +34,12 @@ Run every command at the root of the project.
 $ yarn
 ```
 
+## Build docker
+
+```
+$ docker-compose build
+```
+
 ## Build all components
 
 ```
@@ -46,22 +52,16 @@ $ yarn build
 $ yarn test
 ```
 
-## Build individual components
-
-```
-$ npx bazel build //backend/common:components
-```
-
 ## Run individual components
 
 ```
-$ npx bazel run //backend/chat
+$ npx bazel run //services/updates
 ```
 
 ## Watch and run individual components
 
 ```
-$ npx ibazel run ///backend/api-gateway
+$ npx ibazel run ///services/updates
 ```
 
 ## Clean bazel cache
